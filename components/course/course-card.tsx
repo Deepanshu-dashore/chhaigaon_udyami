@@ -164,7 +164,7 @@ export function CourseCard({
         <Link href={`/courses/${slug}`}>
           <Button
             size="md"
-            className="px-5 py-2.5 h-11 text-sm font-semibold rounded-xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary shadow-md shadow-primary/20 group-hover:shadow-lg transition-all cursor-pointer font-label flex items-center gap-2"
+            className="px-5 py-2.5 h-11 text-sm font-semibold rounded-lg bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary shadow-md shadow-primary/20 group-hover:shadow-lg transition-all cursor-pointer font-label flex items-center gap-2"
           >
             <span>कोर्स देखें</span>
             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />

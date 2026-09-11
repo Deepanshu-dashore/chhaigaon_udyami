@@ -120,7 +120,7 @@ export function LoginForm() {
           type="button"
           onClick={handleGoogleSignIn}
           disabled={googleLoading || loading}
-          className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition shadow-sm disabled:opacity-60 cursor-pointer"
+          className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition shadow-sm disabled:opacity-60 cursor-pointer"
         >
           {googleLoading ? (
             <div className="h-4 w-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
@@ -197,7 +197,7 @@ export function LoginForm() {
           <Button
             type="submit"
             disabled={loading || googleLoading}
-            className="w-full py-2.5 h-11 text-base font-semibold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md shadow-emerald-600/20 transition cursor-pointer"
+            className="w-full py-2.5 h-11 text-base font-semibold rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md shadow-emerald-600/20 transition cursor-pointer"
           >
             {loading ? (
               <div className="flex items-center gap-2">

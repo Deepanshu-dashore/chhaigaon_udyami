@@ -172,7 +172,7 @@ export default async function HomePage() {
                   <Link href="/courses" className="w-full sm:w-auto">
                     <Button
                       size="lg"
-                      className="w-full sm:w-auto px-8 h-12 text-base font-semibold rounded-xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary shadow-lg shadow-primary/20 transition-all cursor-pointer font-label"
+                      className="w-full sm:w-auto px-8 h-12 text-base font-semibold rounded-lg bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary shadow-lg shadow-primary/20 transition-all cursor-pointer font-label"
                     >
                       कोर्सेज एक्सप्लोर करें (Explore Courses)
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -183,7 +183,7 @@ export default async function HomePage() {
                     <Button
                       variant="outline"
                       size="lg"
-                      className="w-full sm:w-auto px-7 h-12 text-base font-bold rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-900 shadow-sm cursor-pointer font-label"
+                      className="w-full sm:w-auto px-7 h-12 text-base font-bold rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-900 shadow-sm cursor-pointer font-label"
                     >
                       फ्री में खाता बनाएं (Join Free)
                     </Button>

@@ -56,7 +56,7 @@ export default function GoogleLoginButton({
         type="button"
         onClick={handleGoogleLogin}
         disabled={loading}
-        className={`w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition shadow-sm disabled:opacity-60 cursor-pointer ${className}`}
+        className={`w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition shadow-sm disabled:opacity-60 cursor-pointer ${className}`}
       >
         {loading ? (
           <span className="h-4 w-4 border-2 border-slate-400 border-t-slate-800 rounded-full animate-spin" />

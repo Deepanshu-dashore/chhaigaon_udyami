@@ -196,7 +196,7 @@ export function RegisterForm() {
           type="button"
           onClick={handleGoogleSignIn}
           disabled={googleLoading || loading}
-          className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition shadow-sm disabled:opacity-60 cursor-pointer"
+          className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition shadow-sm disabled:opacity-60 cursor-pointer"
         >
           {googleLoading ? (
             <span className="h-4 w-4 border-2 border-slate-400 border-t-slate-800 rounded-full animate-spin" />
@@ -361,7 +361,7 @@ export function RegisterForm() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full h-11 text-sm font-semibold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-md shadow-emerald-600/20 text-white transition-all cursor-pointer"
+            className="w-full h-11 text-sm font-semibold rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-md shadow-emerald-600/20 text-white transition-all cursor-pointer"
           >
             {loading ? (
               <span className="flex items-center gap-2">
