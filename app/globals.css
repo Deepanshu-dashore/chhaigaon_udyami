@@ -1,26 +1,387 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surface & Container Colors - Fidelity Design System */
+  --surface: #f9f9ff;
+  --surface-dim: #d7dae3;
+  --surface-bright: #f9f9ff;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f1f3fc;
+  --surface-container: #ebedf7;
+  --surface-container-high: #e6e8f1;
+  --surface-container-highest: #e0e2eb;
+  --surface-variant: #e0e2eb;
+  --on-surface: #181c22;
+  --on-surface-variant: #414753;
+  --inverse-surface: #2d3037;
+  --inverse-on-surface: #eef0fa;
+  --outline: #74777f;
+  --outline-variant: #c1c6d5;
+  --surface-tint: #1275e2;
+
+  /* Primary Brand Colors (Fidelity: #1275E2) */
+  --primary: #1275e2;
+  --on-primary: #ffffff;
+  --primary-container: #d6e3ff;
+  --on-primary-container: #001b3e;
+  --inverse-primary: #aac7ff;
+
+  /* Secondary Colors (Fidelity: #5F78A3) */
+  --secondary: #5f78a3;
+  --on-secondary: #ffffff;
+  --secondary-container: #d9e3f8;
+  --on-secondary-container: #1b3255;
+
+  /* Tertiary / Accent Colors (Fidelity: #C55B00) */
+  --tertiary: #c55b00;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #ffdbc9;
+  --on-tertiary-container: #331400;
+
+  /* Neutral (Fidelity: #74777F) */
+  --neutral: #74777f;
+  --on-neutral: #ffffff;
+  --neutral-container: #e2e2ea;
+  --on-neutral-container: #1a1c1e;
+
+  /* Error Colors */
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+
+  /* Fixed Palette Variants */
+  --primary-fixed: #d6e3ff;
+  --primary-fixed-dim: #aac7ff;
+  --on-primary-fixed: #001b3e;
+  --on-primary-fixed-variant: #00458d;
+
+  --secondary-fixed: #d9e3f8;
+  --secondary-fixed-dim: #aec7f7;
+  --on-secondary-fixed: #001b3d;
+  --on-secondary-fixed-variant: #2d476f;
+
+  --tertiary-fixed: #ffdbc9;
+  --tertiary-fixed-dim: #ffb68c;
+  --on-tertiary-fixed: #331400;
+  --on-tertiary-fixed-variant: #763400;
+
+  /* Base Semantic Colors */
+  --background: #f9f9ff;
+  --on-background: #181c22;
+  --foreground: #181c22;
+  --border: #c1c6d5;
+
+  /* Card & Surface Tokens - Fidelity Design System */
+  --card-bg: var(--surface-container-lowest);
+  --card-border: var(--outline-variant);
+  --card-border-hover: var(--primary);
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  --card-shadow-hover: 0 10px 25px -5px rgba(18, 117, 226, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+
+  /* Typography Specifications - Fidelity Design System (IBM Plex Sans / Serif / Inter) + Hindi */
+  --font-headline-lg-family: var(--font-baloo2), var(--font-ibm-plex-sans), var(--font-poppins), system-ui, sans-serif;
+  --font-headline-lg-size: 32px;
+  --font-headline-lg-weight: 700;
+  --font-headline-lg-line-height: 40px;
+
+  --font-body-md-family: var(--font-noto-sans-devanagari), var(--font-ibm-plex-serif), var(--font-mukta), Georgia, serif;
+  --font-body-md-size: 16px;
+  --font-body-md-weight: 400;
+  --font-body-md-line-height: 26px;
+
+  --font-label-md-family: var(--font-inter), var(--font-poppins), var(--font-noto-sans-devanagari), system-ui, sans-serif;
+  --font-label-md-size: 14px;
+  --font-label-md-weight: 500;
+  --font-label-md-line-height: 20px;
+
+  /* Radii */
+  --rounded-sm: 0.125rem;
+  --rounded-default: 0.25rem;
+  --rounded-md: 0.375rem;
+  --rounded-lg: 0.5rem;
+  --rounded-xl: 0.75rem;
+  --rounded-2xl: 1rem;
+  --rounded-3xl: 1.5rem;
+  --rounded-full: 9999px;
 }
 
-@theme inline {
+@theme {
+  --color-surface: var(--surface);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-bright: var(--surface-bright);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-surface-variant: var(--surface-variant);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-inverse-surface: var(--inverse-surface);
+  --color-inverse-on-surface: var(--inverse-on-surface);
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+  --color-surface-tint: var(--surface-tint);
+
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+  --color-inverse-primary: var(--inverse-primary);
+
+  --color-secondary: var(--secondary);
+  --color-on-secondary: var(--on-secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary-container: var(--on-secondary-container);
+
+  --color-tertiary: var(--tertiary);
+  --color-on-tertiary: var(--on-tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-on-tertiary-container: var(--on-tertiary-container);
+
+  --color-neutral: var(--neutral);
+  --color-on-neutral: var(--on-neutral);
+  --color-neutral-container: var(--neutral-container);
+  --color-on-neutral-container: var(--on-neutral-container);
+
+  --color-error: var(--error);
+  --color-on-error: var(--on-error);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+
+  --color-primary-fixed: var(--primary-fixed);
+  --color-primary-fixed-dim: var(--primary-fixed-dim);
+  --color-on-primary-fixed: var(--on-primary-fixed);
+  --color-on-primary-fixed-variant: var(--on-primary-fixed-variant);
+
+  --color-secondary-fixed: var(--secondary-fixed);
+  --color-secondary-fixed-dim: var(--secondary-fixed-dim);
+  --color-on-secondary-fixed: var(--on-secondary-fixed);
+  --color-on-secondary-fixed-variant: var(--on-secondary-fixed-variant);
+
+  --color-tertiary-fixed: var(--tertiary-fixed);
+  --color-tertiary-fixed-dim: var(--tertiary-fixed-dim);
+  --color-on-tertiary-fixed: var(--on-tertiary-fixed);
+  --color-on-tertiary-fixed-variant: var(--on-tertiary-fixed-variant);
+
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-on-background: var(--on-background);
+  --color-border: var(--outline-variant);
+  --color-card: var(--card-bg);
+  --color-card-border: var(--card-border);
+
+  /* Fidelity Design System Font Tokens */
+  --font-ibm-sans: var(--font-ibm-plex-sans), sans-serif;
+  --font-ibm-serif: var(--font-ibm-plex-serif), Georgia, serif;
+  --font-inter: var(--font-inter), sans-serif;
+
+  /* Default Application Font Stacks */
+  --font-sans: var(--font-ibm-plex-sans), var(--font-poppins), var(--font-noto-sans-devanagari), system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-ibm-plex-serif), var(--font-noto-sans-devanagari), var(--font-mukta), Georgia, serif;
+  --font-label: var(--font-inter), var(--font-poppins), var(--font-noto-sans-devanagari), system-ui, -apple-system, sans-serif;
+  --font-headline: var(--font-baloo2), var(--font-ibm-plex-sans), var(--font-poppins), system-ui, sans-serif;
+
+  /* Hindi Font Pairings & Variants */
+  --font-noto: var(--font-noto-sans-devanagari), sans-serif;
+  --font-poppins: var(--font-poppins), sans-serif;
+  --font-mukta: var(--font-mukta), sans-serif;
+  --font-nunito: var(--font-nunito), sans-serif;
+  --font-baloo: var(--font-baloo2), cursive, sans-serif;
+  --font-modak: var(--font-modak), cursive, display;
+  --font-teko: var(--font-teko), sans-serif;
+  --font-oswald: var(--font-oswald), sans-serif;
+
+  /* Numbers & Statistics: Public Sans */
+  --font-num: var(--font-public-sans), sans-serif;
+  --font-public-sans: var(--font-public-sans), sans-serif;
+
+  --radius-sm: var(--rounded-sm);
+  --radius-DEFAULT: var(--rounded-default);
+  --radius-md: var(--rounded-md);
+  --radius-lg: var(--rounded-lg);
+  --radius-xl: var(--rounded-xl);
+  --radius-2xl: var(--rounded-2xl);
+  --radius-3xl: var(--rounded-3xl);
+  --radius-full: var(--rounded-full);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--outline-variant);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--surface);
+  color: var(--on-surface);
+  font-family: var(--font-body-md-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-headline-lg-family);
+  font-feature-settings: "kern" 1;
+}
+
+button, input, select, textarea, label, nav, [data-label] {
+  font-family: var(--font-label-md-family);
+}
+
+/* Typography Utility Classes */
+.text-headline-lg {
+  font-family: var(--font-headline-lg-family);
+  font-size: var(--font-headline-lg-size);
+  font-weight: var(--font-headline-lg-weight);
+  line-height: var(--font-headline-lg-line-height);
+}
+
+.text-body-md {
+  font-family: var(--font-body-md-family);
+  font-size: var(--font-body-md-size);
+  font-weight: var(--font-body-md-weight);
+  line-height: var(--font-body-md-line-height);
+}
+
+.text-label-md {
+  font-family: var(--font-label-md-family);
+  font-size: var(--font-label-md-size);
+  font-weight: var(--font-label-md-weight);
+  line-height: var(--font-label-md-line-height);
+}
+
+/* Numbers & Tabular Data Utility (Public Sans) */
+.font-num, .font-numeric {
+  font-family: var(--font-public-sans), var(--font-inter), system-ui, sans-serif;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* Custom scrollbar for Fidelity theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-container);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--outline-variant);
+  border-radius: var(--rounded-default);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--outline);
+}
+
+/* Fidelity Design System English Typography Utilities */
+.font-fidelity-headline {
+  font-family: var(--font-ibm-plex-sans), 'IBM Plex Sans', sans-serif;
+}
+
+.font-fidelity-body {
+  font-family: var(--font-ibm-plex-serif), 'IBM Plex Serif', Georgia, serif;
+}
+
+.font-fidelity-label {
+  font-family: var(--font-inter), 'Inter', sans-serif;
+}
+
+/* Recommended Hindi Typography Font Pairing Utilities */
+.font-pair-general {
+  font-family: var(--font-poppins), var(--font-noto-sans-devanagari), system-ui, sans-serif;
+}
+
+.font-pair-reading {
+  font-family: var(--font-mukta), var(--font-nunito), Georgia, serif;
+}
+
+.font-pair-playful {
+  font-family: var(--font-baloo2), cursive, sans-serif;
+}
+
+.font-pair-festive-headline {
+  font-family: var(--font-modak), cursive, display;
+}
+
+.font-pair-tech-headline {
+  font-family: var(--font-teko), var(--font-oswald), sans-serif;
+  letter-spacing: 0.025em;
+}
+
+/* Fidelity Design System Card Components */
+.card-fidelity, .card-surface {
+  background-color: var(--surface-container-lowest);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--rounded-2xl);
+  box-shadow: var(--card-shadow);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-fidelity:hover, .card-surface:hover {
+  border-color: var(--primary);
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* Fidelity Design System Button Classes */
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border: 1px solid transparent;
+}
+.btn-primary:hover {
+  background-color: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-container);
+  color: var(--on-secondary-container);
+  border: 1px solid transparent;
+}
+.btn-secondary:hover {
+  background-color: var(--secondary);
+  color: var(--on-secondary);
+}
+
+.btn-inverted {
+  background-color: var(--inverse-surface);
+  color: var(--inverse-on-surface);
+  border: 1px solid transparent;
+}
+.btn-inverted:hover {
+  background-color: #000000;
+}
+
+.btn-outlined {
+  background-color: var(--surface-container-lowest);
+  border: 1.5px solid var(--outline-variant);
+  color: var(--on-surface);
+}
+.btn-outlined:hover {
+  border-color: var(--outline);
+  background-color: var(--surface-container-low);
+}
+
+.btn-tertiary {
+  background-color: var(--tertiary);
+  color: var(--on-tertiary);
+  border: 1px solid transparent;
+}
+.btn-tertiary:hover {
+  background-color: var(--tertiary-container);
+  color: var(--on-tertiary-container);
+}
+
+/* Mobile-optimized line-height & word-break for Devanagari matras */
+.hindi-text {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  line-height: 1.65;
+}
+
+
+
+
+
+
