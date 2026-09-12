@@ -15,34 +15,34 @@
   --on-surface-variant: #414753;
   --inverse-surface: #2d3037;
   --inverse-on-surface: #eef0fa;
-  --outline: #74777f;
-  --outline-variant: #c1c6d5;
-  --surface-tint: #1275e2;
+  --outline: #94a3b8;
+  --outline-variant: #e2e8f0;
+  --surface-tint: #0056d2;
 
-  /* Primary Brand Colors (Fidelity: #1275E2) */
-  --primary: #1275e2;
+  /* Primary Brand Colors (Coursera / Royal Blue: #0056d2) */
+  --primary: #0056d2;
   --on-primary: #ffffff;
-  --primary-container: #d6e3ff;
+  --primary-container: #e8f0fe;
   --on-primary-container: #001b3e;
   --inverse-primary: #aac7ff;
 
-  /* Secondary Colors (Fidelity: #5F78A3) */
-  --secondary: #5f78a3;
+  /* Secondary Colors */
+  --secondary: #475569;
   --on-secondary: #ffffff;
-  --secondary-container: #d9e3f8;
-  --on-secondary-container: #1b3255;
+  --secondary-container: #f1f5f9;
+  --on-secondary-container: #0f172a;
 
-  /* Tertiary / Accent Colors (Fidelity: #C55B00) */
+  /* Tertiary / Accent Colors */
   --tertiary: #c55b00;
   --on-tertiary: #ffffff;
   --tertiary-container: #ffdbc9;
   --on-tertiary-container: #331400;
 
-  /* Neutral (Fidelity: #74777F) */
-  --neutral: #74777f;
+  /* Neutral */
+  --neutral: #64748b;
   --on-neutral: #ffffff;
-  --neutral-container: #e2e2ea;
-  --on-neutral-container: #1a1c1e;
+  --neutral-container: #f1f5f9;
+  --on-neutral-container: #0f172a;
 
   /* Error Colors */
   --error: #ba1a1a;
@@ -50,34 +50,20 @@
   --error-container: #ffdad6;
   --on-error-container: #93000a;
 
-  /* Fixed Palette Variants */
-  --primary-fixed: #d6e3ff;
-  --primary-fixed-dim: #aac7ff;
-  --on-primary-fixed: #001b3e;
-  --on-primary-fixed-variant: #00458d;
-
-  --secondary-fixed: #d9e3f8;
-  --secondary-fixed-dim: #aec7f7;
-  --on-secondary-fixed: #001b3d;
-  --on-secondary-fixed-variant: #2d476f;
-
-  --tertiary-fixed: #ffdbc9;
-  --tertiary-fixed-dim: #ffb68c;
-  --on-tertiary-fixed: #331400;
-  --on-tertiary-fixed-variant: #763400;
-
   /* Base Semantic Colors */
-  --background: #f9f9ff;
-  --on-background: #181c22;
-  --foreground: #181c22;
-  --border: #c1c6d5;
+  --background: #ffffff;
+  --on-background: #0f172a;
+  --foreground: #0f172a;
+  --border: #e2e8f0;
 
-  /* Card & Surface Tokens - Fidelity Design System */
-  --card-bg: var(--surface-container-lowest);
-  --card-border: var(--outline-variant);
-  --card-border-hover: var(--primary);
-  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
-  --card-shadow-hover: 0 10px 25px -5px rgba(18, 117, 226, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  /* Card & Surface Tokens - Subtle Border + Refined Soft Shadow */
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --card-border-hover: #0056d2;
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03), 0 4px 16px -2px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.03);
+  --card-shadow-hover: 0 12px 32px -4px rgba(0, 86, 210, 0.09), 0 6px 14px -3px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 86, 210, 0.15);
+  --shadow-subtle: 0 2px 10px -1px rgba(0, 0, 0, 0.04), 0 1px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-elevated: 0 16px 40px -8px rgba(0, 0, 0, 0.07), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
 
   /* Typography Specifications - Fidelity Design System (IBM Plex Sans / Serif / Inter) + Hindi */
   --font-headline-lg-family: var(--font-baloo2), var(--font-ibm-plex-sans), var(--font-poppins), system-ui, sans-serif;

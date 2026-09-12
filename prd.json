@@ -1,0 +1,43 @@
+{
+  "projectName": "chhaigaon_udyami",
+  "branchName": "ralph/core-features",
+  "description": "Chhaigaon Udyami — Grassroots Rural Entrepreneurship & Learning Platform",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Government Schemes Filter & Search UI",
+      "description": "Implement interactive category filters and live search for GovernmentScheme models with detailed eligibility modal/page.",
+      "priority": 1,
+      "passes": true,
+      "acceptanceCriteria": [
+        "Filter schemes by department and eligibility criteria",
+        "Search schemes by keywords in Hindi and English",
+        "Responsive cards with clear benefit summaries and application link"
+      ]
+    },
+    {
+      "id": "US-002",
+      "title": "Startup Toolkit Resource Downloader",
+      "description": "Add UI for browsing startup resources and downloadable sample business plans and templates.",
+      "priority": 2,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Categorized list of StartupResource entries",
+        "Direct download and preview options for templates",
+        "Clean responsive card grid"
+      ]
+    },
+    {
+      "id": "US-003",
+      "title": "Student Course Assessment & Certificate Generation",
+      "description": "Wire up Quiz submission and automated generation of verified certificate records upon achieving passing percentage.",
+      "priority": 3,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Record QuizAttempt and calculate score",
+        "Generate Certificate record with verification code when score >= passingPercentage",
+        "Provide downloadable / printable certificate view"
+      ]
+    }
+  ]
+}

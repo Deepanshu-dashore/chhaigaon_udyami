@@ -49,8 +49,9 @@ export function LoginForm() {
       if (data?.url) {
         window.location.href = data.url;
       }
-    } catch (err: any) {
-      setErrorMessage(err?.message || "Google साइन-इन में समस्या आई।");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Google साइन-इन में समस्या आई।";
+      setErrorMessage(message);
       setGoogleLoading(false);
     }
   };
@@ -75,11 +76,12 @@ export function LoginForm() {
       setSuccessMessage("सफलतापूर्वक लॉग इन हुआ! आपको रीडायरेक्ट किया जा रहा है...");
       router.push(redirectTo);
       router.refresh();
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : "लॉग इन करने में त्रुटि हुई।";
       setErrorMessage(
-        err?.message === "Invalid login credentials"
+        errMsg === "Invalid login credentials"
           ? "ईमेल या पासवर्ड गलत है। कृपया पुनः प्रयास करें।"
-          : err?.message || "लॉग इन करने में त्रुटि हुई।"
+          : errMsg
       );
     } finally {
       setLoading(false);

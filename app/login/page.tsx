@@ -1,12 +1,9 @@
 import React, { Suspense } from "react";
-import Link from "next/link";
 import { LoginForm } from "@/components/auth/login-form";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import {
-  GraduationCap,
   Sparkles,
-  ShieldCheck,
   CheckCircle2,
 } from "lucide-react";
 

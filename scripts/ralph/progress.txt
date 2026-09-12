@@ -1,0 +1,23 @@
+# Ralph Progress Log
+Started: 2026-09-12
+
+## Codebase Patterns
+- **Tech Stack**: Next.js 16 (App Router), React 19, TypeScript 5, Tailwind CSS v4.
+- **ORM / DB**: Prisma v7 with `@prisma/adapter-pg` connecting to Supabase PostgreSQL with RLS enabled.
+- **Auth**: Supabase SSR Auth with `@supabase/ssr` cookies handled in `middleware.ts` and `lib/supabase/client.ts`.
+- **Payment Gateway**: Razorpay integration (`services/payment.service.ts`, `app/api/webhooks/route.ts`).
+- **Video Delivery**: VdoCipher encrypted streaming embed component (`components/video/vdo-player.tsx`).
+- **Quality Checks**: Run `npm run lint` and `npx tsc --noEmit` before marking tasks as passing.
+
+---
+## [2026-09-12] Ralph Iteration - Ideogram Cards, Proof Mockups & Deep Black Stats
+- **User Story**: UI Polish & Visual Assets Verification
+- **Status**: Passes (Verified with `npx tsc --noEmit` and `npm run lint` - 0 errors)
+- **Features Implemented**:
+  - `components/course/course-card.tsx`: Upgraded to Ideogram-inspired textured gradient header cards with centered titles and dual action pill buttons.
+  - `app/page.tsx`:
+    - Social Proof 3-Column Statistical Bar: Adjusted to deep matte black (`#070b14`) with high-contrast typography and vertical dividers.
+    - Alternating 2-Row Proof & Progress sections:
+      - Row 1: "सत्यापित प्रमाणन (Turn learning into proof)" with generated 3D certificate fan mockup (`/images/certificate-fan-proof.jpg`).
+      - Row 2: "दैनिक प्रगति (Make progress in minutes a day)" with generated tablet learning path progress mockup (`/images/learning-progress-proof.jpg`).
+---

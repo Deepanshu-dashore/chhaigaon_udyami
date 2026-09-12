@@ -1,11 +1,9 @@
 import React, { Suspense } from "react";
-import Link from "next/link";
 import { RegisterForm } from "@/components/auth/register-form";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import {
   Sparkles,
-  Award,
   Users,
   TrendingUp,
   CheckCircle2,

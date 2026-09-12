@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 interface VdoPlayerProps {
   videoId?: string | null;
@@ -11,12 +11,6 @@ interface VdoPlayerProps {
 
 export function VdoPlayer({ videoId, otp, playbackInfo, title }: VdoPlayerProps) {
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (otp && playbackInfo) {
-      setLoading(false);
-    }
-  }, [otp, playbackInfo]);
 
   if (!otp || !playbackInfo) {
     return (

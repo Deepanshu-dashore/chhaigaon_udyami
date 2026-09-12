@@ -40,9 +40,10 @@ export default function GoogleLoginButton({
       if (data?.url) {
         window.location.href = data.url;
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Google OAuth error:", err);
-      setError(err?.message || "Google साइन-इन में समस्या आई।");
+      const message = err instanceof Error ? err.message : "Google साइन-इन में समस्या आई।";
+      setError(message);
       setLoading(false);
     }
   };

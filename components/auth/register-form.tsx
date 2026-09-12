@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 import { createClient } from "@/utils/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -58,8 +57,9 @@ export function RegisterForm() {
       if (data?.url) {
         window.location.href = data.url;
       }
-    } catch (err: any) {
-      setErrorMessage(err?.message || "Google साइन-इन में समस्या आई।");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Google साइन-इन में समस्या आई।";
+      setErrorMessage(message);
       setGoogleLoading(false);
     }
   };
@@ -131,10 +131,9 @@ export function RegisterForm() {
           "पंजीकरण सफल! कृपया अपने ईमेल इनबॉक्स में जाकर खाता सक्रिय करें (Check your email to verify account)."
         );
       }
-    } catch (err: any) {
-      setErrorMessage(
-        err?.message || "पंजीकरण में त्रुटि हुई। कृपया पुनः प्रयास करें।"
-      );
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "पंजीकरण में त्रुटि हुई। कृपया पुनः प्रयास करें।";
+      setErrorMessage(message);
     } finally {
       setLoading(false);
     }
