@@ -269,19 +269,19 @@ export default async function HomePage() {
                   <Link href="/auth/register">
                     <Button
                       size="lg"
-                      className="px-6 sm:px-7 py-3.5 h-12 text-sm sm:text-[15px] font-semibold rounded-lg bg-white hover:bg-slate-50 text-[#0056d2] shadow-md hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center gap-2 cursor-pointer font-label group"
+                      className="px-6 sm:px-7 py-3.5 h-12 text-sm sm:text-[15px] font-semibold rounded-lg bg-white hover:bg-slate-100 text-blue-950 shadow-md hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center gap-2 cursor-pointer font-label group"
                     >
                       <span>निःशुल्क सीखना शुरू करें</span>
-                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight className="h-4 w-4 text-blue-950 group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </Link>
                   <Link href="#schemes">
                     <Button
                       size="lg"
                       variant="ghost"
-                      className="px-6 sm:px-7 py-3.5 h-12 text-sm sm:text-[15px] font-semibold rounded-lg border-2 border-white/90 hover:border-white bg-transparent hover:bg-white text-white hover:text-[#0056d2] shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center gap-2 cursor-pointer font-label group"
+                      className="px-6 sm:px-7 py-3.5 h-12 text-sm sm:text-[15px] font-semibold rounded-lg bg-blue-950 hover:bg-[#071739] text-white border border-transparent shadow-md hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center gap-2 cursor-pointer font-label group"
                     >
-                      <BadgePercent className="h-4 w-4 text-amber-300 group-hover:text-[#0056d2] transition-colors" />
+                      <BadgePercent className="h-4 w-4 text-amber-300 group-hover:scale-110 transition-transform" />
                       <span>सब्सिडी योजनाएं देखें</span>
                     </Button>
                   </Link>
@@ -337,58 +337,87 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ================= SOCIAL PROOF STATISTICAL IMPACT BAR (COURSERA SPEC) ================= */}
-        <section className="py-6 sm:py-8 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="rounded-2xl bg-[#090d16] text-white p-6 sm:p-8 lg:p-10 shadow-2xl border border-slate-800/80 relative overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-center divide-y md:divide-y-0 md:divide-x divide-slate-800/70">
-                
-                {/* Stat 1 */}
-                <div className="flex items-center gap-4 lg:gap-5 pt-4 md:pt-0 md:pr-6 lg:pr-8 relative">
-                  <div className="text-4xl lg:text-5xl font-black text-white tracking-tight shrink-0 font-headline">
+        {/* ================= SOCIAL PROOF STATISTICAL IMPACT BAR ================= */}
+        <section className="py-8 sm:py-10 bg-gradient-to-r from-blue-950 via-[#0056d2] to-blue-950 text-white relative overflow-hidden border-y border-blue-800/80 shadow-inner">
+          {/* Top-Left White Corner Lines */}
+          <svg className="absolute top-0 left-0 w-28 h-28 text-white/20 pointer-events-none" viewBox="0 0 100 100" fill="none">
+            <line x1="0" y1="15" x2="15" y2="0" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="0" y1="30" x2="30" y2="0" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="0" y1="45" x2="45" y2="0" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="0" y1="60" x2="60" y2="0" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="0" y1="75" x2="75" y2="0" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+
+          {/* Bottom-Right White Corner Lines */}
+          <svg className="absolute bottom-0 right-0 w-28 h-28 text-white/20 pointer-events-none rotate-180" viewBox="0 0 100 100" fill="none">
+            <line x1="0" y1="15" x2="15" y2="0" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="0" y1="30" x2="30" y2="0" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="0" y1="45" x2="45" y2="0" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="0" y1="60" x2="60" y2="0" stroke="currentColor" strokeWidth="1.5" />
+            <line x1="0" y1="75" x2="75" y2="0" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+
+          {/* Corner L-shaped brackets */}
+          <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-white/40 pointer-events-none" />
+          <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-white/40 pointer-events-none" />
+          <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-white/40 pointer-events-none" />
+          <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-white/40 pointer-events-none" />
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 divide-y sm:divide-y-0 sm:divide-x divide-white/20">
+              
+              {/* Stat 1 */}
+              <div className="pt-4 sm:pt-0 sm:pr-6 lg:pr-8 space-y-2">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl sm:text-4xl lg:text-4xl font-extrabold text-white tracking-tight font-headline">
                     76%
-                  </div>
-                  <div className="flex-1 space-y-1">
-                    <p className="text-xs sm:text-[13px] text-slate-200 font-medium leading-relaxed">
-                      शिक्षार्थी मानते हैं कि व्यावहारिक कौशल व प्रोजेक्ट रिपोर्ट्स से नया उद्यम शुरू करने का आत्मविश्वास दोगुना हुआ
-                    </p>
-                    <div className="text-right">
-                      <span className="text-[10px] text-slate-400 font-mono font-bold">[1]</span>
-                    </div>
-                  </div>
+                  </span>
+                  <span className="text-xs text-amber-300 font-mono font-bold">[1]</span>
                 </div>
-
-                {/* Stat 2 */}
-                <div className="flex items-center gap-4 lg:gap-5 pt-6 md:pt-0 md:px-6 lg:px-8 relative">
-                  <div className="text-4xl lg:text-5xl font-black text-white tracking-tight shrink-0 font-headline">
-                    88%
-                  </div>
-                  <div className="flex-1 space-y-1">
-                    <p className="text-xs sm:text-[13px] text-slate-200 font-medium leading-relaxed">
-                      बैंकर्स एवं जिला उद्योग केंद्र (DIC) मानते हैं कि डिजिटल सर्टिफिकेट्स से PMEGP व मुद्रा लोन स्वीकृति आसान होती है
-                    </p>
-                    <div className="text-right">
-                      <span className="text-[10px] text-slate-400 font-mono font-bold">[2]</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Stat 3 */}
-                <div className="flex items-center gap-4 lg:gap-5 pt-6 md:pt-0 md:pl-6 lg:pl-8 relative">
-                  <div className="text-4xl lg:text-5xl font-black text-white tracking-tight shrink-0 font-headline">
-                    90%
-                  </div>
-                  <div className="flex-1 space-y-1">
-                    <p className="text-xs sm:text-[13px] text-slate-200 font-medium leading-relaxed">
-                      प्रमाणित उद्यमियों ने प्रशिक्षण पूर्ण होने के 30 दिनों के भीतर अपने पहले उत्पाद की बिक्री या सेवा शुरू की
-                    </p>
-                    <div className="text-right">
-                      <span className="text-[10px] text-slate-400 font-mono font-bold">[3]</span>
-                    </div>
-                  </div>
-                </div>
-
+                <p className="text-xs sm:text-[13px] text-blue-100 font-medium leading-relaxed">
+                  शिक्षार्थी मानते हैं कि व्यावहारिक कौशल व प्रोजेक्ट रिपोर्ट्स से नया उद्यम शुरू करने का आत्मविश्वास दोगुना हुआ
+                </p>
               </div>
+
+              {/* Stat 2 */}
+              <div className="pt-6 sm:pt-0 sm:px-6 lg:px-8 space-y-2">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl sm:text-4xl lg:text-4xl font-extrabold text-white tracking-tight font-headline">
+                    88%
+                  </span>
+                  <span className="text-xs text-amber-300 font-mono font-bold">[2]</span>
+                </div>
+                <p className="text-xs sm:text-[13px] text-blue-100 font-medium leading-relaxed">
+                  बैंकर्स एवं जिला उद्योग केंद्र (DIC) मानते हैं कि डिजिटल सर्टिफिकेट्स से PMEGP व मुद्रा लोन स्वीकृति आसान होती है
+                </p>
+              </div>
+
+              {/* Stat 3 */}
+              <div className="pt-6 sm:pt-0 sm:px-6 lg:px-8 space-y-2">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl sm:text-4xl lg:text-4xl font-extrabold text-white tracking-tight font-headline">
+                    90%
+                  </span>
+                  <span className="text-xs text-amber-300 font-mono font-bold">[3]</span>
+                </div>
+                <p className="text-xs sm:text-[13px] text-blue-100 font-medium leading-relaxed">
+                  प्रमाणित उद्यमियों ने प्रशिक्षण पूर्ण होने के 30 दिनों के भीतर अपने पहले उत्पाद की बिक्री या सेवा शुरू की
+                </p>
+              </div>
+
+              {/* Stat 4 */}
+              <div className="pt-6 sm:pt-0 sm:pl-6 lg:pl-8 space-y-2">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl sm:text-4xl lg:text-4xl font-extrabold text-white tracking-tight font-headline">
+                    95%
+                  </span>
+                  <span className="text-xs text-amber-300 font-mono font-bold">[4]</span>
+                </div>
+                <p className="text-xs sm:text-[13px] text-blue-100 font-medium leading-relaxed">
+                  उद्यमियों ने सरकारी योजनाओं (PMEGP / PM FME) के तहत 35% तक सब्सिडी व लोन मार्गदर्शन सफलतापूर्वक प्राप्त किया
+                </p>
+              </div>
+
             </div>
           </div>
         </section>
