@@ -70,19 +70,16 @@ export function Navbar() {
                     alt="छैगांव उद्यमी Logo"
                     width={36}
                     height={36}
-                    className="object-contain drop-shadow-sm"
+                    className="object-contain"
                     priority
                   />
                 </div>
-                <div className="flex flex-col">
-                  <span className="font-extrabold text-base sm:text-lg tracking-tight text-blue-700 flex items-center gap-1.5">
+                <div className="flex flex-col justify-center">
+                  <span className="font-semibold text-lg sm:text-xl tracking-tight text-slate-900 font-headline leading-tight group-hover:text-blue-700 transition-colors">
                     छैगांव उद्यमी
-                    <span className="text-[10px] bg-blue-100 text-blue-800 font-bold px-1.5 py-0.2 rounded uppercase">
-                      HUB
-                    </span>
                   </span>
-                  <span className="text-[10px] text-slate-500 font-medium -mt-0.5 hidden sm:inline">
-                    Rural Entrepreneurship Platform
+                  <span className="text-[10px] sm:text-[11px] text-slate-500 font-medium tracking-normal -mt-0.5">
+                    ग्रामीण कौशल व उद्यम मंच
                   </span>
                 </div>
               </Link>

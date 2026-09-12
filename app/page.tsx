@@ -265,23 +265,23 @@ export default async function HomePage() {
                 </p>
 
                 {/* Action Buttons */}
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
                   <Link href="/auth/register">
                     <Button
                       size="lg"
-                      className="px-8 py-4 h-13 text-sm font-bold rounded-full bg-white hover:bg-slate-100 text-[#0056d2] shadow-xl hover:shadow-2xl transition-all flex items-center gap-2 cursor-pointer font-label"
+                      className="px-6 sm:px-7 py-3.5 h-12 text-sm sm:text-[15px] font-semibold rounded-lg bg-white hover:bg-slate-50 text-[#0056d2] shadow-md hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center gap-2 cursor-pointer font-label group"
                     >
                       <span>निःशुल्क सीखना शुरू करें</span>
-                      <ArrowRight className="h-4 w-4" />
+                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </Link>
                   <Link href="#schemes">
                     <Button
                       size="lg"
-                      variant="outline"
-                      className="px-7 py-4 h-13 text-sm font-bold rounded-full border-2 border-white/80 bg-transparent hover:bg-white/10 text-white transition-all flex items-center gap-2 cursor-pointer font-label"
+                      variant="ghost"
+                      className="px-6 sm:px-7 py-3.5 h-12 text-sm sm:text-[15px] font-semibold rounded-lg border-2 border-white/90 hover:border-white bg-transparent hover:bg-white text-white hover:text-[#0056d2] shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center gap-2 cursor-pointer font-label group"
                     >
-                      <BadgePercent className="h-4 w-4 text-amber-300" />
+                      <BadgePercent className="h-4 w-4 text-amber-300 group-hover:text-[#0056d2] transition-colors" />
                       <span>सब्सिडी योजनाएं देखें</span>
                     </Button>
                   </Link>
