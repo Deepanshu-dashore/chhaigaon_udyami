@@ -4,13 +4,21 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import {
+  LayoutDashboard,
+  BookOpen,
+  GraduationCap,
+  Award,
+  User,
+  ArrowLeft,
+} from "lucide-react";
 
 const navItems = [
-  { label: "Overview", href: "/dashboard", icon: "📊" },
-  { label: "My Courses", href: "/dashboard/courses", icon: "📖" },
-  { label: "Learning Center", href: "/dashboard/learning", icon: "🎓" },
-  { label: "Certificates", href: "/dashboard/certificates", icon: "📜" },
-  { label: "My Profile", href: "/dashboard/profile", icon: "👤" },
+  { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
+  { label: "My Courses", href: "/dashboard/courses", icon: BookOpen },
+  { label: "Learning Center", href: "/dashboard/learning", icon: GraduationCap },
+  { label: "Certificates", href: "/dashboard/certificates", icon: Award },
+  { label: "My Profile", href: "/dashboard/profile", icon: User },
 ];
 
 export function DashboardSidebar() {
@@ -29,6 +37,7 @@ export function DashboardSidebar() {
         <nav className="space-y-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
+            const Icon = item.icon;
             return (
               <Link
                 key={item.href}
@@ -40,7 +49,7 @@ export function DashboardSidebar() {
                     : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100"
                 )}
               >
-                <span>{item.icon}</span>
+                <Icon className="w-4 h-4 shrink-0" />
                 <span>{item.label}</span>
               </Link>
             );
@@ -53,9 +62,11 @@ export function DashboardSidebar() {
           href="/"
           className="flex items-center gap-2 px-3 py-2 text-xs text-zinc-500 hover:text-emerald-600 transition-colors"
         >
-          ← Back to Homepage
+          <ArrowLeft className="w-3.5 h-3.5" />
+          <span>Back to Homepage</span>
         </Link>
       </div>
     </aside>
   );
 }
+

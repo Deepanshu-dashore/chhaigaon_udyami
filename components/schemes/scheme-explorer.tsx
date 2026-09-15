@@ -14,6 +14,9 @@ import {
   HelpCircle,
   Clock,
   ShieldCheck,
+  Coins,
+  Landmark,
+  X,
 } from "lucide-react";
 
 export interface SchemeData {
@@ -122,23 +125,25 @@ export function SchemeExplorer({ initialSchemes }: SchemeExplorerProps) {
             </button>
             <button
               onClick={() => setSelectedBenefitType("SUBSIDY")}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
                 selectedBenefitType === "SUBSIDY"
                   ? "bg-emerald-600 text-white shadow-sm"
                   : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
               }`}
             >
-              💰 सब्सिडी व अनुदान
+              <Coins className="w-3.5 h-3.5" />
+              <span>सब्सिडी व अनुदान</span>
             </button>
             <button
               onClick={() => setSelectedBenefitType("LOAN")}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
                 selectedBenefitType === "LOAN"
                   ? "bg-blue-600 text-white shadow-sm"
                   : "bg-blue-50 text-blue-700 hover:bg-blue-100"
               }`}
             >
-              🏦 बैंक ऋण व क्रेडिट
+              <Landmark className="w-3.5 h-3.5" />
+              <span>बैंक ऋण व क्रेडिट</span>
             </button>
           </div>
         </div>
@@ -316,9 +321,10 @@ export function SchemeExplorer({ initialSchemes }: SchemeExplorerProps) {
             <div className="p-6 md:p-8 bg-gradient-to-r from-blue-900 to-[#0056d2] text-white relative">
               <button
                 onClick={() => setActiveModalScheme(null)}
-                className="absolute right-5 top-5 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition"
+                className="absolute right-5 top-5 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 w-8 h-8 rounded-full flex items-center justify-center transition"
+                aria-label="Close modal"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-white/20 text-white text-xs font-bold mb-3">
                 <Building2 className="w-3.5 h-3.5" />

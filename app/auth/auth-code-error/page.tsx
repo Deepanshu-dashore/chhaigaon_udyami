@@ -1,12 +1,13 @@
 import React from 'react'
 import Link from 'next/link'
+import { AlertCircle } from 'lucide-react'
 
 export default function AuthCodeErrorPage() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-surface text-on-surface p-4">
       <div className="max-w-md w-full bg-surface-container-lowest border border-error/30 rounded-lg p-6 shadow-sm text-center space-y-4">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-error-container text-on-error-container font-sans text-xl font-bold">
-          ✕
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-100 text-red-700">
+          <AlertCircle className="w-6 h-6" />
         </div>
         <h1 className="text-2xl font-bold font-sans text-on-surface">
           Authentication Error

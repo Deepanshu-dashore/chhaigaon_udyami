@@ -3,6 +3,7 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { AlertCircle, XCircle, Key } from 'lucide-react'
 
 export default async function ConsentPage({
   searchParams,
@@ -15,8 +16,8 @@ export default async function ConsentPage({
     return (
       <main className="min-h-screen flex items-center justify-center bg-surface p-4 text-on-surface">
         <div className="max-w-md w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-6 shadow-sm text-center space-y-4">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-sans text-xl font-bold">
-            !
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-100 text-amber-700">
+            <AlertCircle className="w-6 h-6" />
           </div>
           <h1 className="text-xl font-bold font-sans text-on-surface">Missing Authorization ID</h1>
           <p className="text-sm font-serif text-on-surface-variant">
@@ -76,8 +77,8 @@ export default async function ConsentPage({
     return (
       <main className="min-h-screen flex items-center justify-center bg-surface p-4 text-on-surface">
         <div className="max-w-md w-full bg-surface-container-lowest border border-error/30 rounded-lg p-6 shadow-sm text-center space-y-4">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-error-container text-on-error-container font-sans text-xl font-bold">
-            ✕
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-100 text-red-700">
+            <XCircle className="w-6 h-6" />
           </div>
           <h1 className="text-xl font-bold font-sans text-on-surface">Authorization Error</h1>
           <p className="text-sm font-serif text-error">
@@ -105,8 +106,8 @@ export default async function ConsentPage({
     <main className="min-h-screen flex items-center justify-center bg-surface p-4 text-on-surface">
       <div className="max-w-md w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-6 shadow-sm space-y-6">
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-fixed text-primary font-sans text-xl font-bold mb-1">
-            🔑
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary mb-1">
+            <Key className="w-6 h-6" />
           </div>
           <h1 className="text-2xl font-bold font-sans text-on-surface">
             Authorize {authDetails.client.name}

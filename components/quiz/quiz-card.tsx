@@ -3,6 +3,14 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  ChevronLeft,
+  ChevronRight,
+  CheckCircle2,
+  XCircle,
+  Send,
+  HelpCircle,
+} from "lucide-react";
 
 interface Question {
   id: string;
@@ -72,6 +80,7 @@ export function QuizCard({
   if (!questions || questions.length === 0) {
     return (
       <Card className="p-6 text-center text-zinc-500">
+        <HelpCircle className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
         No quiz questions available for this lesson.
       </Card>
     );
@@ -115,11 +124,19 @@ export function QuizCard({
                     : "border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 text-zinc-700 dark:text-zinc-300"
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <span className="w-6 h-6 rounded-full border flex items-center justify-center text-xs font-semibold">
-                    {String.fromCharCode(65 + idx)}
-                  </span>
-                  <span>{option}</span>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-full border flex items-center justify-center text-xs font-semibold">
+                      {String.fromCharCode(65 + idx)}
+                    </span>
+                    <span>{option}</span>
+                  </div>
+                  {isCorrect && (
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                  )}
+                  {isWrong && (
+                    <XCircle className="w-5 h-5 text-red-600 shrink-0" />
+                  )}
                 </div>
               </button>
             );
@@ -132,8 +149,10 @@ export function QuizCard({
             size="sm"
             onClick={handlePrev}
             disabled={currentIdx === 0}
+            className="inline-flex items-center gap-1.5"
           >
-            Previous
+            <ChevronLeft className="w-4 h-4" />
+            <span>Previous</span>
           </Button>
 
           {currentIdx === questions.length - 1 ? (
@@ -141,12 +160,15 @@ export function QuizCard({
               size="sm"
               onClick={handleSubmit}
               disabled={submitted || selectedAnswers[currentIdx] === undefined}
+              className="inline-flex items-center gap-1.5"
             >
-              {submitted ? "Submitted" : "Submit Quiz"}
+              <Send className="w-3.5 h-3.5" />
+              <span>{submitted ? "Submitted" : "Submit Quiz"}</span>
             </Button>
           ) : (
-            <Button size="sm" onClick={handleNext}>
-              Next
+            <Button size="sm" onClick={handleNext} className="inline-flex items-center gap-1.5">
+              <span>Next</span>
+              <ChevronRight className="w-4 h-4" />
             </Button>
           )}
         </div>

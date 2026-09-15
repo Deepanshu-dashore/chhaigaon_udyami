@@ -19,6 +19,7 @@ import {
   Check,
   Building2,
   Briefcase,
+  Star,
 } from "lucide-react";
 
 export const metadata = {
@@ -94,38 +95,50 @@ const defaultCourses: CourseItem[] = [
 const enterpriseRoles = [
   {
     title: "डेयरी फार्म एवं मिल्क प्रोसेसिंग प्लांट संचालक",
-    desc: "10 से 50 दुधारू पशुओं की इकाई, स्वच्छ दुग्ध उत्पादन, पनीर-घी निर्माण और ₹10 लाख मुद्रा लोन।",
+    lead: "यदि आप दुग्ध उत्पादन, पनीर-घी निर्माण और डेयरी ब्रांडिंग से आत्मनिर्भर बनना चाहते हैं, तो यह उद्यम आपके लिए है।",
+    desc: "10 से 50 दुधारू पशुओं की आधुनिक इकाई, स्वच्छ दुग्ध उत्पादन, FSSAI मानक एवं ₹10 लाख PM मुद्रा/PMEGP ऋण की संपूर्ण प्रक्रिया।",
+    skills: "नस्ल सुधार, पशु पोषण, FSSAI लाइसेंसिंग, कोल्ड चेन, PMEGP लोन",
     monthlyEarning: "₹65,000 - ₹1,40,000 / माह",
     level: "Beginner Friendly",
     tag: "उच्च मांग",
     slug: "modern-dairy-farming",
-    authority: "NABARD & DIC Approved",
+    readTime: "7 min read",
+    authority: "NABARD & DIC",
   },
   {
     title: "मसाला एवं लघु खाद्य प्रसंस्करण उद्यमी",
-    desc: "स्थानीय मिर्च, धनिया, हल्दी व आटा-दलिया पिसाई उद्योग, FSSAI लाइसेंसिंग एवं आकर्षक पैकेजिंग।",
+    lead: "यदि आप कृषि उपज का मूल्य संवर्धन (Value Addition) कर स्थानीय स्तर पर पैकेज्ड फूड बेचना चाहते हैं।",
+    desc: "स्थानीय मिर्च, धनिया, हल्दी व आटा-दलिया पिसाई उद्योग, आधुनिक मशीनरी, FSSAI मानक, पैकेजिंग व 35% PM FME सब्सिडी।",
+    skills: "खाद्य प्रसंस्करण, ग्राइंडिंग मशीनरी, ब्रांड पैकेजिंग, GST व FSSAI",
     monthlyEarning: "₹45,000 - ₹95,000 / माह",
     level: "Intermediate",
     tag: "35% PM FME सब्सिडी",
     slug: "food-processing-micro-business",
-    authority: "MOFPI & FSSAI Aligned",
+    readTime: "6 min read",
+    authority: "MOFPI & FSSAI",
   },
   {
     title: "जैविक खाद एवं वर्मीकम्पोस्ट उत्पादक",
-    desc: "कम पूंजी में केंचुआ खाद यूनिट, जैविक एनपीके निर्माण, नर्सरी व किसानों को थोक बिक्री नेटवर्क।",
+    lead: "यदि आप पर्यावरण अनुकूल जैविक खेती एवं कम लागत में उच्च मुनाफा देने वाला खाद व्यवसाय चाहते हैं।",
+    desc: "कम पूंजी में केंचुआ खाद यूनिट, जैविक एनपीके निर्माण, नर्सरी व किसानों को थोक आपूर्ति नेटवर्क व ऑर्गेनिक सर्टिफिकेशन।",
+    skills: "वर्मीबेड प्रबंधन, केंचुआ कल्चर, NPK फॉर्मूलेशन, कृषि विपणन",
     monthlyEarning: "₹35,000 - ₹75,000 / माह",
     level: "Foundational",
     tag: "कम लागत",
     slug: "organic-farming-vermicompost",
+    readTime: "5 min read",
     authority: "कृषि विभाग म.प्र.",
   },
   {
     title: "ग्रामीण ई-कॉमर्स एवं ONDC डिजिटल विक्रेता",
-    desc: "गाँव के हस्तशिल्प व कृषि उत्पादों को WhatsApp, Amazon व ONDC पर ऑनलाइन सीधे ग्राहकों तक पहुंचाएं।",
+    lead: "यदि आप स्थानीय उत्पादों, कला एवं कृषि सामग्रियों को सीधे ऑनलाइन राष्ट्रीय बाज़ार में बेचना चाहते हैं।",
+    desc: "गाँव के हस्तशिल्प व कृषि उत्पादों को WhatsApp Business, Amazon व ONDC पर लिस्ट करें और अखिल भारतीय डिलीवरी से जोड़ें।",
+    skills: "उत्पाद फोटोग्राफी, ONDC लिस्टिंग, डिजिटल पेमेंट, ऑनलाइन डिलीवरी",
     monthlyEarning: "₹30,000 - ₹80,000 / माह",
     level: "All Levels",
     tag: "डिजिटल भारत",
     slug: "rural-digital-commerce-marketing",
+    readTime: "8 min read",
     authority: "ONDC & Digital India",
   },
 ];
@@ -237,76 +250,77 @@ export default async function HomePage() {
       <Navbar />
 
       <main className="flex-1">
-        {/* ================= ROYAL BLUE HERO BANNER (COURSERA IMG 1) ================= */}
-        <section className="bg-gradient-to-r from-blue-900 via-[#0056d2] to-indigo-900 text-white py-10 sm:py-14 border-b border-blue-800/80 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)] pointer-events-none" />
-
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+        {/* ================= COURSERA HERO BANNER (MATCHING REFERENCE UI) ================= */}
+        <section className="bg-white text-slate-900 border-b border-slate-200 relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative min-h-[460px] lg:min-h-[500px] flex items-center">
+            
+            {/* Left Column: Proper Typographic Hierarchy */}
+            <div className="w-full lg:w-[54%] py-10 sm:py-14 lg:py-16 space-y-4 text-left z-10">
               
-              {/* Left Column: Coursera Headline & CTAs */}
-              <div className="lg:col-span-7 space-y-4 sm:space-y-5 text-center lg:text-left">
-                
-                {/* Brand Pill */}
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-white/15 text-white border border-white/25 shadow-xs">
-                  <Sparkles className="h-3.5 w-3.5 text-amber-300" />
-                  <span>छैगांव उद्यमी PLUS • विशेष ग्रामीण उद्यम पहल 2026</span>
-                </div>
-
-                {/* Main Headline */}
-                <h1 className="text-3xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight leading-[1.15] font-headline">
-                  कुछ ही मिनटों में शुरुआत करें।<br />
-                  <span className="text-amber-300">इसी सप्ताह</span> अपना उद्योग बनाएं।
-                </h1>
-
-                {/* Subtitle */}
-                <p className="text-blue-100 text-base sm:text-lg leading-relaxed max-w-2xl font-body">
-                  डेयरी फार्मिंग, फूड प्रोसेसिंग, जैविक खेती और सरकारी सब्सिडी योजनाओं के साथ सीखें सफल ग्रामीण उद्योग की स्थापना। प्रमाणित वीडियो लेक्चर्स व बैंक DPR सहायता।
-                </p>
-
-                {/* Action Buttons */}
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
-                  <Link href="/auth/register">
-                    <Button
-                      size="lg"
-                      className="px-6 sm:px-7 py-3.5 h-12 text-sm sm:text-[15px] font-semibold rounded-lg bg-white hover:bg-slate-100 text-blue-950 shadow-md hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center gap-2 cursor-pointer font-label group"
-                    >
-                      <span>निःशुल्क सीखना शुरू करें</span>
-                      <ArrowRight className="h-4 w-4 text-blue-950 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </Link>
-                  <Link href="#schemes">
-                    <Button
-                      size="lg"
-                      variant="ghost"
-                      className="px-6 sm:px-7 py-3.5 h-12 text-sm sm:text-[15px] font-semibold rounded-lg bg-blue-950 hover:bg-[#071739] text-white border border-transparent shadow-md hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center gap-2 cursor-pointer font-label group"
-                    >
-                      <BadgePercent className="h-4 w-4 text-amber-300 group-hover:scale-110 transition-transform" />
-                      <span>सब्सिडी योजनाएं देखें</span>
-                    </Button>
-                  </Link>
-                </div>
-
-                {/* Guarantee Microcopy */}
-                <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-y-2 gap-x-5 text-xs text-blue-100 font-medium">
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="h-4 w-4 text-amber-300" /> 100% निःशुल्क योजनाएं
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="h-4 w-4 text-amber-300" /> बैंक DPR टेम्पलेट्स शामिल
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="h-4 w-4 text-amber-300" /> आधिकारिक QR सर्टिफिकेट
-                  </span>
-                </div>
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50/90 text-[#0056d2] border border-blue-200/80 shadow-2xs">
+                <Sparkles className="h-3.5 w-3.5 text-[#0056d2]" />
+                <span>कौशल विकास एवं ग्रामीण स्वावलंबन</span>
               </div>
 
-              {/* Right Column: Video Showcase Card */}
-              <div className="lg:col-span-5">
-                <HeroVideoPreview />
-              </div>
+              {/* Level 1: Main Title (H1) */}
+              <h1 className="text-3xl sm:text-4xl lg:text-[46px] font-black text-slate-950 tracking-tight leading-[1.16] font-headline">
+                ग्रामीण उद्यमिता में,<br />
+                सफलता कौशल से बनती है।
+              </h1>
 
+              {/* Level 2: Lead Hook Subtitle */}
+              <p className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                यदि आप नया व्यवसाय शुरू करना चाहते हैं, कृषि को उद्योग में बदलना चाहते हैं, या सरकारी सब्सिडी प्राप्त करना चाहते हैं — तो यह मंच आपके लिए है।
+              </p>
+
+              {/* Level 3: Body Description */}
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-lg font-body">
+                छैगांव उद्यमी आपको देता है व्यावहारिक वीडियो प्रशिक्षण, बैंक-मान्य DPR प्रोजेक्ट रिपोर्ट्स एवं सरकारी योजनाओं (PMEGP, मुख्यमंत्री उद्यम क्रांति) की संपूर्ण आवेदन प्रक्रिया।
+              </p>
+
+              {/* Level 4: Skills you'll need / Key Outcomes */}
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-lg">
+                <strong className="font-bold text-slate-900">Skills you’ll need / gain:</strong> डेयरी फार्मिंग, फूड प्रोसेसिंग, PMEGP ₹50 लाख लोन, FSSAI लाइसेंसिंग, डिजिटल मार्केटिंग, ONDC सेलिंग
+              </p>
+
+              {/* Level 5: Coursera-Style Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3.5 pt-2">
+                <Link href="/courses">
+                  <Button
+                    size="lg"
+                    className="px-5 py-3 h-11 text-xs sm:text-sm font-semibold rounded-[4px] bg-[#0056d2] hover:bg-blue-700 text-white shadow-xs transition-colors flex items-center gap-2 cursor-pointer font-label"
+                  >
+                    <span>कोर्सेज एक्सप्लोर करें (Explore catalog)</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+
+                <Link href="/auth/register">
+                  <Button
+                    size="lg"
+                    variant="ghost"
+                    className="px-5 py-3 h-11 text-xs sm:text-sm font-semibold rounded-[4px] border border-[#0056d2] text-[#0056d2] bg-white hover:bg-blue-50/60 transition-colors flex items-center gap-2 cursor-pointer font-label"
+                  >
+                    <span>निःशुल्क जुड़ें (Sign up)</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
             </div>
+
+          </div>
+
+          {/* Right Column: Full-Bleed Image flush with right screen edge */}
+          <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-[48%] xl:w-[50%] h-[320px] sm:h-[400px] lg:h-full relative overflow-hidden">
+            <img
+              src="/images/coursera-hero-banner.jpg"
+              alt="Indian Entrepreneurs collaborating on business project"
+              className="w-full h-full object-cover object-center"
+            />
+            {/* Smooth Left Horizontal Fade Gradient into White Canvas */}
+            <div className="hidden lg:block absolute inset-y-0 left-0 w-44 bg-gradient-to-r from-white via-white/80 to-transparent pointer-events-none" />
+            <div className="block lg:hidden absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white to-transparent pointer-events-none" />
           </div>
         </section>
 
@@ -428,10 +442,6 @@ export default async function HomePage() {
             
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div className="space-y-1.5">
-                <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#0056d2]">
-                  <Briefcase className="h-3.5 w-3.5" />
-                  <span>उद्यमिता करियर ट्रैक्स (Explore Enterprise Roles)</span>
-                </div>
                 <h2 className="text-2xl sm:text-3xl font-semibold text-slate-950 tracking-tight font-headline">
                   अपने गाँव में शुरू करने योग्य प्रमुख व्यवसाय
                 </h2>
@@ -458,15 +468,15 @@ export default async function HomePage() {
             </div>
 
             {/* Role Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {enterpriseRoles.map((role, idx) => (
                 <div
                   key={idx}
-                  className="rounded-2xl border border-slate-200/80 hover:border-[#0056d2]/50 bg-white p-5 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)] hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+                  className="rounded-2xl border border-slate-200/90 hover:border-[#0056d2]/50 bg-white p-4 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
                 >
-                  <div className="space-y-3">
+                  <div className="space-y-2.5">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-md bg-blue-50 text-[#0056d2] border border-blue-100">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-[#0056d2] border border-blue-100">
                         {role.tag}
                       </span>
                       <span className="text-[10px] font-semibold text-slate-400">
@@ -474,20 +484,32 @@ export default async function HomePage() {
                       </span>
                     </div>
 
-                    <h3 className="font-semibold text-base sm:text-lg text-slate-900 group-hover:text-[#0056d2] transition-colors leading-snug font-headline">
+                    {/* Level 1: Role Title */}
+                    <h3 className="font-bold text-base sm:text-lg text-slate-950 group-hover:text-[#0056d2] transition-colors leading-snug font-headline">
                       {role.title}
                     </h3>
 
-                    <p className="text-xs text-slate-600 leading-relaxed font-body line-clamp-2">
+                    {/* Level 2: Lead Hook */}
+                    <p className="text-xs sm:text-[13px] font-bold text-slate-900 leading-snug">
+                      {role.lead}
+                    </p>
+
+                    {/* Level 3: Description */}
+                    <p className="text-xs text-slate-600 leading-relaxed font-body">
                       {role.desc}
                     </p>
 
+                    {/* Level 4: Skills you'll need */}
+                    <p className="text-xs text-slate-700 leading-relaxed">
+                      <strong className="font-bold text-slate-900">Skills you’ll need:</strong> {role.skills}
+                    </p>
+
                     {/* Median Earning Badge */}
-                    <div className="bg-emerald-50/80 border border-emerald-100/90 rounded-xl p-2.5">
-                      <span className="text-[10px] uppercase font-bold text-emerald-800/80 block tracking-wider">
+                    <div className="bg-emerald-50/80 border border-emerald-100/90 rounded-xl p-2">
+                      <span className="text-[9.5px] uppercase font-bold text-emerald-800/80 block tracking-wider">
                         अनुमानित मासिक आय क्षमता
                       </span>
-                      <span className="text-sm sm:text-base font-black text-emerald-700 font-headline">
+                      <span className="text-sm font-black text-emerald-700 font-headline">
                         {role.monthlyEarning}
                       </span>
                     </div>
@@ -518,10 +540,6 @@ export default async function HomePage() {
             
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div className="space-y-1.5">
-                <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#0056d2]">
-                  <BookOpen className="h-3.5 w-3.5" />
-                  <span>प्रमाणित कौशल पाठ्यक्रम (Featured Courses)</span>
-                </div>
                 <h2 className="text-2xl sm:text-3xl font-semibold text-slate-950 tracking-tight font-headline">
                   लोकप्रिय उद्यमिता मास्टरक्लासेस
                 </h2>
@@ -536,8 +554,8 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-8">
-              {coursesToDisplay.map((course) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {coursesToDisplay.map((course, idx) => (
                 <CourseCard
                   key={course.id}
                   id={course.id}
@@ -550,6 +568,7 @@ export default async function HomePage() {
                   level={course.level}
                   lessonsCount={course.lessonsCount}
                   category={course.category}
+                  isLastInRow={idx % 4 >= 2}
                 />
               ))}
             </div>
@@ -565,8 +584,8 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               {/* Left: Text */}
               <div className="lg:col-span-6 space-y-4">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-[#0056d2] border border-blue-200">
-                  <Award className="h-4 w-4 text-[#0056d2]" />
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-50/90 text-[#0056d2] border border-blue-200/90 shadow-2xs tracking-wide">
+                  <Award className="h-4 w-4 text-[#0056d2] shrink-0" />
                   <span>सत्यापित प्रमाणन (Turn learning into proof)</span>
                 </div>
 
@@ -595,8 +614,9 @@ export default async function HomePage() {
 
                 <div className="pt-1">
                   <Link href="/courses">
-                    <Button className="bg-[#0056d2] hover:bg-blue-800 text-white font-bold rounded-lg px-5 py-2.5 text-xs shadow-md">
-                      सर्टिफाइड कोर्स चुनें →
+                    <Button className="bg-[#0056d2] hover:bg-blue-800 text-white font-bold rounded-lg px-5 py-2.5 text-xs shadow-md inline-flex items-center gap-1.5">
+                      <span>सर्टिफाइड कोर्स चुनें</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
                     </Button>
                   </Link>
                 </div>
@@ -625,8 +645,8 @@ export default async function HomePage() {
 
               {/* Right: Text */}
               <div className="lg:col-span-6 order-1 lg:order-2 space-y-4">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  <Sparkles className="h-4 w-4 text-emerald-600" />
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-50/90 text-emerald-800 border border-emerald-200/90 shadow-2xs tracking-wide">
+                  <Sparkles className="h-4 w-4 text-emerald-600 shrink-0" />
                   <span>दैनिक प्रगति (Make progress in minutes a day)</span>
                 </div>
 
@@ -655,8 +675,9 @@ export default async function HomePage() {
 
                 <div className="pt-1">
                   <Link href="/auth/register">
-                    <Button className="bg-slate-900 hover:bg-black text-white font-bold rounded-lg px-5 py-2.5 text-xs shadow-md">
-                      निःशुल्क शुरुआत करें →
+                    <Button className="bg-slate-900 hover:bg-black text-white font-bold rounded-lg px-5 py-2.5 text-xs shadow-md inline-flex items-center gap-1.5">
+                      <span>निःशुल्क शुरुआत करें</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
                     </Button>
                   </Link>
                 </div>
@@ -690,8 +711,9 @@ export default async function HomePage() {
                   }`}
                 >
                   {plan.isPopular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#0056d2] text-white text-[11px] font-bold tracking-wider uppercase shadow-md">
-                      ⭐ सर्वाधिक लोकप्रिय (Best Value)
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-blue-700 via-[#0056d2] to-indigo-700 text-white text-[11px] font-bold tracking-wide uppercase shadow-md shadow-blue-600/30 border border-white/30 inline-flex items-center gap-1.5 whitespace-nowrap">
+                      <Star className="w-3.5 h-3.5 fill-amber-300 text-amber-300 shrink-0" />
+                      <span>सर्वाधिक लोकप्रिय (Best Value)</span>
                     </div>
                   )}
 

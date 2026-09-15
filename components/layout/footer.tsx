@@ -10,6 +10,12 @@ import {
   Award,
   Sparkles,
 } from "lucide-react";
+import {
+  FaWhatsapp,
+  FaYoutube,
+  FaFacebook,
+  FaInstagram,
+} from "react-icons/fa6";
 
 export function Footer() {
   return (
@@ -89,6 +95,46 @@ export function Footer() {
                 <Phone className="h-4 w-4 text-emerald-600 shrink-0" />
                 <span>हेल्पलाइन: +91 98765 43210</span>
               </div>
+            </div>
+
+            {/* Social Media Links */}
+            <div className="pt-2 flex items-center gap-3 text-slate-500">
+              <a
+                href="https://whatsapp.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp"
+                className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"
+              >
+                <FaWhatsapp className="w-4 h-4" />
+              </a>
+              <a
+                href="https://youtube.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+                className="w-8 h-8 rounded-full bg-red-50 text-red-600 hover:bg-red-600 hover:text-white flex items-center justify-center transition-colors"
+              >
+                <FaYoutube className="w-4 h-4" />
+              </a>
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-colors"
+              >
+                <FaFacebook className="w-4 h-4" />
+              </a>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="w-8 h-8 rounded-full bg-pink-50 text-pink-600 hover:bg-pink-600 hover:text-white flex items-center justify-center transition-colors"
+              >
+                <FaInstagram className="w-4 h-4" />
+              </a>
             </div>
           </div>
 

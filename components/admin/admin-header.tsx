@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
 
 const adminTabs = [
   { label: "Dashboard", href: "/admin/dashboard" },
@@ -37,9 +38,10 @@ export function AdminHeader() {
           <div className="flex items-center gap-4">
             <Link
               href="/dashboard"
-              className="text-xs text-zinc-500 hover:text-emerald-600 transition-colors"
+              className="inline-flex items-center gap-1 text-xs text-zinc-500 hover:text-emerald-600 transition-colors"
             >
-              Learner View →
+              <span>Learner View</span>
+              <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
         </div>

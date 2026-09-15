@@ -15,6 +15,7 @@ import {
   ChevronDown,
   Search,
   Sparkles,
+  ArrowRight,
 } from "lucide-react";
 
 export function Navbar() {
@@ -41,9 +42,10 @@ export function Navbar() {
             </span>
             <Link
               href="/#schemes"
-              className="underline font-bold text-blue-300 hover:text-white ml-1.5"
+              className="inline-flex items-center underline font-bold text-blue-300 hover:text-white ml-1.5"
             >
-              योजनाएं देखें →
+              <span>योजनाएं देखें</span>
+              <ArrowRight className="h-3 w-3 ml-1" />
             </Link>
           </div>
           <button

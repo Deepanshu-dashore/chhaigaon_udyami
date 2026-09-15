@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Play, Shield, BookOpen, Star, Sparkles, X } from "lucide-react";
+import { Play, Shield, BookOpen, Star, Sparkles, X, ArrowRight } from "lucide-react";
 
 export function HeroVideoPreview() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -105,8 +105,9 @@ export function HeroVideoPreview() {
             </div>
 
             <Link href="/courses/modern-dairy-farming">
-              <span className="text-xs font-bold text-[#0056d2] hover:underline flex items-center">
-                पूरा सिलेबस देखें →
+              <span className="text-xs font-bold text-[#0056d2] hover:underline inline-flex items-center gap-1">
+                <span>पूरा सिलेबस देखें</span>
+                <ArrowRight className="h-3 w-3" />
               </span>
             </Link>
           </div>
