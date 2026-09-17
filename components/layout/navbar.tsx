@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
+import UserAvatar from "@/components/ui/user-avatar";
 import {
   BookOpen,
   Menu,
@@ -28,7 +29,7 @@ export function Navbar() {
   const isAuthPage = pathname === "/login" || pathname === "/register";
 
   return (
-    <div className="w-full">
+    <div className="sticky top-0 z-50 w-full">
       {/* Top Announcement Bar (Coursera Style) */}
       {showAnnouncement && (
         <div className="bg-slate-900 text-white text-xs py-2 px-4 flex items-center justify-between font-medium">
@@ -59,7 +60,7 @@ export function Navbar() {
       )}
 
       {/* Main Navigation Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/95 backdrop-blur-md transition-all shadow-xs">
+      <header className="w-full border-b border-slate-200 bg-white/95 backdrop-blur-md transition-all shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between gap-4">
             
@@ -129,6 +130,9 @@ export function Navbar() {
                   <Link href="/courses" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
                     कोर्सेज
                   </Link>
+                  <Link href="/apply" className="px-2.5 py-1.5 text-blue-700 hover:text-blue-800 font-bold rounded">
+                    प्रवेश आवेदन (Apply)
+                  </Link>
                   <Link href="/#schemes" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
                     सब्सिडी योजनाएं
                   </Link>
@@ -139,44 +143,66 @@ export function Navbar() {
               )}
 
               {loading ? (
-                <div className="h-8 w-20 bg-slate-200 rounded-lg animate-pulse" />
+                <div className="h-9 w-24 bg-slate-200 rounded-xl animate-pulse" />
               ) : user ? (
-                <div className="relative">
-                  <button
-                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="flex items-center gap-2 p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
+                <div className="flex items-center gap-2.5">
+                  {/* Prominent Dashboard Action Button */}
+                  <Link
+                    href="/dashboard"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 text-xs font-bold transition shadow-xs"
                   >
-                    <div className="h-7 w-7 rounded-md bg-blue-600 text-white flex items-center justify-center font-bold text-xs uppercase shadow-xs">
-                      {user.email?.charAt(0) || "U"}
-                    </div>
-                    <span className="hidden sm:inline text-xs font-semibold text-slate-800 max-w-[100px] truncate">
-                      {user.user_metadata?.name || user.email?.split("@")[0]}
-                    </span>
-                    <ChevronDown className="h-3 w-3 text-slate-400" />
-                  </button>
+                    <LayoutDashboard className="h-3.5 w-3.5" />
+                    <span>डैशबोर्ड (Dashboard)</span>
+                  </Link>
 
-                  {userDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 rounded-xl bg-white border border-slate-200 shadow-xl py-1 z-50">
-                      <Link
-                        href="/dashboard"
-                        className="flex items-center gap-2 px-4 py-2 text-xs text-slate-700 hover:bg-slate-50"
-                        onClick={() => setUserDropdownOpen(false)}
-                      >
-                        <LayoutDashboard className="h-3.5 w-3.5 text-blue-600" />
-                        डैशबोर्ड
-                      </Link>
-                      <button
-                        onClick={() => {
-                          setUserDropdownOpen(false);
-                          signOut();
-                        }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-xs text-rose-600 hover:bg-rose-50 text-left cursor-pointer"
-                      >
-                        <LogOut className="h-3.5 w-3.5" />
-                        लॉग आउट
-                      </button>
-                    </div>
-                  )}
+                  {/* User Profile Dropdown */}
+                  <div className="relative">
+                    <button
+                      onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                      className="flex items-center gap-2 p-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
+                    >
+                      <UserAvatar
+                        src={user.user_metadata?.avatar_url || user.user_metadata?.picture}
+                        name={user.user_metadata?.name || user.email}
+                        size="sm"
+                      />
+                      <span className="hidden sm:inline text-xs font-semibold text-slate-800 max-w-[100px] truncate">
+                        {user.user_metadata?.name || user.email?.split("@")[0]}
+                      </span>
+                      <ChevronDown className="h-3 w-3 text-slate-400" />
+                    </button>
+
+                    {userDropdownOpen && (
+                      <div className="absolute right-0 mt-2 w-52 rounded-2xl bg-white border border-slate-200 shadow-xl py-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+                        <div className="px-4 py-2 border-b border-slate-100">
+                          <p className="text-xs font-bold text-slate-900 truncate">
+                            {user.user_metadata?.name || "User"}
+                          </p>
+                          <p className="text-[11px] text-slate-500 truncate">
+                            {user.email}
+                          </p>
+                        </div>
+                        <Link
+                          href="/dashboard"
+                          className="flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition"
+                          onClick={() => setUserDropdownOpen(false)}
+                        >
+                          <LayoutDashboard className="h-4 w-4 text-blue-600" />
+                          <span>डैशबोर्ड देखें</span>
+                        </Link>
+                        <button
+                          onClick={() => {
+                            setUserDropdownOpen(false);
+                            signOut();
+                          }}
+                          className="w-full flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition text-left cursor-pointer border-t border-slate-100"
+                        >
+                          <LogOut className="h-4 w-4" />
+                          <span>लॉग आउट (Logout)</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
@@ -231,8 +257,42 @@ export function Navbar() {
               </button>
             </form>
             <div className="flex flex-col gap-1 text-xs font-semibold text-slate-700 pt-2">
+              {user && (
+                <div className="p-3 mb-2 rounded-xl bg-blue-50/80 border border-blue-100 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <UserAvatar
+                      src={user.user_metadata?.avatar_url || user.user_metadata?.picture}
+                      name={user.user_metadata?.name || user.email}
+                      size="sm"
+                    />
+                    <div>
+                      <p className="text-xs font-bold text-slate-900 truncate max-w-[140px]">
+                        {user.user_metadata?.name || "User"}
+                      </p>
+                      <p className="text-[10px] text-slate-500 truncate max-w-[140px]">
+                        {user.email}
+                      </p>
+                    </div>
+                  </div>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-2.5 py-1 text-[11px] font-bold bg-[#0056d2] text-white rounded-lg shadow-xs"
+                  >
+                    डैशबोर्ड
+                  </Link>
+                </div>
+              )}
+
+              <Link href="/dashboard" className="py-2 px-2 text-blue-700 font-bold hover:bg-blue-50 rounded flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                <LayoutDashboard className="h-4 w-4 text-blue-600" />
+                <span>डैशबोर्ड (Dashboard)</span>
+              </Link>
               <Link href="/courses" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
                 कोर्सेज (Courses)
+              </Link>
+              <Link href="/apply" className="py-2 px-2 text-blue-700 font-bold hover:bg-blue-50 rounded" onClick={() => setMobileMenuOpen(false)}>
+                प्रवेश आवेदन (Apply Now)
               </Link>
               <Link href="/#schemes" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
                 सब्सिडी योजनाएं (Schemes)
@@ -240,6 +300,36 @@ export function Navbar() {
               <Link href="/#credentials" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
                 सर्टिफिकेट्स (Certificates)
               </Link>
+
+              {user ? (
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    signOut();
+                  }}
+                  className="py-2 px-2 text-rose-600 hover:bg-rose-50 rounded flex items-center gap-2 text-left cursor-pointer border-t border-slate-100 mt-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>लॉग आउट (Logout)</span>
+                </button>
+              ) : (
+                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="py-2 text-center text-xs font-bold text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-50"
+                  >
+                    लॉग इन
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="py-2 text-center text-xs font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                  >
+                    मुफ्त जुड़ें
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}

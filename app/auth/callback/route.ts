@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import { recordAuthActivity, extractClientMetadata } from "@/lib/auth-tracker";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -48,14 +49,18 @@ export async function GET(request: Request) {
         include: { profile: true },
       });
 
+      let targetUserId = existingUser?.id;
+
       if (existingUser) {
         // Link supabaseUserId if not linked yet, update profile photo if provided
-        await prisma.user.update({
+        const updated = await prisma.user.update({
           where: { id: existingUser.id },
           data: {
             supabaseUserId,
             name: existingUser.name || fullName,
             isVerified: true,
+            isOnline: true,
+            lastLoginAt: new Date(),
             ...(avatarUrl && !existingUser.profile?.profilePhoto
               ? {
                   profile: {
@@ -68,16 +73,32 @@ export async function GET(request: Request) {
               : {}),
           },
         });
+        targetUserId = updated.id;
       } else {
-        // 2. Application-user provisioning: New OAuth user always gets STUDENT role
-        await prisma.user.create({
+        // 2. Application-user provisioning: Assign role from registration or default to STUDENT
+        const allowedRoles = [
+          "STUDENT",
+          "TRAINER",
+          "MARKET_PARTNER",
+          "MENTOR",
+          "CONTENT_MANAGER",
+        ];
+        const roleParam = searchParams.get("role")?.toUpperCase();
+        const roleToAssign =
+          roleParam && allowedRoles.includes(roleParam)
+            ? (roleParam as "STUDENT" | "TRAINER" | "MARKET_PARTNER" | "MENTOR" | "CONTENT_MANAGER")
+            : "STUDENT";
+
+        const newUser = await prisma.user.create({
           data: {
             supabaseUserId,
             email: userEmail,
             name: fullName,
-            role: "STUDENT",
+            role: roleToAssign,
             status: "ACTIVE",
             isVerified: true,
+            isOnline: true,
+            lastLoginAt: new Date(),
             ...(avatarUrl
               ? {
                   profile: {
@@ -87,6 +108,26 @@ export async function GET(request: Request) {
               : {}),
           },
         });
+        targetUserId = newUser.id;
+      }
+
+      // Record Activity Log
+      if (targetUserId) {
+        const { ipAddress, userAgent, deviceInfo } = extractClientMetadata(request);
+        await recordAuthActivity({
+          userId: targetUserId,
+          action: existingUser ? "LOGIN" : "SIGNUP",
+          ipAddress,
+          userAgent,
+          deviceInfo,
+          provider: authUser.app_metadata?.provider || "google",
+          metadata: { authProvider: "google" },
+        });
+      }
+      // Determine redirect path based on user role if next is default /dashboard
+      const finalRole = existingUser?.role || (authUser.user_metadata?.role as string);
+      if (next === "/dashboard" && (finalRole === "ADMIN" || finalRole === "SUPER_ADMIN")) {
+        next = "/admin/dashboard";
       }
     } catch (dbErr) {
       console.error("Failed to sync/provision OAuth user to PostgreSQL:", dbErr);

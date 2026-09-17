@@ -2,16 +2,21 @@
 
 import React, { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
 
 interface GoogleLoginButtonProps {
   redirectPath?: string;
   label?: string;
+  role?: "STUDENT" | "TRAINER" | "MARKET_PARTNER";
   className?: string;
 }
 
 export default function GoogleLoginButton({
   redirectPath = "/dashboard",
-  label = "Google के साथ लॉगिन करें (Continue with Google)",
+  label = "Google के साथ जारी रखें (Continue with Google)",
+  role,
   className = "",
 }: GoogleLoginButtonProps) {
   const [loading, setLoading] = useState(false);
@@ -22,12 +27,19 @@ export default function GoogleLoginButton({
     setError(null);
     try {
       const supabase = createClient();
+      const redirectUrl = new URL(
+        "/auth/callback",
+        window.location.origin
+      );
+      redirectUrl.searchParams.set("next", redirectPath);
+      if (role) {
+        redirectUrl.searchParams.set("role", role);
+      }
+
       const { data, error: authError } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(
-            redirectPath
-          )}`,
+          redirectTo: redirectUrl.toString(),
           queryParams: {
             access_type: "offline",
             prompt: "consent",
@@ -42,27 +54,34 @@ export default function GoogleLoginButton({
       }
     } catch (err: unknown) {
       console.error("Google OAuth error:", err);
-      const message = err instanceof Error ? err.message : "Google साइन-इन में समस्या आई।";
+      const message =
+        err instanceof Error ? err.message : "Google साइन-इन में समस्या आई।";
       setError(message);
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full space-y-2">
       {error && (
-        <p className="text-xs text-red-600 mb-2 text-center">{error}</p>
+        <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs text-center font-medium">
+          {error}
+        </div>
       )}
-      <button
+      <Button
         type="button"
+        variant="outline"
         onClick={handleGoogleLogin}
         disabled={loading}
-        className={`w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition shadow-sm disabled:opacity-60 cursor-pointer ${className}`}
+        className={cn(
+          "w-full h-11 flex items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-xs sm:text-sm font-semibold transition-all shadow-xs active:scale-[0.99] cursor-pointer",
+          className
+        )}
       >
         {loading ? (
-          <span className="h-4 w-4 border-2 border-slate-400 border-t-slate-800 rounded-full animate-spin" />
+          <Spinner size="sm" variant="default" />
         ) : (
-          <svg className="h-4 w-4" viewBox="0 0 24 24">
+          <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
             <path
               fill="#4285F4"
               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -81,8 +100,8 @@ export default function GoogleLoginButton({
             />
           </svg>
         )}
-        <span>{label}</span>
-      </button>
+        <span>{loading ? "Google से कनेक्ट हो रहा है..." : label}</span>
+      </Button>
     </div>
   );
 }

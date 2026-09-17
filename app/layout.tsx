@@ -108,6 +108,10 @@ export const metadata: Metadata = {
     "ग्रामीण एवं कस्बाई भारत के युवाओं और महिलाओं को सफल उद्यमी बनाने की डिजिटल पहल। सीखें डेयरी, फूड प्रोसेसिंग, जैविक खेती और सरकारी सब्सिडी योजनाएं।",
 };
 
+import { AuthProvider } from "@/hooks/use-auth";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
+
 export default function RootLayout({
   children,
 }: {
@@ -119,7 +123,12 @@ export default function RootLayout({
       className={`${publicSans.variable} ${ibmPlexSans.variable} ${ibmPlexSerif.variable} ${inter.variable} ${baloo2.variable} ${notoSansDevanagari.variable} ${poppins.variable} ${mukta.variable} ${nunito.variable} ${modak.variable} ${teko.variable} ${oswald.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-surface text-on-surface">
-        {children}
+        <AuthProvider>
+          <TooltipProvider>
+            {children}
+            <Toaster richColors position="top-right" />
+          </TooltipProvider>
+        </AuthProvider>
       </body>
     </html>
   );

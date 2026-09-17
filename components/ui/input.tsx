@@ -1,64 +1,20 @@
-import React from "react";
-import { cn } from "@/lib/utils";
+import * as React from "react"
+import { cn } from "@/lib/utils"
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  error?: string;
-}
-
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, type, ...props }, ref) => {
-    return (
-      <div className="w-full space-y-1.5">
-        {label && (
-          <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            {label}
-          </label>
-        )}
-        <input
-          type={type}
-          className={cn(
-            "flex h-10 w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:cursor-not-allowed disabled:opacity-50",
-            error && "border-red-500 focus:ring-red-500",
-            className
-          )}
-          ref={ref}
-          {...props}
-        />
-        {error && <p className="text-xs text-red-500">{error}</p>}
-      </div>
-    );
-  }
-);
-
-Input.displayName = "Input";
-
-export function Badge({
-  className,
-  variant = "default",
-  children,
-  ...props
-}: React.HTMLAttributes<HTMLSpanElement> & {
-  variant?: "default" | "success" | "warning" | "outline";
-}) {
-  const variantStyles = {
-    default: "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200",
-    success: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
-    warning: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
-    outline: "border border-zinc-300 text-zinc-700 dark:border-zinc-700 dark:text-zinc-300",
-  };
-
+function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
-    <span
+    <input
+      type={type}
+      data-slot="input"
       className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-        variantStyles[variant],
+        "h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30",
+        "focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
+        "aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40",
         className
       )}
       {...props}
-    >
-      {children}
-    </span>
-  );
+    />
+  )
 }
+
+export { Input }

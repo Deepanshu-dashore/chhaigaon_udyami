@@ -3,10 +3,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Spinner } from "@/components/ui/spinner";
+import GoogleLoginButton from "@/components/auth/GoogleLoginButton";
 import {
   User,
   Mail,
@@ -21,7 +24,6 @@ import {
   Store,
   ShieldCheck,
 } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -34,36 +36,8 @@ export function RegisterForm() {
   const [agreeTerms, setAgreeTerms] = useState(true);
 
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-  const handleGoogleSignIn = async () => {
-    setGoogleLoading(true);
-    setErrorMessage(null);
-    try {
-      const browserSupabase = createClient();
-      const { data, error } = await browserSupabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
-          queryParams: {
-            access_type: "offline",
-            prompt: "consent",
-          },
-        },
-      });
-
-      if (error) throw error;
-      if (data?.url) {
-        window.location.href = data.url;
-      }
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Google साइन-इन में समस्या आई।";
-      setErrorMessage(message);
-      setGoogleLoading(false);
-    }
-  };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,12 +45,12 @@ export function RegisterForm() {
     setSuccessMessage(null);
 
     if (!agreeTerms) {
-      setErrorMessage("कृपया नियम एवं शर्तें स्वीकार करें (Please accept terms & conditions).");
+      setErrorMessage("कृपया नियम एवं शर्तों से सहमति प्रदान करें।");
       return;
     }
 
     if (password.length < 6) {
-      setErrorMessage("पासवर्ड कम से कम 6 अक्षरों का होना चाहिए (Password must be at least 6 characters).");
+      setErrorMessage("पासवर्ड कम से कम 6 अक्षरों का होना अनिवार्य है।");
       return;
     }
 
@@ -85,12 +59,10 @@ export function RegisterForm() {
     try {
       const browserSupabase = createClient();
 
-      // 1. Register with Supabase Auth
       const { data, error } = await browserSupabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
           data: {
             name,
             mobile,
@@ -99,42 +71,27 @@ export function RegisterForm() {
         },
       });
 
-      if (error) throw error;
-
-      // 2. Sync to backend Prisma User model
-      try {
-        const syncRes = await fetch("/api/auth", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            name,
-            mobile,
-            role,
-          }),
-        });
-
-        if (!syncRes.ok) {
-          console.warn("Prisma user sync returned non-200 status.");
-        }
-      } catch (syncErr) {
-        console.error("Backend sync failed:", syncErr);
+      if (error) {
+        throw error;
       }
 
       if (data.session) {
-        setSuccessMessage("पंजीकरण सफल रहा! आपको डैशबोर्ड पर भेजा जा रहा है...");
-        setTimeout(() => {
-          router.push("/dashboard");
-          router.refresh();
-        }, 1200);
+        setSuccessMessage("खाता सफलतापूर्वक तैयार हुआ! रीडायरेक्ट किया जा रहा है...");
+        router.push("/dashboard");
+        router.refresh();
       } else {
         setSuccessMessage(
-          "पंजीकरण सफल! कृपया अपने ईमेल इनबॉक्स में जाकर खाता सक्रिय करें (Check your email to verify account)."
+          "पंजीकरण सफल रहा! कृपया अपना ईमेल चेक करें और सत्यापन लिंक पर क्लिक करके लॉगिन करें।"
         );
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "पंजीकरण में त्रुटि हुई। कृपया पुनः प्रयास करें।";
-      setErrorMessage(message);
+      const message =
+        err instanceof Error ? err.message : "पंजीकरण में त्रुटि हुई।";
+      setErrorMessage(
+        message === "User already registered"
+          ? "यह ईमेल पहले से पंजीकृत है। कृपया लॉगिन करें।"
+          : message
+      );
     } finally {
       setLoading(false);
     }
@@ -143,34 +100,34 @@ export function RegisterForm() {
   const roleOptions = [
     {
       id: "STUDENT" as const,
-      label: "उद्यमी / शिक्षार्थी",
-      subtext: "नई तकनीक व व्यापार सीखें",
+      label: "उद्यमी / छात्र",
+      subtext: "कौशल व सब्सिडी सीखें",
       icon: GraduationCap,
     },
     {
       id: "TRAINER" as const,
       label: "प्रशिक्षक (Trainer)",
-      subtext: "अपना कोर्स व ज्ञान साझा करें",
+      subtext: "अपना कोर्स साझा करें",
       icon: Briefcase,
     },
     {
       id: "MARKET_PARTNER" as const,
       label: "व्यापार सहयोगी",
-      subtext: "उत्पाद एवं बाज़ार लिंकेज",
+      subtext: "उत्पाद व बाज़ार",
       icon: Store,
     },
   ];
 
   return (
-    <Card className="w-full max-w-lg border-slate-200 shadow-xl bg-white rounded-2xl">
-      <CardHeader className="space-y-1 text-center pb-5">
-        <div className="mx-auto w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2 border border-emerald-100 shadow-sm">
+    <Card className="w-full max-w-lg border-slate-200 shadow-xl bg-white rounded-2xl font-sans">
+      <CardHeader className="space-y-1 text-center pb-4">
+        <div className="mx-auto w-12 h-12 rounded-2xl bg-blue-50 text-[#0056d2] flex items-center justify-center mb-2 border border-blue-100 shadow-xs">
           <UserPlus className="h-6 w-6" />
         </div>
-        <CardTitle className="text-2xl font-semibold tracking-tight text-on-surface font-headline">
+        <CardTitle className="text-2xl font-bold tracking-tight text-slate-950 font-headline">
           निःशुल्क खाता बनाएं (Register)
         </CardTitle>
-        <p className="text-sm text-slate-500">
+        <p className="text-xs sm:text-sm text-slate-500">
           ग्रामीण उद्यमिता क्रांति से जुड़ें और अपनी नई यात्रा शुरू करें
         </p>
       </CardHeader>
@@ -178,33 +135,25 @@ export function RegisterForm() {
       <CardContent className="space-y-5">
         {/* Error / Success Notifications */}
         {errorMessage && (
-          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2.5">
+          <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-2.5 animate-in fade-in duration-200">
             <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
             <span className="leading-relaxed font-medium">{errorMessage}</span>
           </div>
         )}
 
         {successMessage && (
-          <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-start gap-2.5">
+          <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-start gap-2.5 animate-in fade-in duration-200">
             <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />
             <span className="leading-relaxed font-medium">{successMessage}</span>
           </div>
         )}
 
-        {/* Google OAuth Button */}
-        <button
-          type="button"
-          onClick={handleGoogleSignIn}
-          disabled={googleLoading || loading}
-          className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold transition shadow-sm disabled:opacity-60 cursor-pointer"
-        >
-          {googleLoading ? (
-            <span className="h-4 w-4 border-2 border-slate-400 border-t-slate-800 rounded-full animate-spin" />
-          ) : (
-            <FcGoogle className="w-5 h-5 shrink-0" />
-          )}
-          <span>Google के साथ शुरू करें (Sign up with Google)</span>
-        </button>
+        {/* Shadcn Google OAuth Button */}
+        <GoogleLoginButton
+          redirectPath="/dashboard"
+          role={role}
+          label="Google के साथ शुरू करें (Sign up with Google)"
+        />
 
         <div className="relative my-2">
           <div className="absolute inset-0 flex items-center">
@@ -218,9 +167,9 @@ export function RegisterForm() {
         </div>
 
         <form onSubmit={handleRegister} className="space-y-4">
-          {/* Role Selection Tabs */}
+          {/* Role Selection */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-700">
+            <label className="text-xs font-bold text-slate-800 block">
               आपकी भूमिका चुनें (Choose Role)
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -234,13 +183,13 @@ export function RegisterForm() {
                     onClick={() => setRole(opt.id)}
                     className={`p-2.5 rounded-xl border text-left flex flex-col items-center sm:items-start transition-all cursor-pointer ${
                       isSelected
-                        ? "border-emerald-600 bg-emerald-50 text-emerald-950 shadow-sm"
+                        ? "border-[#0056d2] bg-blue-50 text-blue-950 shadow-xs font-bold ring-1 ring-[#0056d2]"
                         : "border-slate-200 hover:border-slate-300 bg-white text-slate-700"
                     }`}
                   >
                     <Icon
                       className={`h-5 w-5 mb-1 ${
-                        isSelected ? "text-emerald-700" : "text-slate-400"
+                        isSelected ? "text-[#0056d2]" : "text-slate-400"
                       }`}
                     />
                     <span className="text-xs font-bold leading-tight line-clamp-1">
@@ -257,9 +206,9 @@ export function RegisterForm() {
 
           {/* Full Name */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-              <User className="h-3.5 w-3.5 text-slate-400" />
-              पूरा नाम (Full Name)
+            <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <User className="h-3.5 w-3.5 text-blue-600" />
+              <span>पूरा नाम (Full Name)</span>
             </label>
             <Input
               type="text"
@@ -267,16 +216,16 @@ export function RegisterForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="h-11 rounded-xl bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-emerald-500"
+              className="h-11 rounded-xl bg-slate-50/80 border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-[#0056d2]/20 text-xs sm:text-sm"
             />
           </div>
 
-          {/* Email & Mobile Number Grid */}
+          {/* Email & Mobile Number */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                <Mail className="h-3.5 w-3.5 text-slate-400" />
-                ईमेल (Email)
+              <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <Mail className="h-3.5 w-3.5 text-blue-600" />
+                <span>ईमेल (Email)</span>
               </label>
               <Input
                 type="email"
@@ -284,30 +233,30 @@ export function RegisterForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-11 rounded-xl bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-emerald-500"
+                className="h-11 rounded-xl bg-slate-50/80 border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-[#0056d2]/20 text-xs sm:text-sm"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                <Phone className="h-3.5 w-3.5 text-slate-400" />
-                मोबाइल नंबर (Mobile)
+              <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <Phone className="h-3.5 w-3.5 text-blue-600" />
+                <span>मोबाइल नंबर (Mobile)</span>
               </label>
               <Input
                 type="tel"
                 placeholder="9876543210"
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value)}
-                className="h-11 rounded-xl bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-emerald-500"
+                className="h-11 rounded-xl bg-slate-50/80 border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-[#0056d2]/20 text-xs sm:text-sm"
               />
             </div>
           </div>
 
           {/* Password */}
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-              <Lock className="h-3.5 w-3.5 text-slate-400" />
-              पासवर्ड बनाएं (Create Password)
+            <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <Lock className="h-3.5 w-3.5 text-blue-600" />
+              <span>पासवर्ड बनाएं (Create Password)</span>
             </label>
             <Input
               type="password"
@@ -315,26 +264,25 @@ export function RegisterForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="h-11 rounded-xl bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-emerald-500"
+              className="h-11 rounded-xl bg-slate-50/80 border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-[#0056d2]/20 text-xs sm:text-sm"
             />
           </div>
 
-          {/* Agreement Checkbox */}
-          <div className="flex items-start gap-2 pt-1">
-            <input
-              type="checkbox"
+          {/* Agreement Checkbox with Shadcn Checkbox */}
+          <div className="flex items-start gap-2.5 pt-1">
+            <Checkbox
               id="terms"
               checked={agreeTerms}
-              onChange={(e) => setAgreeTerms(e.target.checked)}
-              className="mt-0.5 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
+              onCheckedChange={(checked) => setAgreeTerms(Boolean(checked))}
+              className="mt-0.5"
             />
-            <label htmlFor="terms" className="text-xs text-slate-600 leading-tight">
+            <label htmlFor="terms" className="text-xs text-slate-600 leading-tight cursor-pointer">
               मैं Chhaigaon Udyami के{" "}
-              <Link href="/terms" className="text-emerald-700 font-medium hover:underline">
+              <Link href="/terms" className="text-blue-700 font-bold hover:underline">
                 नियम व शर्तों
               </Link>{" "}
               तथा{" "}
-              <Link href="/privacy" className="text-emerald-700 font-medium hover:underline">
+              <Link href="/privacy" className="text-blue-700 font-bold hover:underline">
                 गोपनीयता नीति
               </Link>{" "}
               से सहमत हूँ।
@@ -344,16 +292,16 @@ export function RegisterForm() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full h-11 text-sm font-semibold rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-md shadow-emerald-600/20 text-white transition-all cursor-pointer"
+            className="w-full h-11 text-xs sm:text-sm font-bold rounded-xl bg-[#0056d2] hover:bg-blue-700 shadow-md hover:shadow-lg text-white transition-all cursor-pointer active:scale-[0.99]"
           >
             {loading ? (
               <span className="flex items-center gap-2">
-                <span className="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                खाता तैयार हो रहा है...
+                <Spinner size="sm" variant="white" />
+                <span>खाता तैयार हो रहा है...</span>
               </span>
             ) : (
               <span className="flex items-center justify-center gap-2">
-                खाता बनाएं (Create Account)
+                <span>खाता बनाएं (Create Account)</span>
                 <ArrowRight className="h-4 w-4" />
               </span>
             )}
@@ -364,14 +312,14 @@ export function RegisterForm() {
           पहले से खाता मौजूद है?{" "}
           <Link
             href="/login"
-            className="font-bold text-emerald-700 hover:underline"
+            className="font-bold text-blue-700 hover:text-blue-900 hover:underline"
           >
             यहाँ लॉग इन करें (Sign In)
           </Link>
         </div>
 
         <div className="pt-2 text-center text-[11px] text-slate-400 flex items-center justify-center gap-1.5 font-medium">
-          <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+          <ShieldCheck className="h-3.5 w-3.5 text-blue-600" />
           <span>100% सुरक्षित पंजीकरण • कोई छुपा शुल्क नहीं</span>
         </div>
       </CardContent>

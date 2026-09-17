@@ -62,6 +62,14 @@ enum VideoStatus {
   ARCHIVED
 }
 
+enum AuthActionType {
+  LOGIN
+  LOGOUT
+  SIGNUP
+  PASSWORD_RESET
+  TOKEN_REFRESH
+}
+
 // ----------------------------------------------------
 // USER & PROFILE
 // ----------------------------------------------------
@@ -77,8 +85,13 @@ model User {
   status         UserStatus @default(ACTIVE)
   isVerified     Boolean    @default(false)
 
+  // Auth & Session Tracking
+  isOnline     Boolean   @default(false)
+  lastLoginAt  DateTime?
+  lastLogoutAt DateTime?
+
   profile        UserProfile?
-  createdCourses Course[]         @relation("CourseCreator")
+  createdCourses Course[]          @relation("CourseCreator")
   enrollments    Enrollment[]
   orders         Order[]
   payments       Payment[]
@@ -87,6 +100,7 @@ model User {
   certificates   Certificate[]
   notifications  Notification[]
   marketLeads    MarketLead[]
+  activityLogs   UserActivityLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -94,6 +108,24 @@ model User {
   @@index([supabaseUserId])
   @@index([role, status])
   @@index([mobile])
+  @@index([isOnline])
+}
+
+model UserActivityLog {
+  id         String         @id @default(cuid())
+  userId     String
+  action     AuthActionType
+  ipAddress  String?
+  userAgent  String?
+  deviceInfo String?
+  provider   String? // "google" | "email" | "phone"
+  metadata   Json?
+  timestamp  DateTime       @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, timestamp])
+  @@index([action, timestamp])
 }
 
 model UserProfile {
