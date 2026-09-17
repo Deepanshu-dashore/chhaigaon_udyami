@@ -21,7 +21,7 @@ export default function RegisterPage() {
 
       <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* Ambient Blue Glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-gradient-to-tr from-blue-200/40 to-indigo-200/40 blur-3xl pointer-events-none rounded-full" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-112.5 bg-linear-to-tr from-blue-200/40 to-indigo-200/40 blur-3xl pointer-events-none rounded-full" />
 
         <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
           {/* Left Side Value Column */}

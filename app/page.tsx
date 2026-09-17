@@ -252,7 +252,7 @@ export default async function HomePage() {
       <main className="flex-1">
         {/* ================= COURSERA HERO BANNER (MATCHING REFERENCE UI) ================= */}
         <section className="bg-white text-slate-900 border-b border-slate-200 relative overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative min-h-[460px] lg:min-h-[500px] flex items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative min-h-115 lg:min-h-125 flex items-center">
             
             {/* Left Column: Proper Typographic Hierarchy */}
             <div className="w-full lg:w-[54%] py-10 sm:py-14 lg:py-16 space-y-4 text-left z-10">
@@ -312,15 +312,15 @@ export default async function HomePage() {
           </div>
 
           {/* Right Column: Full-Bleed Image flush with right screen edge */}
-          <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-[48%] xl:w-[50%] h-[320px] sm:h-[400px] lg:h-full relative overflow-hidden">
+          <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-[48%] xl:w-[50%] h-80 sm:h-100 lg:h-full relative overflow-hidden">
             <img
               src="/images/coursera-hero-banner.jpg"
               alt="Indian Entrepreneurs collaborating on business project"
               className="w-full h-full object-cover object-center"
             />
             {/* Smooth Left Horizontal Fade Gradient into White Canvas */}
-            <div className="hidden lg:block absolute inset-y-0 left-0 w-44 bg-gradient-to-r from-white via-white/80 to-transparent pointer-events-none" />
-            <div className="block lg:hidden absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white to-transparent pointer-events-none" />
+            <div className="hidden lg:block absolute inset-y-0 left-0 w-44 bg-linear-to-r from-white via-white/80 to-transparent pointer-events-none" />
+            <div className="block lg:hidden absolute inset-x-0 top-0 h-16 bg-linear-to-b from-white to-transparent pointer-events-none" />
           </div>
         </section>
 
@@ -352,7 +352,7 @@ export default async function HomePage() {
         </section>
 
         {/* ================= SOCIAL PROOF STATISTICAL IMPACT BAR ================= */}
-        <section className="py-8 sm:py-10 bg-gradient-to-r from-blue-950 via-[#0056d2] to-blue-950 text-white relative overflow-hidden border-y border-blue-800/80 shadow-inner">
+        <section className="py-8 sm:py-10 bg-linear-to-r from-blue-950 via-[#0056d2] to-blue-950 text-white relative overflow-hidden border-y border-blue-800/80 shadow-inner">
           {/* Top-Left White Corner Lines */}
           <svg className="absolute top-0 left-0 w-28 h-28 text-white/20 pointer-events-none" viewBox="0 0 100 100" fill="none">
             <line x1="0" y1="15" x2="15" y2="0" stroke="currentColor" strokeWidth="1.5" />
@@ -711,7 +711,7 @@ export default async function HomePage() {
                   }`}
                 >
                   {plan.isPopular && (
-                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-blue-700 via-[#0056d2] to-indigo-700 text-white text-[11px] font-bold tracking-wide uppercase shadow-md shadow-blue-600/30 border border-white/30 inline-flex items-center gap-1.5 whitespace-nowrap">
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-linear-to-r from-blue-700 via-[#0056d2] to-indigo-700 text-white text-[11px] font-bold tracking-wide uppercase shadow-md shadow-blue-600/30 border border-white/30 inline-flex items-center gap-1.5 whitespace-nowrap">
                       <Star className="w-3.5 h-3.5 fill-amber-300 text-amber-300 shrink-0" />
                       <span>सर्वाधिक लोकप्रिय (Best Value)</span>
                     </div>
@@ -768,7 +768,7 @@ export default async function HomePage() {
             <div className="rounded-3xl bg-[#0056d2] text-white overflow-hidden shadow-2xl relative flex flex-col lg:flex-row items-center justify-between border border-blue-600">
               
               {/* Decorative backdrop gradients */}
-              <div className="absolute -right-20 -top-20 w-96 h-96 bg-gradient-to-br from-pink-500/20 via-purple-500/20 to-transparent rounded-full blur-2xl pointer-events-none" />
+              <div className="absolute -right-20 -top-20 w-96 h-96 bg-linear-to-br from-pink-500/20 via-purple-500/20 to-transparent rounded-full blur-2xl pointer-events-none" />
               <div className="absolute left-0 bottom-0 w-80 h-80 bg-blue-700/50 rounded-full blur-3xl pointer-events-none" />
 
               {/* Left Column Text */}
@@ -810,9 +810,9 @@ export default async function HomePage() {
               </div>
 
               {/* Right Column: Hero Person Image with compact fit */}
-              <div className="relative w-full lg:w-[360px] h-52 sm:h-56 lg:h-[240px] shrink-0 flex items-end justify-center lg:justify-end overflow-hidden">
+              <div className="relative w-full lg:w-90 h-52 sm:h-56 lg:h-60 shrink-0 flex items-end justify-center lg:justify-end overflow-hidden">
                 {/* Magenta curved abstract accent */}
-                <div className="absolute right-6 top-4 w-36 h-36 bg-gradient-to-tr from-pink-500 to-rose-400 rounded-3xl transform rotate-12 opacity-80 blur-xs hidden sm:block pointer-events-none" />
+                <div className="absolute right-6 top-4 w-36 h-36 bg-linear-to-tr from-pink-500 to-rose-400 rounded-3xl transform rotate-12 opacity-80 blur-xs hidden sm:block pointer-events-none" />
                 
                 <img
                   src="/images/banner-entrepreneur.jpg"

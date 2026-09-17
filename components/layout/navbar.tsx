@@ -166,7 +166,7 @@ export function Navbar() {
                         name={user.user_metadata?.name || user.email}
                         size="sm"
                       />
-                      <span className="hidden sm:inline text-xs font-semibold text-slate-800 max-w-[100px] truncate">
+                      <span className="hidden sm:inline text-xs font-semibold text-slate-800 max-w-25 truncate">
                         {user.user_metadata?.name || user.email?.split("@")[0]}
                       </span>
                       <ChevronDown className="h-3 w-3 text-slate-400" />
@@ -266,10 +266,10 @@ export function Navbar() {
                       size="sm"
                     />
                     <div>
-                      <p className="text-xs font-bold text-slate-900 truncate max-w-[140px]">
+                      <p className="text-xs font-bold text-slate-900 truncate max-w-35">
                         {user.user_metadata?.name || "User"}
                       </p>
-                      <p className="text-[10px] text-slate-500 truncate max-w-[140px]">
+                      <p className="text-[10px] text-slate-500 truncate max-w-35">
                         {user.email}
                       </p>
                     </div>

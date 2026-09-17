@@ -86,7 +86,7 @@ export default async function DashboardPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-[#0056d2] via-blue-700 to-indigo-800 text-white rounded-2xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
+      <div className="bg-linear-to-r from-[#0056d2] via-blue-700 to-indigo-800 text-white rounded-2xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
         <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="flex items-center gap-4">
             <UserAvatar

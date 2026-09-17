@@ -70,13 +70,13 @@ export function CourseCardGrid({ course, variant = "udemy" }: CourseCardGridProp
   return (
     <div className="group flex flex-col bg-white rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-xl transition-all duration-300 overflow-hidden h-full">
       {/* Thumbnail Container */}
-      <Link href={`/courses/${course.slug}`} className="relative block aspect-[16/9] w-full overflow-hidden bg-slate-900">
+      <Link href={`/courses/${course.slug}`} className="relative block aspect-video w-full overflow-hidden bg-slate-900">
         <img
           src={course.thumbnail || "/images/dairy-course.jpg"}
           alt={course.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
         
         {/* Top Floating Badge */}
         <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">

@@ -135,7 +135,7 @@ export default function ApplyPage() {
             </div>
 
             {/* Admission Helpdesk */}
-            <div className="bg-gradient-to-br from-blue-50 via-indigo-50/50 to-white rounded-2xl border border-blue-200/80 p-6 sm:p-8 shadow-sm space-y-4 flex flex-col justify-between">
+            <div className="bg-linear-to-br from-blue-50 via-indigo-50/50 to-white rounded-2xl border border-blue-200/80 p-6 sm:p-8 shadow-sm space-y-4 flex flex-col justify-between">
               <div>
                 <h3 className="text-base font-bold text-slate-950 flex items-center gap-2 mb-2">
                   <PhoneCall className="w-4 h-4 text-[#0056d2]" />

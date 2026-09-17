@@ -23,13 +23,13 @@ function CertBadgeCard({
       className="group flex flex-col justify-between rounded-2xl bg-[#1e2333] hover:bg-[#252c40] p-4 transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5"
     >
       {/* Visual Badge Graphic Image with Clean Rounded Corner */}
-      <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-slate-900 mb-3.5">
+      <div className="relative aspect-16/10 w-full rounded-xl overflow-hidden bg-slate-900 mb-3.5">
         <img
           src={imageSrc}
           alt={title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-40 group-hover:opacity-20 transition-opacity" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent opacity-40 group-hover:opacity-20 transition-opacity" />
       </div>
 
       {/* Title & Description Tags */}

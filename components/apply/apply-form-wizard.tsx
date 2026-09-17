@@ -77,7 +77,7 @@ export function ApplyFormWizard() {
     <div id="apply-form" className="w-full bg-white rounded-2xl border border-slate-200/90 shadow-xl overflow-hidden scroll-mt-20">
       
       {/* Top Banner Header */}
-      <div className="bg-gradient-to-r from-[#003882] via-[#0056d2] to-[#004bb8] text-white p-6 sm:p-8">
+      <div className="bg-linear-to-r from-[#003882] via-[#0056d2] to-[#004bb8] text-white p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-bold bg-white/20 text-white backdrop-blur-xs border border-white/20">

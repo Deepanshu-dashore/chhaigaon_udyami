@@ -193,7 +193,7 @@ export default async function CoursesPage() {
           <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-indigo-100/50 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 right-1/3 w-80 h-80 bg-amber-100/40 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative min-h-[460px] lg:min-h-[480px] flex items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative min-h-115 lg:min-h-120 flex items-center">
             
             {/* Left Column: Proper Typographic Hierarchy */}
             <div className="w-full lg:w-[54%] py-10 sm:py-14 space-y-4 text-left z-10">
@@ -263,15 +263,15 @@ export default async function CoursesPage() {
           </div>
 
           {/* Right Column: Full-Bleed Image flush with right screen edge with Smooth Gray Linear Fade Gradient */}
-          <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-[48%] xl:w-[50%] h-[320px] sm:h-[400px] lg:h-full relative overflow-hidden">
+          <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-[48%] xl:w-[50%] h-80 sm:h-100 lg:h-full relative overflow-hidden">
             <img
               src="/images/courses-hero-banner.jpg"
               alt="Bright modern Indian rural entrepreneurs learning business skills"
               className="w-full h-full object-cover object-center"
             />
             {/* Smooth Left Horizontal Fade Linear Gradient into Slate Canvas */}
-            <div className="hidden lg:block absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent pointer-events-none" />
-            <div className="block lg:hidden absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-slate-50 to-transparent pointer-events-none" />
+            <div className="hidden lg:block absolute inset-y-0 left-0 w-48 bg-linear-to-r from-slate-50 via-slate-50/80 to-transparent pointer-events-none" />
+            <div className="block lg:hidden absolute inset-x-0 top-0 h-16 bg-linear-to-b from-slate-50 to-transparent pointer-events-none" />
           </div>
         </section>
 

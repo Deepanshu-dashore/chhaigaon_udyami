@@ -74,7 +74,7 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 text-white p-6 sm:p-8 rounded-2xl shadow-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-linear-to-r from-purple-900 via-indigo-900 to-slate-900 text-white p-6 sm:p-8 rounded-2xl shadow-md">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Badge className="bg-purple-500 hover:bg-purple-600 text-white font-bold text-xs uppercase tracking-wider">

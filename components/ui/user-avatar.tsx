@@ -58,7 +58,7 @@ export default function UserAvatar({
   // Fallback with initials or User Icon
   return (
     <div
-      className={`rounded-full shrink-0 flex items-center justify-center font-bold bg-gradient-to-tr from-[#0056d2] to-blue-500 text-white shadow-xs border border-blue-200 ${sizeClasses[size]} ${className}`}
+      className={`rounded-full shrink-0 flex items-center justify-center font-bold bg-linear-to-tr from-[#0056d2] to-blue-500 text-white shadow-xs border border-blue-200 ${sizeClasses[size]} ${className}`}
     >
       {initial ? (
         <span>{initial}</span>
