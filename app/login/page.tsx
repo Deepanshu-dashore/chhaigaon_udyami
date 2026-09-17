@@ -2,6 +2,9 @@ import React, { Suspense } from "react";
 import { LoginForm } from "@/components/auth/login-form";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { GradientWaves } from "@/components/ui/gradient-waves";
 import {
   Sparkles,
   CheckCircle2,
@@ -14,24 +17,47 @@ export const metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50/70 font-sans text-slate-900">
+    <div className="min-h-screen flex flex-col bg-slate-50/80 font-sans text-slate-900">
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        {/* Ambient blue glow styling */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-100 bg-linear-to-tr from-blue-200/40 to-indigo-200/40 blur-3xl pointer-events-none rounded-full" />
+        {/* Dynamic Interactive Gradient Waves Background */}
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-45 overflow-hidden">
+          <GradientWaves
+            horizonColor="#003882"
+            waveColor="#0056d2"
+            crestColor="#93c5fd"
+            speed={0.32}
+            amplitude={2.0}
+            waveScale={0.55}
+            waveRatio={0.85}
+            swell={28}
+            turbulence={16}
+            tilt={1.12}
+            zoom={1.0}
+            height={5.2}
+            fogDepth={18}
+            detail="medium"
+            brightness={1.05}
+            opacity={0.75}
+            mouseInteraction={true}
+            parallaxStrength={0.35}
+            grain={true}
+            grainIntensity={0.03}
+          />
+        </div>
 
         <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
           {/* Left Side Value Column */}
           <div className="lg:col-span-6 space-y-6 hidden lg:block pr-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#0056d2] text-xs font-semibold shadow-2xs">
+            <Badge variant="outline" className="px-3 py-1 bg-blue-50 border-blue-200 text-[#0056d2] text-xs font-semibold shadow-2xs gap-2 rounded-full">
               <Sparkles className="h-3.5 w-3.5 text-amber-500" />
               <span>ग्रामीण उद्यमिता सशक्तिकरण</span>
-            </div>
+            </Badge>
 
             <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-950 tracking-tight leading-tight font-headline">
               सीखें अपनी भाषा में, <br />
-              <span className="text-[#0056d2]">
+              <span className="bg-linear-to-r from-[#0056d2] via-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 बनाएं अपना सफल व्यवसाय
               </span>
             </h1>
@@ -63,29 +89,11 @@ export default function LoginPage() {
                 <span>कोर्स पूरा होने पर आधिकारिक डिजिटल सर्टिफिकेट</span>
               </div>
             </div>
-
-            {/* Testimonial Quote Card */}
-            <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm mt-6">
-              <p className="text-xs italic text-slate-600 leading-relaxed">
-                &ldquo;छैगांव उद्यमी के डेयरी एवं मिल्क प्रोसेसिंग कोर्स ने मुझे गाँव में ही अपना ब्रांड शुरू करने का आत्मविश्वास दिया।&rdquo;
-              </p>
-              <div className="mt-3 flex items-center gap-2.5">
-                <div className="h-7 w-7 rounded-full bg-[#0056d2] text-white flex items-center justify-center text-xs font-bold shadow-xs">
-                  R
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-slate-900 font-headline">
-                    राजेश पटेल
-                  </h4>
-                  <p className="text-[10px] text-slate-500">डेयरी उद्यमी, मध्य प्रदेश</p>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Right Side Form Column */}
           <div className="lg:col-span-6 flex justify-center">
-            <Suspense fallback={<div className="h-96 w-full max-w-md bg-white border border-slate-200 rounded-2xl animate-pulse" />}>
+            <Suspense fallback={<Skeleton className="h-[460px] w-full max-w-md rounded-2xl" />}>
               <LoginForm />
             </Suspense>
           </div>

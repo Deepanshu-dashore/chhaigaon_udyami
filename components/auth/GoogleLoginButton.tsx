@@ -74,7 +74,7 @@ export default function GoogleLoginButton({
         onClick={handleGoogleLogin}
         disabled={loading}
         className={cn(
-          "w-full h-11 flex items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-xs sm:text-sm font-semibold transition-all shadow-xs active:scale-[0.99] cursor-pointer",
+          "w-full h-11 flex items-center justify-center gap-3 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 text-xs sm:text-sm font-semibold transition-all shadow-xs active:scale-[0.99] cursor-pointer",
           className
         )}
       >

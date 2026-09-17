@@ -5,8 +5,17 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Spinner } from "@/components/ui/spinner";
 import GoogleLoginButton from "@/components/auth/GoogleLoginButton";
@@ -127,25 +136,29 @@ export function RegisterForm() {
         <CardTitle className="text-2xl font-bold tracking-tight text-slate-950 font-headline">
           निःशुल्क खाता बनाएं (Register)
         </CardTitle>
-        <p className="text-xs sm:text-sm text-slate-500">
+        <CardDescription className="text-xs sm:text-sm text-slate-500">
           ग्रामीण उद्यमिता क्रांति से जुड़ें और अपनी नई यात्रा शुरू करें
-        </p>
+        </CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-5">
-        {/* Error / Success Notifications */}
+        {/* Error / Success Notifications using Shadcn Alert */}
         {errorMessage && (
-          <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-2.5 animate-in fade-in duration-200">
-            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-            <span className="leading-relaxed font-medium">{errorMessage}</span>
-          </div>
+          <Alert variant="destructive" className="bg-rose-50 border-rose-200 text-rose-800 rounded-xl py-3 animate-in fade-in duration-200">
+            <AlertCircle className="h-4 w-4 text-rose-600 shrink-0" />
+            <AlertDescription className="text-xs font-medium text-rose-700">
+              {errorMessage}
+            </AlertDescription>
+          </Alert>
         )}
 
         {successMessage && (
-          <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-start gap-2.5 animate-in fade-in duration-200">
-            <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />
-            <span className="leading-relaxed font-medium">{successMessage}</span>
-          </div>
+          <Alert className="bg-emerald-50 border-emerald-200 text-emerald-800 rounded-xl py-3 animate-in fade-in duration-200">
+            <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+            <AlertDescription className="text-xs font-medium text-emerald-700">
+              {successMessage}
+            </AlertDescription>
+          </Alert>
         )}
 
         {/* Shadcn Google OAuth Button */}
@@ -155,23 +168,19 @@ export function RegisterForm() {
           label="Google के साथ शुरू करें (Sign up with Google)"
         />
 
-        <div className="relative my-2">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-200" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-3 text-slate-400 font-semibold">
-              या विवरण भरें
-            </span>
-          </div>
+        <div className="relative flex items-center justify-center my-2">
+          <Separator className="w-full" />
+          <span className="absolute bg-white px-3 text-xs uppercase font-semibold text-slate-400">
+            या विवरण भरें
+          </span>
         </div>
 
         <form onSubmit={handleRegister} className="space-y-4">
           {/* Role Selection */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-800 block">
+            <Label className="text-xs font-bold text-slate-800 block">
               आपकी भूमिका चुनें (Choose Role)
-            </label>
+            </Label>
             <div className="grid grid-cols-3 gap-2">
               {roleOptions.map((opt) => {
                 const isSelected = role === opt.id;
@@ -206,11 +215,12 @@ export function RegisterForm() {
 
           {/* Full Name */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+            <Label htmlFor="reg-name" className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
               <User className="h-3.5 w-3.5 text-blue-600" />
               <span>पूरा नाम (Full Name)</span>
-            </label>
+            </Label>
             <Input
+              id="reg-name"
               type="text"
               placeholder="उदा. रमेश कुमार"
               value={name}
@@ -223,11 +233,12 @@ export function RegisterForm() {
           {/* Email & Mobile Number */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <Label htmlFor="reg-email" className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                 <Mail className="h-3.5 w-3.5 text-blue-600" />
                 <span>ईमेल (Email)</span>
-              </label>
+              </Label>
               <Input
+                id="reg-email"
                 type="email"
                 placeholder="aapka.naam@email.com"
                 value={email}
@@ -238,11 +249,12 @@ export function RegisterForm() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <Label htmlFor="reg-mobile" className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                 <Phone className="h-3.5 w-3.5 text-blue-600" />
                 <span>मोबाइल नंबर (Mobile)</span>
-              </label>
+              </Label>
               <Input
+                id="reg-mobile"
                 type="tel"
                 placeholder="9876543210"
                 value={mobile}
@@ -254,11 +266,12 @@ export function RegisterForm() {
 
           {/* Password */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+            <Label htmlFor="reg-password" className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
               <Lock className="h-3.5 w-3.5 text-blue-600" />
               <span>पासवर्ड बनाएं (Create Password)</span>
-            </label>
+            </Label>
             <Input
+              id="reg-password"
               type="password"
               placeholder="कम से कम 6 अक्षर"
               value={password}
@@ -276,7 +289,7 @@ export function RegisterForm() {
               onCheckedChange={(checked) => setAgreeTerms(Boolean(checked))}
               className="mt-0.5"
             />
-            <label htmlFor="terms" className="text-xs text-slate-600 leading-tight cursor-pointer">
+            <Label htmlFor="terms" className="text-xs text-slate-600 leading-tight cursor-pointer font-normal">
               मैं Chhaigaon Udyami के{" "}
               <Link href="/terms" className="text-blue-700 font-bold hover:underline">
                 नियम व शर्तों
@@ -286,7 +299,7 @@ export function RegisterForm() {
                 गोपनीयता नीति
               </Link>{" "}
               से सहमत हूँ।
-            </label>
+            </Label>
           </div>
 
           <Button

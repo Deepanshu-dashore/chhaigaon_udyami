@@ -2,6 +2,10 @@ import React, { Suspense } from "react";
 import { RegisterForm } from "@/components/auth/register-form";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { GradientWaves } from "@/components/ui/gradient-waves";
 import {
   Sparkles,
   Users,
@@ -16,24 +20,47 @@ export const metadata = {
 
 export default function RegisterPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50/70 font-sans text-slate-900">
+    <div className="min-h-screen flex flex-col bg-slate-50/80 font-sans text-slate-900">
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        {/* Ambient Blue Glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-112.5 bg-linear-to-tr from-blue-200/40 to-indigo-200/40 blur-3xl pointer-events-none rounded-full" />
+        {/* Dynamic Interactive Gradient Waves Background */}
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-45 overflow-hidden">
+          <GradientWaves
+            horizonColor="#003882"
+            waveColor="#0056d2"
+            crestColor="#93c5fd"
+            speed={0.32}
+            amplitude={2.0}
+            waveScale={0.55}
+            waveRatio={0.85}
+            swell={28}
+            turbulence={16}
+            tilt={1.12}
+            zoom={1.0}
+            height={5.2}
+            fogDepth={18}
+            detail="medium"
+            brightness={1.05}
+            opacity={0.75}
+            mouseInteraction={true}
+            parallaxStrength={0.35}
+            grain={true}
+            grainIntensity={0.03}
+          />
+        </div>
 
         <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
           {/* Left Side Value Column */}
           <div className="lg:col-span-5 space-y-6 hidden lg:block pr-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#0056d2] text-xs font-semibold shadow-2xs">
+            <Badge variant="outline" className="px-3 py-1 bg-blue-50 border-blue-200 text-[#0056d2] text-xs font-semibold shadow-2xs gap-2 rounded-full">
               <Sparkles className="h-3.5 w-3.5 text-amber-500" />
               <span>100% निःशुल्क पंजीकरण</span>
-            </div>
+            </Badge>
 
             <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-950 tracking-tight leading-tight font-headline">
               अपने गाँव व शहर में <br />
-              <span className="text-[#0056d2]">
+              <span className="bg-linear-to-r from-[#0056d2] via-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 सफल व्यापार स्थापित करें
               </span>
             </h1>
@@ -43,17 +70,21 @@ export default function RegisterPage() {
             </p>
 
             <div className="grid grid-cols-2 gap-3 pt-1">
-              <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm">
-                <Users className="h-5 w-5 text-[#0056d2] mb-1" />
-                <div className="text-lg font-bold text-slate-900 font-num">5,000+</div>
-                <div className="text-[11px] text-slate-500 font-medium">पंजीकृत उद्यमी</div>
-              </div>
+              <Card className="rounded-xl bg-white border-slate-200 shadow-sm">
+                <CardContent className="p-3.5">
+                  <Users className="h-5 w-5 text-[#0056d2] mb-1" />
+                  <div className="text-lg font-bold text-slate-900 font-num">5,000+</div>
+                  <div className="text-[11px] text-slate-500 font-medium">पंजीकृत उद्यमी</div>
+                </CardContent>
+              </Card>
 
-              <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm">
-                <TrendingUp className="h-5 w-5 text-blue-600 mb-1" />
-                <div className="text-lg font-bold text-slate-900 font-num">25+</div>
-                <div className="text-[11px] text-slate-500 font-medium">व्यावहारिक कोर्सेज</div>
-              </div>
+              <Card className="rounded-xl bg-white border-slate-200 shadow-sm">
+                <CardContent className="p-3.5">
+                  <TrendingUp className="h-5 w-5 text-blue-600 mb-1" />
+                  <div className="text-lg font-bold text-slate-900 font-num">25+</div>
+                  <div className="text-[11px] text-slate-500 font-medium">व्यावहारिक कोर्सेज</div>
+                </CardContent>
+              </Card>
             </div>
 
             <div className="space-y-2.5 pt-2">
@@ -80,7 +111,7 @@ export default function RegisterPage() {
 
           {/* Right Side Form Column */}
           <div className="lg:col-span-7 flex justify-center">
-            <Suspense fallback={<div className="h-96 w-full max-w-lg bg-white border border-slate-200 rounded-2xl animate-pulse" />}>
+            <Suspense fallback={<Skeleton className="h-[520px] w-full max-w-lg rounded-2xl" />}>
               <RegisterForm />
             </Suspense>
           </div>
