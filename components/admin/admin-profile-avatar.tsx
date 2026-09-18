@@ -125,7 +125,7 @@ export function AdminProfileAvatar({ user }: AdminProfileAvatarProps) {
               className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium cursor-pointer"
             >
               <Settings className="h-4 w-4 text-slate-500" />
-              <span>कंसोल सेटिंग्स (Settings)</span>
+              <span>कंसोल सेटिंग्स</span>
             </Link>
           </DropdownMenuItem>
 
@@ -135,7 +135,7 @@ export function AdminProfileAvatar({ user }: AdminProfileAvatarProps) {
               className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium cursor-pointer"
             >
               <Activity className="h-4 w-4 text-slate-500" />
-              <span>सिस्टम ऑडिट लॉग्स (Audit Logs)</span>
+              <span>सिस्टम ऑडिट लॉग्स</span>
             </Link>
           </DropdownMenuItem>
 
@@ -145,7 +145,7 @@ export function AdminProfileAvatar({ user }: AdminProfileAvatarProps) {
               className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium cursor-pointer"
             >
               <User className="h-4 w-4 text-slate-500" />
-              <span>विद्यार्थी दृश्य (Learner Dashboard)</span>
+              <span>विद्यार्थी डैशबोर्ड</span>
             </Link>
           </DropdownMenuItem>
 
@@ -156,7 +156,7 @@ export function AdminProfileAvatar({ user }: AdminProfileAvatarProps) {
               className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium cursor-pointer"
             >
               <ExternalLink className="h-4 w-4 text-slate-500" />
-              <span>मुख्य वेबसाइट देखें (Live Site)</span>
+              <span>मुख्य वेबसाइट देखें</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -168,7 +168,7 @@ export function AdminProfileAvatar({ user }: AdminProfileAvatarProps) {
           className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-semibold text-rose-600 focus:bg-rose-50 focus:text-rose-700 cursor-pointer"
         >
           <LogOut className="h-4 w-4" />
-          <span>लॉग आउट (Log Out)</span>
+          <span>लॉग आउट</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

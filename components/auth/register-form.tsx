@@ -32,6 +32,8 @@ import {
   GraduationCap,
   Store,
   ShieldCheck,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 export function RegisterForm() {
@@ -41,6 +43,7 @@ export function RegisterForm() {
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState<"STUDENT" | "TRAINER" | "MARKET_PARTNER">("STUDENT");
   const [agreeTerms, setAgreeTerms] = useState(true);
 
@@ -128,7 +131,7 @@ export function RegisterForm() {
   ];
 
   return (
-    <Card className="w-full max-w-lg border-slate-200 shadow-xl bg-white rounded-2xl font-sans">
+    <Card className="w-full max-w-lg border border-white/80 shadow-2xl shadow-blue-950/30 bg-white/95 backdrop-blur-xl rounded-2xl font-sans ring-1 ring-slate-900/5">
       <CardHeader className="space-y-1 text-center pb-4">
         <div className="mx-auto w-12 h-12 rounded-2xl bg-blue-50 text-[#0056d2] flex items-center justify-center mb-2 border border-blue-100 shadow-xs">
           <UserPlus className="h-6 w-6" />
@@ -178,7 +181,7 @@ export function RegisterForm() {
         <form onSubmit={handleRegister} className="space-y-4">
           {/* Role Selection */}
           <div className="space-y-1.5">
-            <Label className="text-xs font-bold text-slate-800 block">
+            <Label className="text-xs font-semibold text-slate-700 block">
               आपकी भूमिका चुनें (Choose Role)
             </Label>
             <div className="grid grid-cols-3 gap-2">
@@ -190,23 +193,29 @@ export function RegisterForm() {
                     key={opt.id}
                     type="button"
                     onClick={() => setRole(opt.id)}
-                    className={`p-2.5 rounded-xl border text-left flex flex-col items-center sm:items-start transition-all cursor-pointer ${
+                    className={`p-2.5 rounded-xl border text-left flex items-center gap-2 transition-all cursor-pointer ${
                       isSelected
-                        ? "border-[#0056d2] bg-blue-50 text-blue-950 shadow-xs font-bold ring-1 ring-[#0056d2]"
-                        : "border-slate-200 hover:border-slate-300 bg-white text-slate-700"
+                        ? "border-[#0056d2] bg-blue-50/90 text-blue-950 shadow-xs font-semibold ring-1 ring-[#0056d2]"
+                        : "border-slate-200 hover:border-slate-300 hover:bg-slate-50/60 bg-white text-slate-700"
                     }`}
                   >
-                    <Icon
-                      className={`h-5 w-5 mb-1 ${
-                        isSelected ? "text-[#0056d2]" : "text-slate-400"
+                    <div
+                      className={`h-7 w-7 rounded-lg flex items-center justify-center shrink-0 ${
+                        isSelected
+                          ? "bg-blue-100 text-[#0056d2]"
+                          : "bg-slate-100 text-slate-500"
                       }`}
-                    />
-                    <span className="text-xs font-bold leading-tight line-clamp-1">
-                      {opt.label}
-                    </span>
-                    <span className="text-[10px] text-slate-500 hidden sm:inline line-clamp-1 mt-0.5">
-                      {opt.subtext}
-                    </span>
+                    >
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <div className="flex flex-col min-w-0 flex-1">
+                      <span className="text-xs font-bold leading-tight truncate">
+                        {opt.label}
+                      </span>
+                      <span className="text-[10px] text-slate-500 hidden sm:inline leading-tight truncate mt-0.5">
+                        {opt.subtext}
+                      </span>
+                    </div>
                   </button>
                 );
               })}
@@ -215,7 +224,7 @@ export function RegisterForm() {
 
           {/* Full Name */}
           <div className="space-y-1.5">
-            <Label htmlFor="reg-name" className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+            <Label htmlFor="reg-name" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
               <User className="h-3.5 w-3.5 text-blue-600" />
               <span>पूरा नाम (Full Name)</span>
             </Label>
@@ -226,14 +235,14 @@ export function RegisterForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="h-11 rounded-xl bg-slate-50/80 border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-[#0056d2]/20 text-xs sm:text-sm"
+              className="h-11 rounded-xl bg-slate-50/70 border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
             />
           </div>
 
           {/* Email & Mobile Number */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="reg-email" className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <Label htmlFor="reg-email" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                 <Mail className="h-3.5 w-3.5 text-blue-600" />
                 <span>ईमेल (Email)</span>
               </Label>
@@ -244,12 +253,12 @@ export function RegisterForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-11 rounded-xl bg-slate-50/80 border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-[#0056d2]/20 text-xs sm:text-sm"
+                className="h-11 rounded-xl bg-slate-50/70 border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="reg-mobile" className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <Label htmlFor="reg-mobile" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                 <Phone className="h-3.5 w-3.5 text-blue-600" />
                 <span>मोबाइल नंबर (Mobile)</span>
               </Label>
@@ -259,26 +268,40 @@ export function RegisterForm() {
                 placeholder="9876543210"
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value)}
-                className="h-11 rounded-xl bg-slate-50/80 border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-[#0056d2]/20 text-xs sm:text-sm"
+                className="h-11 rounded-xl bg-slate-50/70 border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
               />
             </div>
           </div>
 
           {/* Password */}
           <div className="space-y-1.5">
-            <Label htmlFor="reg-password" className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+            <Label htmlFor="reg-password" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
               <Lock className="h-3.5 w-3.5 text-blue-600" />
               <span>पासवर्ड बनाएं (Create Password)</span>
             </Label>
-            <Input
-              id="reg-password"
-              type="password"
-              placeholder="कम से कम 6 अक्षर"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="h-11 rounded-xl bg-slate-50/80 border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-[#0056d2]/20 text-xs sm:text-sm"
-            />
+            <div className="relative">
+              <Input
+                id="reg-password"
+                type={showPassword ? "text" : "password"}
+                placeholder="कम से कम 6 अक्षर"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="h-11 pr-10 rounded-xl bg-slate-50/70 border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer p-1"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Agreement Checkbox with Shadcn Checkbox */}
@@ -287,15 +310,15 @@ export function RegisterForm() {
               id="terms"
               checked={agreeTerms}
               onCheckedChange={(checked) => setAgreeTerms(Boolean(checked))}
-              className="mt-0.5"
+              className="mt-0.5 rounded-md border-slate-300 data-[state=checked]:bg-[#0056d2] data-[state=checked]:border-[#0056d2]"
             />
-            <Label htmlFor="terms" className="text-xs text-slate-600 leading-tight cursor-pointer font-normal">
+            <Label htmlFor="terms" className="text-xs text-slate-600 leading-snug cursor-pointer select-none font-normal">
               मैं Chhaigaon Udyami के{" "}
-              <Link href="/terms" className="text-blue-700 font-bold hover:underline">
+              <Link href="/terms" className="text-[#0056d2] font-semibold hover:underline">
                 नियम व शर्तों
               </Link>{" "}
               तथा{" "}
-              <Link href="/privacy" className="text-blue-700 font-bold hover:underline">
+              <Link href="/privacy" className="text-[#0056d2] font-semibold hover:underline">
                 गोपनीयता नीति
               </Link>{" "}
               से सहमत हूँ।
@@ -305,7 +328,7 @@ export function RegisterForm() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full h-11 text-xs sm:text-sm font-bold rounded-xl bg-[#0056d2] hover:bg-blue-700 shadow-md hover:shadow-lg text-white transition-all cursor-pointer active:scale-[0.99]"
+            className="w-full h-11 text-xs sm:text-sm font-semibold rounded-xl bg-[#0056d2] hover:bg-blue-700 shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 text-white transition-all cursor-pointer active:scale-[0.99]"
           >
             {loading ? (
               <span className="flex items-center gap-2">

@@ -128,10 +128,10 @@ export function Navbar() {
               {!isAuthPage && (
                 <nav className="hidden xl:flex items-center gap-1 text-xs font-semibold text-slate-700">
                   <Link href="/courses" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
-                    कोर्सेज
+                    पाठ्यक्रम
                   </Link>
                   <Link href="/apply" className="px-2.5 py-1.5 text-blue-700 hover:text-blue-800 font-bold rounded">
-                    प्रवेश आवेदन (Apply)
+                    प्रवेश आवेदन
                   </Link>
                   <Link href="/#schemes" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
                     सब्सिडी योजनाएं
@@ -152,7 +152,7 @@ export function Navbar() {
                     className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 text-xs font-bold transition shadow-xs"
                   >
                     <LayoutDashboard className="h-3.5 w-3.5" />
-                    <span>डैशबोर्ड (Dashboard)</span>
+                    <span>डैशबोर्ड</span>
                   </Link>
 
                   {/* User Profile Dropdown */}
@@ -198,7 +198,7 @@ export function Navbar() {
                           className="w-full flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition text-left cursor-pointer border-t border-slate-100"
                         >
                           <LogOut className="h-4 w-4" />
-                          <span>लॉग आउट (Logout)</span>
+                          <span>लॉग आउट</span>
                         </button>
                       </div>
                     )}
@@ -286,19 +286,19 @@ export function Navbar() {
 
               <Link href="/dashboard" className="py-2 px-2 text-blue-700 font-bold hover:bg-blue-50 rounded flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
                 <LayoutDashboard className="h-4 w-4 text-blue-600" />
-                <span>डैशबोर्ड (Dashboard)</span>
+                <span>डैशबोर्ड</span>
               </Link>
               <Link href="/courses" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
-                कोर्सेज (Courses)
+                पाठ्यक्रम
               </Link>
               <Link href="/apply" className="py-2 px-2 text-blue-700 font-bold hover:bg-blue-50 rounded" onClick={() => setMobileMenuOpen(false)}>
-                प्रवेश आवेदन (Apply Now)
+                प्रवेश आवेदन
               </Link>
               <Link href="/#schemes" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
-                सब्सिडी योजनाएं (Schemes)
+                सब्सिडी योजनाएं
               </Link>
               <Link href="/#credentials" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
-                सर्टिफिकेट्स (Certificates)
+                सर्टिफिकेट्स
               </Link>
 
               {user ? (
@@ -310,7 +310,7 @@ export function Navbar() {
                   className="py-2 px-2 text-rose-600 hover:bg-rose-50 rounded flex items-center gap-2 text-left cursor-pointer border-t border-slate-100 mt-2"
                 >
                   <LogOut className="h-4 w-4" />
-                  <span>लॉग आउट (Logout)</span>
+                  <span>लॉग आउट</span>
                 </button>
               ) : (
                 <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">

@@ -37,6 +37,8 @@ import {
   ShieldCheck,
   Sparkles,
   UserCheck,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 export function LoginForm() {
@@ -46,6 +48,7 @@ export function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -59,8 +62,8 @@ export function LoginForm() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMessage(null);
     setLoading(true);
+    setErrorMessage(null);
 
     try {
       const browserSupabase = createClient();
@@ -120,24 +123,24 @@ export function LoginForm() {
 
   return (
     <>
-      <Card className="w-full max-w-md bg-white border-slate-200 shadow-xl rounded-xl overflow-hidden font-sans">
-        <CardHeader className="text-center pb-2 pt-6 px-6 sm:px-8 space-y-2">
-          <div className="mx-auto h-12 w-12 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-[#0056d2] shadow-xs">
+      <Card className="w-full max-w-md bg-white/95 backdrop-blur-xl border border-white/80 shadow-2xl shadow-blue-950/30 rounded-2xl overflow-hidden font-sans ring-1 ring-slate-900/5">
+        <CardHeader className="text-center pb-2 pt-7 px-6 sm:px-8 space-y-2">
+          <div className="mx-auto h-12 w-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#0056d2] shadow-xs ring-4 ring-blue-50/60">
             <LogIn className="h-6 w-6" />
           </div>
           <CardTitle className="text-2xl font-bold tracking-tight text-slate-950 font-headline">
             लॉग इन करें
           </CardTitle>
-          <CardDescription className="text-xs sm:text-sm text-slate-500">
-            अपने छैगांव उद्यमी खाते में प्रवेश करें
+          <CardDescription className="text-xs sm:text-sm text-slate-500 font-normal">
+            अपने छैगांव उद्यमी खाते में सुरक्षित प्रवेश करें
           </CardDescription>
         </CardHeader>
 
-        <CardContent className="p-6 sm:p-8 pt-4 space-y-5">
+        <CardContent className="p-6 sm:p-8 pt-4 space-y-4">
           {errorMessage && (
-            <Alert variant="destructive" className="bg-rose-50 border-rose-200 text-rose-800 rounded-lg py-3 animate-in fade-in duration-200">
+            <Alert variant="destructive" className="bg-rose-50/90 border-rose-200 text-rose-800 rounded-xl py-2.5 px-3.5 animate-in fade-in duration-200">
               <AlertCircle className="h-4 w-4 text-rose-600 shrink-0" />
-              <AlertDescription className="text-xs sm:text-sm font-medium text-rose-700">
+              <AlertDescription className="text-xs sm:text-sm font-medium text-rose-700 ml-1.5">
                 {errorMessage}
               </AlertDescription>
             </Alert>
@@ -149,19 +152,19 @@ export function LoginForm() {
             label="Google खाते से लॉग इन करें"
           />
 
-          <div className="relative flex items-center justify-center my-2">
-            <Separator className="w-full" />
-            <span className="absolute bg-white px-3 text-xs font-semibold text-slate-400">
-              या ईमेल से
+          <div className="relative flex items-center justify-center my-1.5">
+            <Separator className="w-full bg-slate-200" />
+            <span className="absolute bg-white px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+              या ईमेल द्वारा
             </span>
           </div>
 
-          {/* Email & Password Form using Shadcn Input, Label & Button with reduced roundness */}
+          {/* Email & Password Form */}
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="login-email" className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <Label htmlFor="login-email" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                 <Mail className="h-3.5 w-3.5 text-blue-600" />
-                <span>ईमेल पता (Email Address)</span>
+                <span>ईमेल पता (Email)</span>
               </Label>
               <Input
                 id="login-email"
@@ -171,39 +174,53 @@ export function LoginForm() {
                 placeholder="apka.naam@example.com"
                 required
                 autoComplete="email"
-                className="h-11 rounded-lg bg-slate-50/80 border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-[#0056d2]/20 text-xs sm:text-sm"
+                className="h-11 rounded-xl bg-slate-50/70 border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
               />
             </div>
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <Label htmlFor="login-password" className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <Label htmlFor="login-password" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                   <Lock className="h-3.5 w-3.5 text-blue-600" />
                   <span>पासवर्ड (Password)</span>
                 </Label>
                 <Link
                   href="/auth/forgot-password"
-                  className="text-xs text-blue-700 hover:text-blue-900 font-bold hover:underline"
+                  className="text-xs text-blue-600 hover:text-blue-800 font-semibold hover:underline"
                 >
                   पासवर्ड भूल गए?
                 </Link>
               </div>
-              <Input
-                id="login-password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                autoComplete="current-password"
-                className="h-11 rounded-lg bg-slate-50/80 border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-[#0056d2]/20 text-xs sm:text-sm"
-              />
+              <div className="relative">
+                <Input
+                  id="login-password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  autoComplete="current-password"
+                  className="h-11 pr-10 rounded-xl bg-slate-50/70 border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer p-1"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
             </div>
 
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-11 text-xs sm:text-sm font-bold rounded-lg bg-[#0056d2] hover:bg-blue-700 text-white shadow-md hover:shadow-lg transition-all cursor-pointer active:scale-[0.99]"
+              className="w-full h-11 text-xs sm:text-sm font-semibold rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 transition-all cursor-pointer active:scale-[0.99]"
             >
               {loading ? (
                 <div className="flex items-center gap-2">
@@ -223,13 +240,13 @@ export function LoginForm() {
             <span>खाता नहीं है? </span>
             <Link
               href="/register"
-              className="text-blue-700 font-bold hover:text-blue-900 hover:underline"
+              className="text-[#0056d2] font-bold hover:text-blue-800 hover:underline"
             >
               नया खाता बनाएं (Register Free)
             </Link>
           </div>
 
-          <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400 pt-1">
+          <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400 pt-0.5">
             <ShieldCheck className="h-3.5 w-3.5 text-blue-600" />
             <span>सुरक्षित 256-बिट एन्क्रिप्शन प्रमाणीकरण</span>
           </div>

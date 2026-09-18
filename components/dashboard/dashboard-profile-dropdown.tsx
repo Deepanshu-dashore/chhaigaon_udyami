@@ -127,7 +127,7 @@ export function DashboardProfileDropdown({ user }: DashboardProfileDropdownProps
               className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium cursor-pointer"
             >
               <User className="h-4 w-4 text-[#0056d2]" />
-              <span>डैशबोर्ड प्रोफाइल (My Profile)</span>
+              <span>मेरी प्रोफ़ाइल</span>
             </Link>
           </DropdownMenuItem>
 
@@ -137,7 +137,7 @@ export function DashboardProfileDropdown({ user }: DashboardProfileDropdownProps
               className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium cursor-pointer"
             >
               <BookOpen className="h-4 w-4 text-slate-500" />
-              <span>मेरे कोर्सेस (My Courses)</span>
+              <span>मेरे पाठ्यक्रम</span>
             </Link>
           </DropdownMenuItem>
 
@@ -147,7 +147,7 @@ export function DashboardProfileDropdown({ user }: DashboardProfileDropdownProps
               className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium cursor-pointer"
             >
               <Award className="h-4 w-4 text-slate-500" />
-              <span>प्रमाण पत्र (Certificates)</span>
+              <span>प्रमाण पत्र</span>
             </Link>
           </DropdownMenuItem>
 
@@ -157,7 +157,7 @@ export function DashboardProfileDropdown({ user }: DashboardProfileDropdownProps
               className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium cursor-pointer"
             >
               <Settings className="h-4 w-4 text-slate-500" />
-              <span>खाता सेटिंग्स (Settings)</span>
+              <span>खाता सेटिंग्स</span>
             </Link>
           </DropdownMenuItem>
 
@@ -168,7 +168,7 @@ export function DashboardProfileDropdown({ user }: DashboardProfileDropdownProps
                 className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-semibold text-purple-700 bg-purple-50/60 cursor-pointer"
               >
                 <ShieldAlert className="h-4 w-4" />
-                <span>प्रशासनिक कंसोल (Admin Hub)</span>
+                <span>प्रशासनिक कंसोल</span>
               </Link>
             </DropdownMenuItem>
           )}
@@ -180,7 +180,7 @@ export function DashboardProfileDropdown({ user }: DashboardProfileDropdownProps
               className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium cursor-pointer"
             >
               <ExternalLink className="h-4 w-4 text-slate-500" />
-              <span>मुख्य वेबसाइट (Home)</span>
+              <span>मुख्य वेबसाइट</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -192,7 +192,7 @@ export function DashboardProfileDropdown({ user }: DashboardProfileDropdownProps
           className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-semibold text-rose-600 focus:bg-rose-50 focus:text-rose-700 cursor-pointer"
         >
           <LogOut className="h-4 w-4" />
-          <span>लॉग आउट (Log Out)</span>
+          <span>लॉग आउट</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

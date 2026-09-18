@@ -202,8 +202,8 @@ export function CourseCard({
         </div>
 
         <Link href={`/courses/${slug}`} className="block">
-          <button className="w-full py-2.5 rounded-xl bg-[#5624d0] hover:bg-[#401b9c] text-white font-bold text-xs shadow-md transition-colors cursor-pointer active:scale-98">
-            Add to cart / शुरू करें
+          <button className="w-full py-2.5 rounded-xl bg-[#0056d2] hover:bg-blue-800 text-white font-bold text-xs shadow-md transition-colors cursor-pointer active:scale-98">
+            कोर्स देखें
           </button>
         </Link>
       </div>
