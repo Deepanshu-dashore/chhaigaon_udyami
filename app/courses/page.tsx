@@ -206,9 +206,12 @@ export default async function CoursesPage() {
               </div>
 
               {/* Level 1: Main Title (H1) */}
-              <h1 className="text-2xl sm:text-3xl lg:text-[34px] font-black text-slate-950 tracking-tight leading-[1.2] font-headline">
-                ग्रामीण उद्यमिता में,<br />
-                <span className="text-[#0056d2]">
+              <h1 className="text-2xl sm:text-3xl lg:text-[34px] font-black tracking-tight leading-[1.22] font-headline">
+                <span className="bg-linear-to-r from-slate-950 via-slate-900 to-slate-800 bg-clip-text text-transparent">
+                  ग्रामीण उद्यमिता में,
+                </span>
+                <br />
+                <span className="bg-linear-to-r from-[#0056d2] via-blue-600 to-indigo-600 bg-clip-text text-transparent inline-block pb-1">
                   सफलता हुनर और तकनीक से बनती है।
                 </span>
               </h1>
