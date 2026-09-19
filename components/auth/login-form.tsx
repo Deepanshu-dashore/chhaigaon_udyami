@@ -182,7 +182,7 @@ export function LoginForm() {
               <div className="flex items-center justify-between">
                 <Label htmlFor="login-password" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                   <Lock className="h-3.5 w-3.5 text-blue-600" />
-                  <span>पासवर्ड (Password)</span>
+                  <span>पासवर्ड</span>
                 </Label>
                 <Link
                   href="/auth/forgot-password"
@@ -229,7 +229,7 @@ export function LoginForm() {
                 </div>
               ) : (
                 <div className="flex items-center justify-center gap-2">
-                  <span>लॉग इन करें (Sign In)</span>
+                  <span>लॉग इन करें</span>
                   <ArrowRight className="h-4 w-4" />
                 </div>
               )}
@@ -242,7 +242,7 @@ export function LoginForm() {
               href="/register"
               className="text-[#0056d2] font-bold hover:text-blue-800 hover:underline"
             >
-              नया खाता बनाएं (Register Free)
+              नया खाता बनाएं
             </Link>
           </div>
 

@@ -614,31 +614,31 @@ export default async function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
               {plansList.map((plan, idx) => (
                 <div
                   key={idx}
-                  className={`rounded-2xl bg-white border p-6 sm:p-7 flex flex-col justify-between transition-all relative ${
+                  className={`rounded-2xl bg-white border p-5 sm:p-6 flex flex-col justify-between transition-all relative ${
                     plan.isPopular
-                      ? "border-[#0056d2] shadow-xl ring-2 ring-[#0056d2]/20"
-                      : "border-slate-200 shadow-xs hover:shadow-md"
+                      ? "border-[#0056d2] shadow-lg ring-1 ring-[#0056d2]/20"
+                      : "border-slate-200 shadow-2xs hover:shadow-md"
                   }`}
                 >
                   {plan.isPopular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3.5 py-0.5 rounded-full bg-linear-to-r from-blue-700 via-[#0056d2] to-indigo-700 text-white text-[10px] font-bold tracking-wide uppercase shadow-sm border border-white/30 inline-flex items-center gap-1 whitespace-nowrap">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-linear-to-r from-blue-700 to-[#0056d2] text-white text-[10px] font-bold tracking-wide uppercase shadow-xs border border-white/30 inline-flex items-center gap-1 whitespace-nowrap">
                       <Star className="w-3 h-3 fill-amber-300 text-amber-300 shrink-0" />
                       <span>सर्वोत्तम विकल्प</span>
                     </div>
                   )}
 
-                  <div className="space-y-5">
+                  <div className="space-y-4">
                     <div>
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 font-headline">{plan.title}</h3>
+                      <h3 className="text-base font-bold text-slate-900 font-headline">{plan.title}</h3>
                       <p className="text-xs text-slate-500 mt-0.5 font-body">{plan.subtitle}</p>
                     </div>
 
                     <div>
-                      <span className="text-3xl font-extrabold text-slate-950 font-headline">
+                      <span className="text-2xl sm:text-3xl font-extrabold text-slate-950 font-headline">
                         {plan.price}
                       </span>
                       <span className="text-xs text-slate-500 ml-1.5 font-medium">/ {plan.period}</span>
@@ -646,7 +646,7 @@ export default async function HomePage() {
 
                     <Link href="/auth/register" className="block">
                       <Button
-                        className={`w-full py-2.5 h-10 text-xs font-bold rounded-lg cursor-pointer ${
+                        className={`w-full py-2 h-9 text-xs font-bold rounded-lg cursor-pointer ${
                           plan.buttonVariant === "primary"
                             ? "bg-[#0056d2] hover:bg-blue-800 text-white shadow-xs"
                             : "border border-[#0056d2] text-[#0056d2] bg-white hover:bg-blue-50"
@@ -676,25 +676,28 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ================= FULL-WIDTH MILESTONE CTA BANNER ================= */}
+        {/* ================= FULL-WIDTH MILESTONE CTA BANNER (CLEAN & COMPACT) ================= */}
         <section className="py-6 sm:py-8 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="rounded-3xl bg-[#0056d2] text-white overflow-hidden shadow-xl relative flex flex-col lg:flex-row items-center justify-between border border-blue-600">
+            <div className="rounded-2xl bg-[#023574] text-white overflow-hidden shadow-xl relative flex flex-col lg:flex-row items-center justify-between border border-[#0d3f7a] min-h-[220px] lg:min-h-[240px]">
               
               {/* Left Column Text */}
-              <div className="p-6 sm:p-7 lg:p-8 max-w-2xl space-y-3 relative z-10">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white/15 backdrop-blur-md border border-white/25 text-white">
-                  <span className="text-[10px] font-black tracking-wider uppercase">छैगांव उद्यमी</span>
-                  <span className="px-1 py-0.2 rounded bg-blue-500 text-[9px] font-black tracking-widest uppercase">PLUS</span>
+              <div className="p-6 sm:p-7 lg:p-8 max-w-xl space-y-3 relative z-10 lg:w-[58%]">
+                {/* Brand Logo & PLUS Tag */}
+                <div className="inline-flex items-center gap-1.5 text-white">
+                  <span className="text-lg sm:text-xl font-black tracking-tight">छैगांव उद्यमी</span>
+                  <span className="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-black tracking-wider uppercase border border-white/70 bg-white/10 backdrop-blur-xs">
+                    PLUS
+                  </span>
                 </div>
 
                 <div className="space-y-0.5">
-                  <h3 className="text-xl sm:text-2xl font-bold tracking-tight leading-tight font-headline">
+                  <h3 className="text-xl sm:text-2xl font-bold tracking-tight leading-snug font-headline text-white">
                     मात्र 7 दिनों में अपने उद्यम का सपना साकार करें
                   </h3>
                 </div>
 
-                <p className="text-xs sm:text-sm text-blue-100 leading-relaxed font-body">
+                <p className="text-xs sm:text-[13px] text-blue-100/90 leading-relaxed font-body max-w-md">
                   हजारों ग्रामीणों एवं युवाओं से जुड़ें जो अपने गाँव में ही सफल लघु उद्योग शुरू कर रहे हैं। छोटे-छोटे अध्यायों से वास्तविक व्यावसायिक कौशल अर्जित करें।
                 </p>
 
@@ -702,22 +705,25 @@ export default async function HomePage() {
                   <Link href="/auth/register" className="inline-block">
                     <Button
                       size="sm"
-                      className="px-5 py-2.5 h-10 text-xs sm:text-sm font-bold rounded-lg bg-white hover:bg-slate-100 text-[#0056d2] shadow-md transition-all flex items-center gap-2 cursor-pointer"
+                      className="px-5 py-2 h-9 text-xs sm:text-sm font-bold rounded-lg bg-white hover:bg-slate-100 text-[#023574] shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 cursor-pointer active:scale-98"
                     >
                       <span>निःशुल्क शुरुआत करें</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
+                      <ArrowRight className="h-3.5 w-3.5 text-[#023574]" />
                     </Button>
                   </Link>
                 </div>
               </div>
 
               {/* Right Column: Image */}
-              <div className="relative w-full lg:w-90 h-48 sm:h-52 lg:h-56 shrink-0 flex items-end justify-center lg:justify-end overflow-hidden">
+              <div className="relative w-full lg:w-[42%] lg:absolute lg:right-0 lg:top-0 lg:bottom-0 h-56 sm:h-60 lg:h-full flex items-center justify-end overflow-hidden">
                 <img
-                  src="/images/banner-entrepreneur.jpg"
-                  alt="सफल ग्रामीण उद्यमी - छैगांव उद्यमी प्लस"
-                  className="relative z-10 h-full w-auto object-contain object-bottom"
+                  src="/images/plus-banner-entrepreneur.jpg"
+                  alt="सफल उद्यमी - छैगांव उद्यमी PLUS"
+                  className="w-full h-full object-cover object-center lg:object-left"
                 />
+                {/* Seamless Left Fade Gradient matching exact #023574 color */}
+                <div className="hidden lg:block absolute inset-y-0 left-0 w-28 bg-linear-to-r from-[#023574] via-[#023574]/80 to-transparent pointer-events-none" />
+                <div className="block lg:hidden absolute inset-x-0 top-0 h-14 bg-linear-to-b from-[#023574] to-transparent pointer-events-none" />
               </div>
 
             </div>

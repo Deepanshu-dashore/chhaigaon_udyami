@@ -12,14 +12,8 @@ import { FaqAccordion } from "@/components/home/faq-accordion";
 import { getPublishedCourses } from "@/services/course.service";
 import {
   Sparkles,
-  ShieldCheck,
-  FileCheck2,
-  Landmark,
   GraduationCap,
-  ArrowRight,
   ChevronRight,
-  TrendingUp,
-  Award,
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -229,35 +223,7 @@ export default async function CoursesPage() {
                 छैगांव उद्यमी के साथ सीखें आधुनिक डेयरी फार्मिंग, फूड प्रोसेसिंग, FSSAI लाइसेंसिंग, PMEGP ₹50 लाख लोन और सीधे डिजिटल विपणन।
               </p>
 
-              {/* Level 4: Trust Badges Bar */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 max-w-lg">
-                <div className="bg-white/90 border border-slate-200/90 rounded-xl p-2.5 text-center shadow-2xs backdrop-blur-xs">
-                  <span className="text-amber-600 font-black text-sm sm:text-base block">100%</span>
-                  <span className="text-[10px] sm:text-[11px] text-slate-600 font-semibold">व्यावहारिक ज्ञान</span>
-                </div>
-                <div className="bg-white/90 border border-slate-200/90 rounded-xl p-2.5 text-center shadow-2xs backdrop-blur-xs">
-                  <span className="text-blue-600 font-black text-sm sm:text-base block">₹50L</span>
-                  <span className="text-[10px] sm:text-[11px] text-slate-600 font-semibold">बैंक DPR शामिल</span>
-                </div>
-                <div className="bg-white/90 border border-slate-200/90 rounded-xl p-2.5 text-center shadow-2xs backdrop-blur-xs">
-                  <span className="text-emerald-600 font-black text-sm sm:text-base block">35%</span>
-                  <span className="text-[10px] sm:text-[11px] text-slate-600 font-semibold">सब्सिडी गाइडेंस</span>
-                </div>
-                <div className="bg-white/90 border border-slate-200/90 rounded-xl p-2.5 text-center shadow-2xs backdrop-blur-xs">
-                  <span className="text-purple-600 font-black text-sm sm:text-base block">QR</span>
-                  <span className="text-[10px] sm:text-[11px] text-slate-600 font-semibold">सर्टिफिकेट मान्य</span>
-                </div>
-              </div>
 
-              {/* Action Button */}
-              <div className="pt-2">
-                <Link href="#catalog">
-                  <button className="px-6 py-3 rounded-lg bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer active:scale-98">
-                    <span>कोर्सेज एक्सप्लोर करें (Explore Courses)</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </Link>
-              </div>
             </div>
 
           </div>

@@ -20,6 +20,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Spinner } from "@/components/ui/spinner";
 import GoogleLoginButton from "@/components/auth/GoogleLoginButton";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   User,
   Mail,
   Phone,
@@ -34,6 +41,7 @@ import {
   ShieldCheck,
   Eye,
   EyeOff,
+  Check,
 } from "lucide-react";
 
 export function RegisterForm() {
@@ -43,13 +51,33 @@ export function RegisterForm() {
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [role, setRole] = useState<"STUDENT" | "TRAINER" | "MARKET_PARTNER">("STUDENT");
   const [agreeTerms, setAgreeTerms] = useState(true);
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const roleOptions = [
+    {
+      id: "STUDENT" as const,
+      label: "उद्यमी / छात्र (कौशल व प्रशिक्षण)",
+      icon: GraduationCap,
+    },
+    {
+      id: "TRAINER" as const,
+      label: "प्रशिक्षक / मास्टर ट्रेनर",
+      icon: Briefcase,
+    },
+    {
+      id: "MARKET_PARTNER" as const,
+      label: "व्यापार सहयोगी / विक्रेता",
+      icon: Store,
+    },
+  ];
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,6 +91,11 @@ export function RegisterForm() {
 
     if (password.length < 6) {
       setErrorMessage("पासवर्ड कम से कम 6 अक्षरों का होना अनिवार्य है।");
+      return;
+    }
+
+    if (confirmPassword && password !== confirmPassword) {
+      setErrorMessage("पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।");
       return;
     }
 
@@ -109,210 +142,254 @@ export function RegisterForm() {
     }
   };
 
-  const roleOptions = [
-    {
-      id: "STUDENT" as const,
-      label: "उद्यमी / छात्र",
-      subtext: "कौशल व सब्सिडी सीखें",
-      icon: GraduationCap,
-    },
-    {
-      id: "TRAINER" as const,
-      label: "प्रशिक्षक (Trainer)",
-      subtext: "अपना कोर्स साझा करें",
-      icon: Briefcase,
-    },
-    {
-      id: "MARKET_PARTNER" as const,
-      label: "व्यापार सहयोगी",
-      subtext: "उत्पाद व बाज़ार",
-      icon: Store,
-    },
-  ];
+  const isPasswordValid = password.length >= 6;
+  const isPasswordMatch = confirmPassword.length > 0 && password === confirmPassword;
 
   return (
-    <Card className="w-full max-w-lg border border-white/80 shadow-2xl shadow-blue-950/30 bg-white/95 backdrop-blur-xl rounded-2xl font-sans ring-1 ring-slate-900/5">
-      <CardHeader className="space-y-1 text-center pb-4">
-        <div className="mx-auto w-12 h-12 rounded-2xl bg-blue-50 text-[#0056d2] flex items-center justify-center mb-2 border border-blue-100 shadow-xs">
-          <UserPlus className="h-6 w-6" />
+    <Card className="w-full bg-white/95 backdrop-blur-xl border border-slate-200/80 shadow-2xl shadow-blue-950/20 rounded-2xl sm:rounded-3xl font-sans ring-1 ring-slate-900/5 overflow-hidden">
+      {/* Card Header */}
+      <CardHeader className="text-center pb-2 pt-7 sm:pt-8 px-5 sm:px-8 space-y-1.5">
+        <div className="mx-auto h-11 w-11 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#0056d2] shadow-xs ring-4 ring-blue-50/60">
+          <UserPlus className="h-5 w-5" />
         </div>
-        <CardTitle className="text-2xl font-bold tracking-tight text-slate-950 font-headline">
-          निःशुल्क खाता बनाएं (Register)
+        <CardTitle className="text-2xl sm:text-2xl font-bold tracking-tight text-slate-950 font-headline">
+          नया खाता बनाएं
         </CardTitle>
-        <CardDescription className="text-xs sm:text-sm text-slate-500">
-          ग्रामीण उद्यमिता क्रांति से जुड़ें और अपनी नई यात्रा शुरू करें
+        <CardDescription className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto">
+          छैगांव उद्यमी मंच पर निःशुल्क पंजीकरण करें
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-5">
-        {/* Error / Success Notifications using Shadcn Alert */}
+      <CardContent className="p-5 sm:p-8 pt-3 space-y-5">
+        {/* Error / Success Notifications */}
         {errorMessage && (
-          <Alert variant="destructive" className="bg-rose-50 border-rose-200 text-rose-800 rounded-xl py-3 animate-in fade-in duration-200">
+          <Alert variant="destructive" className="bg-rose-50/90 border-rose-200 text-rose-800 rounded-xl py-3 px-4 animate-in fade-in duration-200">
             <AlertCircle className="h-4 w-4 text-rose-600 shrink-0" />
-            <AlertDescription className="text-xs font-medium text-rose-700">
+            <AlertDescription className="text-xs sm:text-sm font-medium text-rose-700 ml-1.5">
               {errorMessage}
             </AlertDescription>
           </Alert>
         )}
 
         {successMessage && (
-          <Alert className="bg-emerald-50 border-emerald-200 text-emerald-800 rounded-xl py-3 animate-in fade-in duration-200">
+          <Alert className="bg-emerald-50 border-emerald-200 text-emerald-800 rounded-xl py-3 px-4 animate-in fade-in duration-200">
             <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-            <AlertDescription className="text-xs font-medium text-emerald-700">
+            <AlertDescription className="text-xs sm:text-sm font-medium text-emerald-700 ml-1.5">
               {successMessage}
             </AlertDescription>
           </Alert>
         )}
 
-        {/* Shadcn Google OAuth Button */}
-        <GoogleLoginButton
-          redirectPath="/dashboard"
-          role={role}
-          label="Google के साथ शुरू करें (Sign up with Google)"
-        />
+        {/* Google Quick Signup */}
+        <div className="max-w-md mx-auto w-full">
+          <GoogleLoginButton
+            redirectPath="/dashboard"
+            role={role}
+            label="Google खाते से तुरंत पंजीकरण करें"
+          />
+        </div>
 
-        <div className="relative flex items-center justify-center my-2">
-          <Separator className="w-full" />
-          <span className="absolute bg-white px-3 text-xs uppercase font-semibold text-slate-400">
-            या विवरण भरें
+        <div className="relative flex items-center justify-center">
+          <Separator className="w-full bg-slate-200" />
+          <span className="absolute bg-white px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            या फॉर्म भरें
           </span>
         </div>
 
-        <form onSubmit={handleRegister} className="space-y-4">
-          {/* Role Selection */}
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-slate-700 block">
-              आपकी भूमिका चुनें (Choose Role)
-            </Label>
-            <div className="grid grid-cols-3 gap-2">
-              {roleOptions.map((opt) => {
-                const isSelected = role === opt.id;
-                const Icon = opt.icon;
-                return (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    onClick={() => setRole(opt.id)}
-                    className={`p-2.5 rounded-xl border text-left flex items-center gap-2 transition-all cursor-pointer ${
-                      isSelected
-                        ? "border-[#0056d2] bg-blue-50/90 text-blue-950 shadow-xs font-semibold ring-1 ring-[#0056d2]"
-                        : "border-slate-200 hover:border-slate-300 hover:bg-slate-50/60 bg-white text-slate-700"
-                    }`}
-                  >
-                    <div
-                      className={`h-7 w-7 rounded-lg flex items-center justify-center shrink-0 ${
-                        isSelected
-                          ? "bg-blue-100 text-[#0056d2]"
-                          : "bg-slate-100 text-slate-500"
-                      }`}
-                    >
-                      <Icon className="h-4 w-4" />
-                    </div>
-                    <div className="flex flex-col min-w-0 flex-1">
-                      <span className="text-xs font-bold leading-tight truncate">
-                        {opt.label}
-                      </span>
-                      <span className="text-[10px] text-slate-500 hidden sm:inline leading-tight truncate mt-0.5">
-                        {opt.subtext}
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
+        {/* Horizontal Form Grid */}
+        <form onSubmit={handleRegister} className="space-y-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+            
+            {/* Full Name */}
+            <div className="space-y-1.5">
+              <Label htmlFor="reg-name" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                <User className="h-3.5 w-3.5 text-blue-600" />
+                <span>पूरा नाम <span className="text-rose-500">*</span></span>
+              </Label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#0056d2] transition-colors">
+                  <User className="h-4 w-4" />
+                </div>
+                <Input
+                  id="reg-name"
+                  type="text"
+                  placeholder="उदा. रमेश कुमार"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="h-11 pl-10 rounded-xl bg-slate-50/60 border-slate-200 hover:border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Full Name */}
-          <div className="space-y-1.5">
-            <Label htmlFor="reg-name" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-              <User className="h-3.5 w-3.5 text-blue-600" />
-              <span>पूरा नाम (Full Name)</span>
-            </Label>
-            <Input
-              id="reg-name"
-              type="text"
-              placeholder="उदा. रमेश कुमार"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="h-11 rounded-xl bg-slate-50/70 border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
-            />
-          </div>
+            {/* Role Dropdown using Shadcn Select */}
+            <div className="space-y-1.5">
+              <Label htmlFor="reg-role" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                <GraduationCap className="h-3.5 w-3.5 text-blue-600" />
+                <span>आपकी भूमिका <span className="text-rose-500">*</span></span>
+              </Label>
+              <div className="relative group">
+                <Select
+                  value={role}
+                  onValueChange={(val) => setRole(val as "STUDENT" | "TRAINER" | "MARKET_PARTNER")}
+                >
+                  <SelectTrigger
+                    id="reg-role"
+                    className="h-11 rounded-xl bg-slate-50/60 border-slate-200 hover:border-slate-300 text-slate-900 focus:bg-white focus:border-[#0056d2] focus:ring-4 focus:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
+                  >
+                    <SelectValue placeholder="भूमिका चुनें" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-slate-200 shadow-xl">
+                    {roleOptions.map((opt) => {
+                      const Icon = opt.icon;
+                      return (
+                        <SelectItem key={opt.id} value={opt.id} className="cursor-pointer py-2.5 rounded-lg text-xs sm:text-sm">
+                          <div className="flex items-center gap-2.5">
+                            <div className="h-6 w-6 rounded-md bg-blue-50 text-[#0056d2] flex items-center justify-center shrink-0">
+                              <Icon className="h-3.5 w-3.5" />
+                            </div>
+                            <span className="font-medium">{opt.label}</span>
+                          </div>
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
 
-          {/* Email & Mobile Number */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Email */}
             <div className="space-y-1.5">
               <Label htmlFor="reg-email" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                 <Mail className="h-3.5 w-3.5 text-blue-600" />
-                <span>ईमेल (Email)</span>
+                <span>ईमेल पता <span className="text-rose-500">*</span></span>
               </Label>
-              <Input
-                id="reg-email"
-                type="email"
-                placeholder="aapka.naam@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="h-11 rounded-xl bg-slate-50/70 border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
-              />
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#0056d2] transition-colors">
+                  <Mail className="h-4 w-4" />
+                </div>
+                <Input
+                  id="reg-email"
+                  type="email"
+                  placeholder="aapka.naam@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                  className="h-11 pl-10 rounded-xl bg-slate-50/60 border-slate-200 hover:border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
+                />
+              </div>
             </div>
 
+            {/* Mobile Number */}
             <div className="space-y-1.5">
               <Label htmlFor="reg-mobile" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                 <Phone className="h-3.5 w-3.5 text-blue-600" />
-                <span>मोबाइल नंबर (Mobile)</span>
+                <span>मोबाइल नंबर</span>
               </Label>
-              <Input
-                id="reg-mobile"
-                type="tel"
-                placeholder="9876543210"
-                value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
-                className="h-11 rounded-xl bg-slate-50/70 border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
-              />
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#0056d2] transition-colors">
+                  <Phone className="h-4 w-4" />
+                </div>
+                <Input
+                  id="reg-mobile"
+                  type="tel"
+                  placeholder="9876543210"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                  className="h-11 pl-10 rounded-xl bg-slate-50/60 border-slate-200 hover:border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Password */}
-          <div className="space-y-1.5">
-            <Label htmlFor="reg-password" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-              <Lock className="h-3.5 w-3.5 text-blue-600" />
-              <span>पासवर्ड बनाएं (Create Password)</span>
-            </Label>
-            <div className="relative">
-              <Input
-                id="reg-password"
-                type={showPassword ? "text" : "password"}
-                placeholder="कम से कम 6 अक्षर"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="h-11 pr-10 rounded-xl bg-slate-50/70 border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer p-1"
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
+            {/* Password */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="reg-password" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                  <Lock className="h-3.5 w-3.5 text-blue-600" />
+                  <span>पासवर्ड बनाएं <span className="text-rose-500">*</span></span>
+                </Label>
+                {password.length > 0 && (
+                  <span className={`text-[11px] font-medium flex items-center gap-1 ${isPasswordValid ? "text-emerald-600" : "text-amber-600"}`}>
+                    {isPasswordValid ? <Check className="h-3 w-3" /> : null}
+                    {isPasswordValid ? "मान्य लंबाई" : "कम से कम 6 अक्षर"}
+                  </span>
                 )}
-              </button>
+              </div>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#0056d2] transition-colors">
+                  <Lock className="h-4 w-4" />
+                </div>
+                <Input
+                  id="reg-password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="कम से कम 6 अक्षर"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  autoComplete="new-password"
+                  className="h-11 pl-10 pr-10 rounded-xl bg-slate-50/60 border-slate-200 hover:border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer p-1"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Confirm Password */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="reg-confirm-password" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                  <Lock className="h-3.5 w-3.5 text-blue-600" />
+                  <span>पासवर्ड पुष्टि करें <span className="text-rose-500">*</span></span>
+                </Label>
+                {confirmPassword.length > 0 && (
+                  <span className={`text-[11px] font-medium flex items-center gap-1 ${isPasswordMatch ? "text-emerald-600" : "text-rose-600"}`}>
+                    {isPasswordMatch ? <Check className="h-3 w-3" /> : null}
+                    {isPasswordMatch ? "पासवर्ड मेल खाता है" : "मेल नहीं खाता"}
+                  </span>
+                )}
+              </div>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#0056d2] transition-colors">
+                  <Lock className="h-4 w-4" />
+                </div>
+                <Input
+                  id="reg-confirm-password"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="पासवर्ड दोबारा दर्ज करें"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  autoComplete="new-password"
+                  className="h-11 pl-10 pr-10 rounded-xl bg-slate-50/60 border-slate-200 hover:border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-4 focus-visible:ring-[#0056d2]/10 transition-all text-xs sm:text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer p-1"
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                >
+                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Agreement Checkbox with Shadcn Checkbox */}
-          <div className="flex items-start gap-2.5 pt-1">
+          {/* Terms & Agreement Checkbox */}
+          <div className="flex items-start gap-2.5 pt-2">
             <Checkbox
               id="terms"
               checked={agreeTerms}
               onCheckedChange={(checked) => setAgreeTerms(Boolean(checked))}
-              className="mt-0.5 rounded-md border-slate-300 data-[state=checked]:bg-[#0056d2] data-[state=checked]:border-[#0056d2]"
+              className="mt-0.5"
             />
-            <Label htmlFor="terms" className="text-xs text-slate-600 leading-snug cursor-pointer select-none font-normal">
+            <Label htmlFor="terms" className="text-xs sm:text-sm text-slate-600 leading-snug cursor-pointer select-none font-normal">
               मैं Chhaigaon Udyami के{" "}
               <Link href="/terms" className="text-[#0056d2] font-semibold hover:underline">
                 नियम व शर्तों
@@ -325,10 +402,11 @@ export function RegisterForm() {
             </Label>
           </div>
 
+          {/* Submit Button */}
           <Button
             type="submit"
             disabled={loading}
-            className="w-full h-11 text-xs sm:text-sm font-semibold rounded-xl bg-[#0056d2] hover:bg-blue-700 shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 text-white transition-all cursor-pointer active:scale-[0.99]"
+            className="w-full h-12 text-sm font-semibold rounded-xl bg-[#0056d2] hover:bg-blue-700 shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 text-white transition-all cursor-pointer active:scale-[0.99] group"
           >
             {loading ? (
               <span className="flex items-center gap-2">
@@ -337,28 +415,26 @@ export function RegisterForm() {
               </span>
             ) : (
               <span className="flex items-center justify-center gap-2">
-                <span>खाता बनाएं (Create Account)</span>
-                <ArrowRight className="h-4 w-4" />
+                <span>खाता बनाएं</span>
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </span>
             )}
           </Button>
         </form>
 
-        <div className="text-center text-xs text-slate-500 pt-2">
-          पहले से खाता मौजूद है?{" "}
+        {/* Footer info & Login Link */}
+        <div className="pt-3 text-center text-xs sm:text-sm text-slate-600 border-t border-slate-100">
+          <span>पहले से खाता मौजूद है? </span>
           <Link
             href="/login"
-            className="font-bold text-blue-700 hover:text-blue-900 hover:underline"
+            className="font-bold text-[#0056d2] hover:text-blue-900 hover:underline"
           >
-            यहाँ लॉग इन करें (Sign In)
+            यहाँ लॉग इन करें
           </Link>
-        </div>
-
-        <div className="pt-2 text-center text-[11px] text-slate-400 flex items-center justify-center gap-1.5 font-medium">
-          <ShieldCheck className="h-3.5 w-3.5 text-blue-600" />
-          <span>100% सुरक्षित पंजीकरण • कोई छुपा शुल्क नहीं</span>
         </div>
       </CardContent>
     </Card>
   );
 }
+
+
