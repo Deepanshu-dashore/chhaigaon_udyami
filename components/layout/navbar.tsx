@@ -134,17 +134,11 @@ export function Navbar() {
                   <Link href="/apply" className="px-2.5 py-1.5 text-blue-700 hover:text-blue-800 font-bold rounded">
                     प्रवेश आवेदन
                   </Link>
-                  <Link href="/#schemes" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
-                    सब्सिडी योजनाएं
-                  </Link>
                   <Link
                     href="/certificates"
-                    className="px-2.5 py-1.5 text-slate-700 hover:text-blue-700 hover:bg-blue-50 rounded-lg font-bold transition-colors inline-flex items-center gap-1"
+                    className="px-2.5 py-1.5 hover:text-blue-600 rounded"
                   >
-                    <span>सर्टिफिकेट्स</span>
-                    <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-amber-100 text-amber-800 font-extrabold border border-amber-300">
-                      सत्यापित
-                    </span>
+                    सर्टिफिकेट्स
                   </Link>
                 </nav>
               )}
@@ -316,17 +310,9 @@ export function Navbar() {
               <Link href="/apply" className="py-2 px-2 text-blue-700 font-bold hover:bg-blue-50 rounded" onClick={() => setMobileMenuOpen(false)}>
                 प्रवेश आवेदन
               </Link>
-              <Link href="/#schemes" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
-                सब्सिडी योजनाएं
-              </Link>
-              <Link href="/certificates" className="py-2 px-2 hover:bg-slate-50 rounded flex items-center justify-between" onClick={() => setMobileMenuOpen(false)}>
-                <div className="flex items-center gap-2">
-                  <Award className="h-4 w-4 text-amber-600" />
-                  <span>सर्टिफिकेट्स व सत्यापन</span>
-                </div>
-                <span className="px-1.5 py-0.5 rounded text-[9px] bg-amber-100 text-amber-800 font-bold">
-                  सत्यापित
-                </span>
+              <Link href="/certificates" className="py-2 px-2 hover:bg-slate-50 rounded flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                <Award className="h-4 w-4 text-amber-600" />
+                <span>सर्टिफिकेट्स</span>
               </Link>
 
               {user ? (

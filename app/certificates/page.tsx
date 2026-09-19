@@ -15,6 +15,8 @@ import {
   BookOpen,
   Check,
 } from "lucide-react";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 import { CertificateVerifier } from "@/components/certificate/certificate-verifier";
 import { CertificateShowcaseTabs } from "@/components/certificate/certificate-showcase-tabs";
 import { Button } from "@/components/ui/button";
@@ -28,6 +30,9 @@ export const metadata = {
 export default function CertificatesPortalPage() {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50/50 text-slate-900 font-sans selection:bg-blue-600 selection:text-white">
+      <Navbar />
+
+      <main className="flex-1">
       
       {/* ================= HERO BANNER (MATCHING PLATFORM DESIGN SYSTEM) ================= */}
       <section className="bg-white border-b border-slate-200/90 relative overflow-hidden">
@@ -248,6 +253,9 @@ export default function CertificatesPortalPage() {
 
       </div>
 
+      </main>
+
+      <Footer showValueBanner={false} />
     </div>
   );
 }
