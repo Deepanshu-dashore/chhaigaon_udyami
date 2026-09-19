@@ -187,26 +187,26 @@ export default async function CoursesPage() {
           <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-indigo-100/50 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 right-1/3 w-80 h-80 bg-amber-100/40 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative min-h-115 lg:min-h-120 flex items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative min-h-96 lg:min-h-105 flex items-center">
             
             {/* Left Column: Proper Typographic Hierarchy */}
-            <div className="w-full lg:w-[54%] py-10 sm:py-14 space-y-4 text-left z-10">
+            <div className="w-full lg:w-[54%] py-8 sm:py-10 space-y-3.5 text-left z-10">
               
               {/* Breadcrumb Navigation */}
-              <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
+              <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-slate-500 mb-0.5">
                 <Link href="/" className="hover:text-blue-700 transition-colors">होम (Home)</Link>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                <ChevronRight className="w-3 h-3 text-slate-400" />
                 <span className="text-blue-700 font-bold">व्यावसायिक पाठ्यक्रम (Courses)</span>
               </div>
 
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-white/95 text-[#0056d2] border border-blue-200/90 shadow-2xs backdrop-blur-xs">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/95 text-[#0056d2] border border-blue-200/90 shadow-2xs backdrop-blur-xs mt-5">
                 <GraduationCap className="w-3.5 h-3.5 text-[#0056d2]" />
                 <span>प्रमाणित ग्रामीण उद्यम एवं आजीविका अकादमी</span>
               </div>
 
               {/* Level 1: Main Title (H1) */}
-              <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-black text-slate-950 tracking-tight leading-[1.16] font-headline">
+              <h1 className="text-2xl sm:text-3xl lg:text-[34px] font-black text-slate-950 tracking-tight leading-[1.2] font-headline">
                 ग्रामीण उद्यमिता में,<br />
                 <span className="text-[#0056d2]">
                   सफलता हुनर और तकनीक से बनती है।
@@ -214,16 +214,14 @@ export default async function CoursesPage() {
               </h1>
 
               {/* Level 2: Lead Hook Subtitle */}
-              <p className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+              <p className="text-sm sm:text-base font-bold text-slate-800 leading-snug">
                 व्यावहारिक वीडियो प्रशिक्षण, बैंक-मान्य DPR रिपोर्ट्स एवं सरकारी सब्सिडी की संपूर्ण आवेदन प्रक्रिया।
               </p>
 
               {/* Level 3: Body Description */}
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-lg font-body">
+              <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed max-w-lg font-body">
                 छैगांव उद्यमी के साथ सीखें आधुनिक डेयरी फार्मिंग, फूड प्रोसेसिंग, FSSAI लाइसेंसिंग, PMEGP ₹50 लाख लोन और सीधे डिजिटल विपणन।
               </p>
-
-
             </div>
 
           </div>
