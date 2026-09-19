@@ -77,43 +77,63 @@ export function ApplyFormWizard() {
     <div id="apply-form" className="w-full bg-white rounded-2xl border border-slate-200/90 shadow-xl overflow-hidden scroll-mt-20">
       
       {/* Top Banner Header */}
-      <div className="bg-linear-to-r from-[#003882] via-[#0056d2] to-[#004bb8] text-white p-6 sm:p-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-bold bg-white/20 text-white backdrop-blur-xs border border-white/20">
-              <Sparkles className="w-3 h-3 text-amber-300" />
+      <div className="bg-linear-to-r from-[#003882] via-[#0056d2] to-[#004bb8] text-white p-5 sm:p-6 lg:p-7 relative overflow-hidden">
+        {/* Subtle Ambient Background Glows */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-blue-400/10 rounded-full blur-2xl pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1.5 text-left">
+            {/* Session Badge */}
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/95 text-[#0056d2] border border-blue-200/90 shadow-2xs backdrop-blur-xs">
+              <Sparkles className="w-3.5 h-3.5 text-[#0056d2]" />
               <span>सत्र 2026-27 प्रवेश प्रारंभ</span>
             </div>
-            <h3 className="text-xl sm:text-2xl font-black font-headline tracking-tight">
+
+            {/* Main Header */}
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-black font-headline tracking-tight text-white leading-snug">
               ऑनलाइन प्रवेश एवं सब्सिडी सहायता आवेदन फॉर्म
             </h3>
-            <p className="text-xs sm:text-sm text-blue-100 font-body">
-              कृपया सभी आवश्यक विवरण सही-सही भरें। आपका आवेदन 2-3 कार्यदिवसों में स्वीकृत होगा।
+
+            {/* Subtitle */}
+            <p className="text-xs sm:text-[13px] text-blue-100/90 font-body leading-relaxed max-w-2xl">
+              कृपया सभी आवश्यक विवरण सही-सही भरें। आपका आवेदन 2–3 कार्यदिवसों में एडमिशन सेल द्वारा सत्यापित किया जाएगा।
             </p>
           </div>
 
-          {/* Step Indicator */}
+          {/* Step Indicator Badge */}
           {!isSubmitted && (
-            <div className="flex items-center gap-2 bg-black/20 backdrop-blur-xs px-3.5 py-2 rounded-xl border border-white/10 shrink-0">
-              <span className="text-xs text-blue-200 font-medium">चरण (Step):</span>
-              <span className="text-sm font-extrabold text-white">{step} / 3</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/95 border border-blue-200/90 shadow-2xs backdrop-blur-xs shrink-0 self-start sm:self-center">
+              <span className="text-[11px] font-bold text-slate-700">चरण (Step):</span>
+              <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-xs font-black bg-[#0056d2] text-white shadow-2xs">
+                <span>{step}</span>
+                <span className="text-blue-200 font-normal">/</span>
+                <span>3</span>
+              </span>
             </div>
           )}
         </div>
 
-        {/* Progress Bar */}
+        {/* Progress Bar & Steps Checkpoints */}
         {!isSubmitted && (
-          <div className="w-full bg-white/20 h-1.5 rounded-full mt-5 overflow-hidden">
-            <div
-              className="bg-amber-400 h-full rounded-full transition-all duration-300"
-              style={{ width: `${(step / 3) * 100}%` }}
-            />
+          <div className="relative z-10 mt-4 pt-1">
+            <div className="w-full bg-black/20 h-1.5 rounded-full overflow-hidden p-0.5">
+              <div
+                className="bg-linear-to-r from-amber-400 to-amber-300 h-full rounded-full transition-all duration-400 shadow-sm"
+                style={{ width: `${(step / 3) * 100}%` }}
+              />
+            </div>
+            <div className="flex justify-between items-center text-[11px] font-semibold text-blue-200 mt-1.5 px-0.5">
+              <span className={step >= 1 ? "text-white font-bold" : "text-blue-200/70"}>1. व्यक्तिगत विवरण</span>
+              <span className={step >= 2 ? "text-white font-bold" : "text-blue-200/70"}>2. कोर्स व व्यवसाय</span>
+              <span className={step >= 3 ? "text-white font-bold" : "text-blue-200/70"}>3. आधार व घोषणा</span>
+            </div>
           </div>
         )}
       </div>
 
       {/* Form Content Body */}
-      <div className="p-6 sm:p-10">
+      <div className="p-5 sm:p-7">
         
         {isSubmitted ? (
           /* Success Screen */
@@ -185,11 +205,17 @@ export function ApplyFormWizard() {
             {/* STEP 1: PERSONAL DETAILS */}
             {step === 1 && (
               <div className="space-y-5">
-                <div className="border-b border-slate-100 pb-3">
-                  <h4 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <div className="border-b border-slate-100 pb-3.5 flex items-center justify-between">
+                  <h4 className="text-base font-bold text-slate-900 flex items-center gap-2.5">
+                    <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-black flex items-center justify-center shadow-2xs">
+                      1
+                    </span>
                     <User className="w-4 h-4 text-blue-600" />
-                    <span>चरण 1: व्यक्तिगत विवरण (Personal Information)</span>
+                    <span>व्यक्तिगत विवरण (Personal Information)</span>
                   </h4>
+                  <span className="hidden sm:inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                    चरण 1 / 3
+                  </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -300,11 +326,17 @@ export function ApplyFormWizard() {
             {/* STEP 2: PROGRAM & ENTERPRISE SELECTION */}
             {step === 2 && (
               <div className="space-y-5">
-                <div className="border-b border-slate-100 pb-3">
-                  <h4 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <div className="border-b border-slate-100 pb-3.5 flex items-center justify-between">
+                  <h4 className="text-base font-bold text-slate-900 flex items-center gap-2.5">
+                    <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-black flex items-center justify-center shadow-2xs">
+                      2
+                    </span>
                     <Briefcase className="w-4 h-4 text-blue-600" />
-                    <span>चरण 2: पाठ्यक्रम एवं व्यवसाय चयन (Course &amp; Business Selection)</span>
+                    <span>पाठ्यक्रम एवं व्यवसाय चयन (Course &amp; Business Selection)</span>
                   </h4>
+                  <span className="hidden sm:inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                    चरण 2 / 3
+                  </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -384,11 +416,17 @@ export function ApplyFormWizard() {
             {/* STEP 3: DOCUMENT UPLOAD & CONFIRMATION */}
             {step === 3 && (
               <div className="space-y-5">
-                <div className="border-b border-slate-100 pb-3">
-                  <h4 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <div className="border-b border-slate-100 pb-3.5 flex items-center justify-between">
+                  <h4 className="text-base font-bold text-slate-900 flex items-center gap-2.5">
+                    <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-black flex items-center justify-center shadow-2xs">
+                      3
+                    </span>
                     <FileCheck className="w-4 h-4 text-blue-600" />
-                    <span>चरण 3: आधार सत्यापन एवं घोषणा (Verification &amp; Declaration)</span>
+                    <span>आधार सत्यापन एवं घोषणा (Verification &amp; Declaration)</span>
                   </h4>
+                  <span className="hidden sm:inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                    चरण 3 / 3
+                  </span>
                 </div>
 
                 <div className="space-y-4">

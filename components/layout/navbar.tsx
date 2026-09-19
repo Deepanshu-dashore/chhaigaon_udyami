@@ -17,6 +17,7 @@ import {
   Search,
   Sparkles,
   ArrowRight,
+  Award,
 } from "lucide-react";
 
 export function Navbar() {
@@ -136,8 +137,14 @@ export function Navbar() {
                   <Link href="/#schemes" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
                     सब्सिडी योजनाएं
                   </Link>
-                  <Link href="/#credentials" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
-                    सर्टिफिकेट्स
+                  <Link
+                    href="/certificates"
+                    className="px-2.5 py-1.5 text-slate-700 hover:text-blue-700 hover:bg-blue-50 rounded-lg font-bold transition-colors inline-flex items-center gap-1"
+                  >
+                    <span>सर्टिफिकेट्स</span>
+                    <span className="px-1.5 py-0.2 rounded-full text-[9px] bg-amber-100 text-amber-800 font-extrabold border border-amber-300">
+                      सत्यापित
+                    </span>
                   </Link>
                 </nav>
               )}
@@ -189,6 +196,21 @@ export function Navbar() {
                         >
                           <LayoutDashboard className="h-4 w-4 text-blue-600" />
                           <span>डैशबोर्ड देखें</span>
+                        </Link>
+                        <Link
+                          href="/dashboard/certificates"
+                          className="flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-800 transition"
+                          onClick={() => setUserDropdownOpen(false)}
+                        >
+                          <Award className="h-4 w-4 text-amber-600" />
+                          <span>मेरे प्रमाण पत्र (Certificates)</span>
+                        </Link>
+                        <Link
+                          href="/certificates"
+                          className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition border-t border-slate-100"
+                          onClick={() => setUserDropdownOpen(false)}
+                        >
+                          <span>प्रमाण पत्र सत्यापन पोर्टल</span>
                         </Link>
                         <button
                           onClick={() => {
@@ -297,8 +319,14 @@ export function Navbar() {
               <Link href="/#schemes" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
                 सब्सिडी योजनाएं
               </Link>
-              <Link href="/#credentials" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
-                सर्टिफिकेट्स
+              <Link href="/certificates" className="py-2 px-2 hover:bg-slate-50 rounded flex items-center justify-between" onClick={() => setMobileMenuOpen(false)}>
+                <div className="flex items-center gap-2">
+                  <Award className="h-4 w-4 text-amber-600" />
+                  <span>सर्टिफिकेट्स व सत्यापन</span>
+                </div>
+                <span className="px-1.5 py-0.5 rounded text-[9px] bg-amber-100 text-amber-800 font-bold">
+                  सत्यापित
+                </span>
               </Link>
 
               {user ? (

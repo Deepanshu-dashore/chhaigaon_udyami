@@ -25,14 +25,14 @@ export function NeedToKnowTabs() {
       {/* Header Title */}
       <div className="p-6 sm:p-8 pb-4 border-b border-slate-100">
         <h2 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight font-headline">
-          Everything You <span className="text-[#0056d2]">Need To Know</span>
+          प्रवेश संबंधी <span className="text-[#0056d2]">महत्वपूर्ण जानकारियां</span>
         </h2>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1 font-body">
+        <p className="text-xs sm:text-sm text-slate-600 mt-1 font-body">
           प्रवेश प्रक्रिया, परीक्षा पद्धति एवं 24x7 मेंटर सहायता से संबंधित संपूर्ण विवरण।
         </p>
       </div>
 
-      {/* Tri-Color Navigation Tabs (Matching Reference Image) */}
+      {/* Tri-Color Navigation Tabs (Matching Reference Design) */}
       <div className="grid grid-cols-1 sm:grid-cols-3 text-center text-sm font-bold text-white select-none">
         
         {/* Tab 1: Mode of Examination */}
@@ -45,7 +45,7 @@ export function NeedToKnowTabs() {
           }`}
         >
           <Award className="w-4 h-4 text-slate-200" />
-          <span>Mode of Examination</span>
+          <span>परीक्षा एवं मूल्यांकन पद्धति</span>
         </button>
 
         {/* Tab 2: How to Apply (Default / Active in Screenshot) */}
@@ -58,7 +58,7 @@ export function NeedToKnowTabs() {
           }`}
         >
           <FileText className="w-4 h-4 text-blue-200" />
-          <span>How to Apply</span>
+          <span>आवेदन कैसे करें (How to Apply)</span>
         </button>
 
         {/* Tab 3: 24x7 Support System */}
@@ -71,7 +71,7 @@ export function NeedToKnowTabs() {
           }`}
         >
           <PhoneCall className="w-4 h-4 text-amber-100" />
-          <span>24x7 Support System</span>
+          <span>24x7 सहायता व मेंटरशिप</span>
         </button>
 
       </div>
@@ -79,20 +79,20 @@ export function NeedToKnowTabs() {
       {/* Tab Content Body */}
       <div className="p-6 sm:p-10 bg-white">
         
-        {/* 1. HOW TO APPLY (MATCHING EXACT SCREENSHOT) */}
+        {/* 1. HOW TO APPLY (IN HINDI) */}
         {activeTab === "apply" && (
           <div className="space-y-6 text-slate-800">
             
             {/* Direct Enroll Banner */}
             <div className="flex flex-wrap items-center gap-3">
-              <span className="text-base sm:text-lg font-bold text-slate-900">
-                To enrol in the programme,
+              <span className="text-sm sm:text-base font-bold text-slate-900">
+                प्रशिक्षण कार्यक्रम में नामांकन के लिए,
               </span>
               <a
                 href="#apply-form"
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md border border-[#0056d2] text-[#0056d2] hover:bg-blue-50 font-bold text-sm transition-colors shadow-2xs"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#0056d2] text-white hover:bg-blue-700 font-bold text-xs sm:text-sm transition-colors shadow-2xs cursor-pointer active:scale-98"
               >
-                <span>Apply Now</span>
+                <span>अभी आवेदन करें (Apply Now)</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
@@ -100,36 +100,36 @@ export function NeedToKnowTabs() {
             {/* Application Steps */}
             <div className="space-y-3">
               <h3 className="text-base sm:text-lg font-black text-slate-950 font-headline">
-                Application steps:
+                आवेदन प्रक्रिया के चरण (Application Steps):
               </h3>
               
-              <ol className="space-y-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed list-decimal list-inside font-body">
+              <ol className="space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed list-decimal list-inside font-body">
                 <li>
-                  <strong className="font-semibold text-slate-900">Register/Login</strong> on the application portal and fill all the required details (व्यक्तिगत विवरण एवं मोबाइल सत्यापन)।
+                  <strong className="font-semibold text-slate-900">पोर्टल पर पंजीकरण / लॉगिन करें:</strong> आवेदन पोर्टल पर रजिस्टर/लॉगिन करें और सभी आवश्यक विवरण (व्यक्तिगत विवरण एवं मोबाइल सत्यापन) भरें।
                 </li>
                 <li>
-                  <strong className="font-semibold text-slate-900">Pay the application fee</strong> (or apply for government scheme scholarship voucher) and update the Mentor &amp; Enterprise information.{" "}
+                  <strong className="font-semibold text-slate-900">आवेदन शुल्क या स्कॉलरशिप वाउचर चुनें:</strong> आवेदन शुल्क जमा करें (या सरकारी योजना स्कॉलरशिप वाउचर के लिए आवेदन करें) और मेंटर व उद्यम की जानकारी अपडेट करें।{" "}
                   <a href="#fee-info" className="text-blue-700 underline font-semibold hover:text-blue-900">
-                    Click here for more information
+                    अधिक जानकारी के लिए यहां क्लिक करें (Click here for more information)
                   </a>.
                 </li>
                 <li>
-                  <strong className="font-semibold text-slate-900">Submit the application</strong> with all required documents (आधार कार्ड, बैंक पासबुक व शैक्षणिक प्रमाण पत्र)।
+                  <strong className="font-semibold text-slate-900">आवश्यक दस्तावेजों के साथ आवेदन जमा करें:</strong> सभी आवश्यक दस्तावेजों (आधार कार्ड, बैंक पासबुक व शैक्षणिक प्रमाण पत्र) के साथ आवेदन सबमिट करें।
                 </li>
                 <li>
-                  The <strong className="font-semibold text-slate-900">Admissions Cell</strong> will review your application and share the admission decision via email or the application portal within 2–3 business days.
+                  <strong className="font-semibold text-slate-900">प्रवेश समीक्षा एवं स्वीकृति निर्णय:</strong> प्रवेश प्रकोष्ठ (Admissions Cell) आपके आवेदन की समीक्षा करेगा और 2–3 कार्यदिवसों के भीतर ईमेल या आवेदन पोर्टल के माध्यम से प्रवेश निर्णय साझा करेगा।
                 </li>
               </ol>
             </div>
 
             {/* Step-by-Step Video Guide Link */}
-            <div className="pt-2 flex items-center gap-2 text-xs sm:text-sm text-slate-700">
-              <span>For a step-by-step guide on the application,</span>
+            <div className="pt-2 flex flex-wrap items-center gap-2 text-xs sm:text-sm text-slate-700">
+              <span>आवेदन प्रक्रिया की चरणबद्ध वीडियो गाइड देखने के लिए,</span>
               <a
                 href="#video-guide"
                 className="inline-flex items-center gap-1 text-blue-700 underline font-bold hover:text-blue-900"
               >
-                <span>Watch Here</span>
+                <span>यहां वीडियो देखें (Watch Here)</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
@@ -137,12 +137,12 @@ export function NeedToKnowTabs() {
             {/* Important Note with Sample Forms */}
             <div className="pt-3 border-t border-slate-100 text-xs text-slate-600 leading-relaxed">
               <p>
-                <strong className="font-bold text-slate-900">Important:</strong> If you are applying as a group under a Self-Help Group (SHG) or FPO and require mentor verification, you may upload the endorsement letter from your local Block Development Office or SHG Federation using the formats available below:{" "}
-                <a href="#sample-mentor" className="text-blue-700 underline font-semibold hover:text-blue-900 mr-2">
-                  Sample Mentor form ↗
+                <strong className="font-bold text-slate-900">महत्वपूर्ण सूचना (Important):</strong> यदि आप स्व-सहायता समूह (SHG) या FPO के तहत समूह के रूप में आवेदन कर रहे हैं और मेंटर सत्यापन की आवश्यकता है, तो आप अपने स्थानीय ब्लॉक विकास कार्यालय (BDO) या SHG फेडरेशन से अनुमोदन पत्र नीचे दिए गए प्रारूप में डाउनलोड कर अपलोड कर सकते हैं:{" "}
+                <a href="#sample-mentor" className="text-blue-700 underline font-semibold hover:text-blue-900 mr-3 inline-block">
+                  सैंपल मेंटर फॉर्म (Sample Mentor form ↗)
                 </a>
-                <a href="#sample-employer" className="text-blue-700 underline font-semibold hover:text-blue-900">
-                  Sample SHG / Enterprise form ↗
+                <a href="#sample-employer" className="text-blue-700 underline font-semibold hover:text-blue-900 inline-block">
+                  सैंपल SHG / उद्यम फॉर्म (Sample SHG / Enterprise form ↗)
                 </a>
               </p>
             </div>
@@ -154,7 +154,7 @@ export function NeedToKnowTabs() {
         {activeTab === "exam" && (
           <div className="space-y-6 text-slate-800">
             <h3 className="text-base sm:text-lg font-black text-slate-950 font-headline">
-              Mode of Examination &amp; Certification (मूल्यांकन एवं परीक्षा पद्धति)
+              परीक्षा एवं मूल्यांकन पद्धति (Mode of Examination &amp; Certification)
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -174,7 +174,7 @@ export function NeedToKnowTabs() {
                   <span>2. प्रोजेक्ट रिपोर्ट (DPR) सबमिशन</span>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  कोर्स पूर्ण होने पर छात्र को अपने उद्यम की वित्तीय योजना (DPR) तैयार करके पोर्टल पर जमा करनी होती है।
+                  कोर्स पूर्ण होने पर छात्र को अपने उद्यम की विस्तृत प्रोजेक्ट रिपोर्ट (DPR) तैयार करके पोर्टल पर जमा करनी होती है।
                 </p>
               </div>
 
@@ -205,7 +205,7 @@ export function NeedToKnowTabs() {
         {activeTab === "support" && (
           <div className="space-y-6 text-slate-800">
             <h3 className="text-base sm:text-lg font-black text-slate-950 font-headline">
-              24x7 Support &amp; Mentorship System (सहायता एवं मेंटरशिप)
+              24x7 सहायता एवं मेंटरशिप प्रणाली (24x7 Support System)
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

@@ -33,66 +33,62 @@ export default function ApplyPage() {
       <main className="flex-1">
         
         {/* ================= HERO BANNER ================= */}
-        <section className="bg-white border-b border-slate-200/90 py-10 lg:py-14 relative overflow-hidden">
+        <section className="bg-white border-b border-slate-200/90 relative overflow-hidden">
           
           {/* Subtle ambient lighting */}
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-10 w-80 h-80 bg-amber-100/30 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 min-h-96 lg:min-h-105 flex items-center">
             
-            {/* Breadcrumb */}
-            <div className="flex items-center gap-2 text-xs text-slate-500 mb-4">
-              <Link href="/" className="hover:text-blue-700 transition-colors">होम (Home)</Link>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-              <Link href="/courses" className="hover:text-blue-700 transition-colors">कोर्सेज (Courses)</Link>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-              <span className="text-blue-700 font-bold">प्रवेश आवेदन (Apply Now)</span>
-            </div>
+            {/* Left Column Text */}
+            <div className="w-full lg:w-[54%] py-8 sm:py-10 space-y-3.5 text-left z-10">
+              {/* Breadcrumb */}
+              <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-slate-500 mb-0.5">
+                <Link href="/" className="hover:text-blue-700 transition-colors">होम (Home)</Link>
+                <ChevronRight className="w-3 h-3 text-slate-400" />
+                <Link href="/courses" className="hover:text-blue-700 transition-colors">कोर्सेज (Courses)</Link>
+                <ChevronRight className="w-3 h-3 text-slate-400" />
+                <span className="text-blue-700 font-bold">प्रवेश आवेदन (Apply Now)</span>
+              </div>
 
-            <div className="max-w-3xl space-y-4">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-[#0056d2] border border-blue-200/80 shadow-2xs">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/95 text-[#0056d2] border border-blue-200/90 shadow-2xs backdrop-blur-xs mt-5">
                 <GraduationCap className="w-3.5 h-3.5 text-[#0056d2]" />
                 <span>सत्र 2026-27 प्रवेश एवं सब्सिडी आवेदन</span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-[1.15] font-headline">
-                कौशल सीखें, उद्यम लगाएं — <br />
-                <span className="text-[#0056d2]">
+              <h1 className="text-2xl sm:text-3xl lg:text-[36px] font-black tracking-tight leading-[1.24] font-headline">
+                <span className="bg-linear-to-r from-slate-950 via-blue-950 to-indigo-900 bg-clip-text text-transparent inline-block">
+                  कौशल सीखें, उद्यम लगाएं —
+                </span>
+                <br />
+                <span className="bg-linear-to-r from-[#0056d2] via-blue-600 to-indigo-600 bg-clip-text text-transparent inline-block pb-1">
                   ऑनलाइन प्रवेश आवेदन करें।
                 </span>
               </h1>
 
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-body">
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-lg font-body">
                 डेयरी फार्मिंग, फूड प्रोसेसिंग, FSSAI सर्टिफिकेशन एवं PMEGP ₹50 लाख बैंक DPR मास्टरक्लास हेतु प्रवेश प्रक्रिया प्रारंभ हो चुकी है।
               </p>
-
-              {/* Highlights Pill Bar */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-                <div className="bg-slate-50 border border-slate-200/90 rounded-xl p-3 text-center shadow-2xs">
-                  <span className="text-xs text-slate-500 block font-medium">बैच प्रारंभ</span>
-                  <span className="text-xs sm:text-sm font-bold text-slate-900">1 अक्टूबर 2026</span>
-                </div>
-                <div className="bg-slate-50 border border-slate-200/90 rounded-xl p-3 text-center shadow-2xs">
-                  <span className="text-xs text-slate-500 block font-medium">प्रवेश माध्यम</span>
-                  <span className="text-xs sm:text-sm font-bold text-blue-700">100% ऑनलाइन</span>
-                </div>
-                <div className="bg-slate-50 border border-slate-200/90 rounded-xl p-3 text-center shadow-2xs">
-                  <span className="text-xs text-slate-500 block font-medium">सरकारी सब्सिडी</span>
-                  <span className="text-xs sm:text-sm font-bold text-emerald-700">35% तक सहायता</span>
-                </div>
-                <div className="bg-slate-50 border border-slate-200/90 rounded-xl p-3 text-center shadow-2xs">
-                  <span className="text-xs text-slate-500 block font-medium">प्रमाण पत्र</span>
-                  <span className="text-xs sm:text-sm font-bold text-purple-700">QR बैंक-मान्य</span>
-                </div>
-              </div>
             </div>
 
+          </div>
+
+          {/* Right Column: Full-Bleed Image flush with right edge */}
+          <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-[48%] xl:w-[50%] h-72 sm:h-80 lg:h-full relative overflow-hidden">
+            <img
+              src="/images/apply-hero-banner.jpg"
+              alt="Indian students applying for skill development and enterprise training"
+              className="w-full h-full object-cover object-center"
+            />
+            {/* Smooth Left Horizontal Fade Linear Gradient into White Canvas */}
+            <div className="hidden lg:block absolute inset-y-0 left-0 w-44 bg-linear-to-r from-white via-white/80 to-transparent pointer-events-none" />
+            <div className="block lg:hidden absolute inset-x-0 top-0 h-16 bg-linear-to-b from-white to-transparent pointer-events-none" />
           </div>
         </section>
 
         {/* ================= MAIN CONTENT CONTAINER ================= */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 sm:space-y-10">
           
           {/* 1. EVERYTHING YOU NEED TO KNOW TABBED SECTION (MATCHING USER SCREENSHOT) */}
           <NeedToKnowTabs />

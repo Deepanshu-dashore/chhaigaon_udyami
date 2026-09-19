@@ -747,7 +747,7 @@ export default async function HomePage() {
         </section>
       </main>
 
-      <Footer />
+      <Footer showValueBanner={true} />
     </div>
   );
 }

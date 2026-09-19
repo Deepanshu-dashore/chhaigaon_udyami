@@ -17,45 +17,51 @@ import {
   FaInstagram,
 } from "react-icons/fa6";
 
-export function Footer() {
+interface FooterProps {
+  showValueBanner?: boolean;
+}
+
+export function Footer({ showValueBanner = false }: FooterProps) {
   return (
     <footer className="bg-slate-50 text-slate-700 border-t border-slate-200 mt-auto">
-      {/* Top Value Banner */}
-      <div className="border-b border-slate-200 py-8 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start gap-4 p-4 rounded-2xl bg-blue-50/70 border border-blue-100">
-              <div className="h-11 w-11 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                <ShieldCheck className="h-5 w-5" />
+      {/* Top Value Banner (Only shown when showValueBanner is true, e.g. Home Page) */}
+      {showValueBanner && (
+        <div className="border-b border-slate-200 py-8 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-4 p-4 rounded-2xl bg-blue-50/70 border border-blue-100">
+                <div className="h-11 w-11 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <ShieldCheck className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-sm font-headline">प्रमाणित पाठ्यक्रम</h4>
+                  <p className="text-xs text-slate-500 mt-0.5">शासकीय एवं वित्तीय संस्थाओं से संरेखित</p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm font-headline">प्रमाणित पाठ्यक्रम</h4>
-                <p className="text-xs text-slate-500 mt-0.5">शासकीय एवं वित्तीय संस्थाओं से संरेखित</p>
-              </div>
-            </div>
 
-            <div className="flex items-center justify-center md:justify-start gap-4 p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100">
-              <div className="h-11 w-11 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                <Award className="h-5 w-5" />
+              <div className="flex items-center justify-center md:justify-start gap-4 p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100">
+                <div className="h-11 w-11 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <Award className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-sm font-headline">व्यावहारिक प्रशिक्षण</h4>
+                  <p className="text-xs text-slate-500 mt-0.5">सरल हिंदी में वीडियो एवं DPR रिपोर्ट्स</p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm font-headline">व्यावहारिक प्रशिक्षण</h4>
-                <p className="text-xs text-slate-500 mt-0.5">सरल हिंदी में वीडियो एवं DPR रिपोर्ट्स</p>
-              </div>
-            </div>
 
-            <div className="flex items-center justify-center md:justify-start gap-4 p-4 rounded-2xl bg-purple-50/70 border border-purple-100">
-              <div className="h-11 w-11 rounded-xl bg-purple-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                <Sparkles className="h-5 w-5" />
-              </div>
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm font-headline">मेंटरशिप व सहयोग</h4>
-                <p className="text-xs text-slate-500 mt-0.5">विशेषज्ञों से सीधा संवाद और मार्गदर्शन</p>
+              <div className="flex items-center justify-center md:justify-start gap-4 p-4 rounded-2xl bg-purple-50/70 border border-purple-100">
+                <div className="h-11 w-11 rounded-xl bg-purple-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <Sparkles className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-sm font-headline">मेंटरशिप व सहयोग</h4>
+                  <p className="text-xs text-slate-500 mt-0.5">विशेषज्ञों से सीधा संवाद और मार्गदर्शन</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Footer Links */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
