@@ -33,7 +33,7 @@ export function Navbar() {
     <div className="sticky top-0 z-50 w-full">
       {/* Top Announcement Bar (Coursera Style) */}
       {showAnnouncement && (
-        <div className="bg-slate-900 text-white text-xs py-2 px-4 flex items-center justify-between font-medium">
+        <div className="bg-[#0056d2] text-white text-xs py-2 px-4 flex items-center justify-between font-medium shadow-xs">
           <div className="max-w-7xl mx-auto w-full flex items-center justify-center gap-2 text-center">
             <span className="inline-flex items-center gap-1.5 font-bold text-amber-300">
               <Sparkles className="h-3.5 w-3.5" />
@@ -44,7 +44,7 @@ export function Navbar() {
             </span>
             <Link
               href="/#schemes"
-              className="inline-flex items-center underline font-bold text-blue-300 hover:text-white ml-1.5"
+              className="inline-flex items-center underline font-bold text-amber-200 hover:text-white ml-1.5"
             >
               <span>योजनाएं देखें</span>
               <ArrowRight className="h-3 w-3 ml-1" />
@@ -52,7 +52,7 @@ export function Navbar() {
           </div>
           <button
             onClick={() => setShowAnnouncement(false)}
-            className="text-slate-400 hover:text-white p-1 ml-2 cursor-pointer"
+            className="text-blue-200 hover:text-white p-1 ml-2 cursor-pointer"
             aria-label="Close announcement"
           >
             <X className="h-3.5 w-3.5" />
