@@ -114,6 +114,9 @@ export function Navbar() {
             <div className="flex items-center gap-3">
               {!isAuthPage && (
                 <nav className="hidden xl:flex items-center gap-1 text-xs font-semibold text-slate-700">
+                  <Link href="/" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
+                    होम
+                  </Link>
                   <Link href="/courses" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
                     पाठ्यक्रम
                   </Link>
@@ -225,7 +228,7 @@ export function Navbar() {
                       size="sm"
                       className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg h-9 px-4 shadow-xs"
                     >
-                      मुफ्त जुड़ें
+                      रजिस्टर करें
                     </Button>
                   </Link>
                 </div>
@@ -289,6 +292,9 @@ export function Navbar() {
                 </div>
               )}
 
+              <Link href="/" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
+                होम
+              </Link>
               <Link href="/dashboard" className="py-2 px-2 text-blue-700 font-bold hover:bg-blue-50 rounded flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
                 <LayoutDashboard className="h-4 w-4 text-blue-600" />
                 <span>डैशबोर्ड</span>
@@ -332,7 +338,7 @@ export function Navbar() {
                     onClick={() => setMobileMenuOpen(false)}
                     className="py-2 text-center text-xs font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700"
                   >
-                    मुफ्त जुड़ें
+                    रजिस्टर करें
                   </Link>
                 </div>
               )}

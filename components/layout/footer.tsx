@@ -31,7 +31,11 @@ export function Footer({ showValueBanner = false }: FooterProps) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start gap-4 p-4 rounded-2xl bg-blue-50/70 border border-blue-100">
                 <div className="h-11 w-11 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                  <ShieldCheck className="h-5 w-5" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" className="h-6 w-6">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="currentColor" fillRule="evenodd" d="M19 11c2.309 0 3.753 2.5 2.598 4.5a3 3 0 0 1-.598.736v4.955a.5.5 0 0 1-.724.447L19 21l-1.276.638a.5.5 0 0 1-.724-.447v-4.955c-1.721-1.54-1.13-4.365 1.064-5.086c.302-.099.618-.15.936-.15m-7-2H6a1 1 0 0 0-.117 1.993L6 11h6a1 1 0 0 0 .117-1.993zm-4 4H6a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2" className="duoicon-primary-layer" />
+                    <path fill="currentColor" fillRule="evenodd" d="M20 4a2 2 0 0 1 2 2v4c-3.079-2.309-7.504-.419-7.964 3.402A5 5 0 0 0 15 17v3H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" className="duoicon-secondary-layer" opacity=".3" />
+                  </svg>
                 </div>
                 <div>
                   <h4 className="font-bold text-slate-900 text-sm font-headline">प्रमाणित पाठ्यक्रम</h4>
@@ -41,7 +45,10 @@ export function Footer({ showValueBanner = false }: FooterProps) {
 
               <div className="flex items-center justify-center md:justify-start gap-4 p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100">
                 <div className="h-11 w-11 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                  <Award className="h-5 w-5" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" className="h-6 w-6">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="currentColor" fillRule="evenodd" d="M14.285 2.142a3 3 0 0 0-4.57 0l-.042.05a1 1 0 0 1-.842.348l-.065-.005a3 3 0 0 0-3.23 3.231l.004.065a1 1 0 0 1-.348.842l-.05.042a3 3 0 0 0 0 4.57l.05.042a1 1 0 0 1 .348.842l-.005.065A3 3 0 0 0 8 15.429V22a1 1 0 0 0 1.555.832L12 21.202l2.445 1.63A1 1 0 0 0 16 22v-6.57a3 3 0 0 0 2.465-3.196l-.005-.065a1 1 0 0 1 .348-.842l.05-.042a3 3 0 0 0 0-4.57l-.05-.042a1 1 0 0 1-.348-.842l.005-.065a3 3 0 0 0-3.231-3.23l-.065.004a1 1 0 0 1-.842-.348zM10 20.132V16.15a3 3 0 0 0 4 0v3.98l-1.445-.963a1 1 0 0 0-1.11 0zm4.707-11.425a1 1 0 0 0-1.414-1.414L11 9.586l-.293-.293a1 1 0 0 0-1.414 1.414l1 1a1 1 0 0 0 1.414 0z" clipRule="evenodd" />
+                  </svg>
                 </div>
                 <div>
                   <h4 className="font-bold text-slate-900 text-sm font-headline">व्यावहारिक प्रशिक्षण</h4>
@@ -51,7 +58,11 @@ export function Footer({ showValueBanner = false }: FooterProps) {
 
               <div className="flex items-center justify-center md:justify-start gap-4 p-4 rounded-2xl bg-purple-50/70 border border-purple-100">
                 <div className="h-11 w-11 rounded-xl bg-purple-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                  <Sparkles className="h-5 w-5" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" className="h-6 w-6">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="currentColor" fillRule="evenodd" d="M14.447 1.106a1 1 0 0 1 .447 1.341L14.118 4H18a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3.882l-.776-1.553a1 1 0 0 1 1.788-.894L12 3.763l1.106-2.21a1 1 0 0 1 1.341-.447" className="duoicon-secondary-layer" opacity=".3" />
+                    <path fill="currentColor" fillRule="evenodd" d="M12 9c-1.54 0-2.502 1.667-1.732 3c.357.619 1.017 1 1.732 1c1.54 0 2.502-1.667 1.732-3A2 2 0 0 0 12 9m1.5 5h-3a2.5 2.5 0 0 0-2.495 2.336L8 16.5v.5a1 1 0 0 0 1.993.117L10 17v-.5a.5.5 0 0 1 .41-.492L10.5 16h3a.5.5 0 0 1 .492.41l.008.09v.5a1 1 0 0 0 1.993.117L16 17v-.5a2.5 2.5 0 0 0-2.336-2.495z" className="duoicon-primary-layer" />
+                  </svg>
                 </div>
                 <div>
                   <h4 className="font-bold text-slate-900 text-sm font-headline">मेंटरशिप व सहयोग</h4>
