@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { TrainerIcon } from "@/components/ui/trainer-icon";
 import {
   User,
   Mail,
@@ -70,7 +71,7 @@ export function RegisterForm() {
     {
       id: "TRAINER" as const,
       label: "प्रशिक्षक / मास्टर ट्रेनर",
-      icon: Briefcase,
+      icon: TrainerIcon,
     },
     {
       id: "MARKET_PARTNER" as const,
