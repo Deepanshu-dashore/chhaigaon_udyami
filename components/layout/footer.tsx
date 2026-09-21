@@ -213,6 +213,11 @@ export function Footer({ showValueBanner = false }: FooterProps) {
             <h4 className="text-xs font-semibold uppercase tracking-wider text-on-surface font-headline">मंच (Platform)</h4>
             <ul className="space-y-2 text-sm text-on-surface-variant">
               <li>
+                <Link href="/about" className="hover:text-primary transition-colors">
+                  हमारे बारे में (About Us)
+                </Link>
+              </li>
+              <li>
                 <Link href="/login" className="hover:text-primary transition-colors">
                   लॉग इन (Sign In)
                 </Link>

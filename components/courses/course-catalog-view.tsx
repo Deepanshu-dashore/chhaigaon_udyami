@@ -150,7 +150,7 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
   return (
     <div className="space-y-10">
       
-      {/* ================= 1. SKILLS TO TRANSFORM YOUR CAREER AND LIFE SECTION (MATCHING IMAGE 3) ================= */}
+      {/* ================= 1. SKILLS TO TRANSFORM YOUR CAREER AND LIFE SECTION ================= */}
       <div className="space-y-5">
         <div className="space-y-1.5">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight font-headline">
@@ -161,7 +161,7 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
           </p>
         </div>
 
-        {/* Tab Navigation Bar (Underline style matching Image 3) */}
+        {/* Category Tab Navigation Bar */}
         <div className="border-b border-slate-200 overflow-x-auto scrollbar-none">
           <div className="flex items-center gap-6 sm:gap-8 min-w-max pb-0.5">
             {SKILL_TABS.map((tab) => {
@@ -234,35 +234,7 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
             </div>
           </div>
 
-          {/* Category Filter */}
-          <div className="space-y-2 pt-2 border-t border-slate-100">
-            <label className="text-xs font-bold text-slate-800 block">
-              उद्योग श्रेणी (Categories)
-            </label>
-            <div className="space-y-1.5">
-              {[
-                { id: "dairy", label: "डेयरी एवं पशुपालन" },
-                { id: "food-processing", label: "खाद्य प्रसंस्करण व FSSAI" },
-                { id: "organic-farming", label: "जैविक खेती व एग्रोटेक" },
-                { id: "schemes", label: "PMEGP व बैंक सब्सिडी" },
-                { id: "digital-marketing", label: "डिजिटल व्यवसाय व ONDC" },
-                { id: "solar", label: "सौर ऊर्जा एवं रिन्यूएबल" },
-              ].map((cat) => (
-                <label
-                  key={cat.id}
-                  className="flex items-center gap-2 text-xs text-slate-700 hover:text-slate-950 cursor-pointer select-none"
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedCategories.includes(cat.id)}
-                    onChange={() => toggleCategory(cat.id)}
-                    className="rounded text-blue-600 focus:ring-blue-500 h-3.5 w-3.5 border-slate-300"
-                  />
-                  <span>{cat.label}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+
 
           {/* Price Filter */}
           <div className="space-y-2 pt-2 border-t border-slate-100">
@@ -471,32 +443,7 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
               </button>
             </div>
 
-            {/* Mobile Category */}
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-800 block">उद्योग श्रेणी</label>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { id: "dairy", label: "डेयरी एवं पशुपालन" },
-                  { id: "food-processing", label: "खाद्य प्रसंस्करण" },
-                  { id: "organic-farming", label: "जैविक खेती" },
-                  { id: "schemes", label: "PMEGP व लोन" },
-                  { id: "digital-marketing", label: "डिजिटल व्यवसाय" },
-                  { id: "solar", label: "सौर ऊर्जा" },
-                ].map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => toggleCategory(cat.id)}
-                    className={`px-3 py-2 rounded-lg text-xs font-semibold text-left border transition-all ${
-                      selectedCategories.includes(cat.id)
-                        ? "bg-blue-50 border-blue-500 text-blue-700 font-bold"
-                        : "bg-slate-50 border-slate-200 text-slate-700"
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+
 
             {/* Mobile Price */}
             <div className="space-y-2 pt-2 border-t border-slate-100">

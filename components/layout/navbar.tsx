@@ -87,25 +87,11 @@ export function Navbar() {
                   </span>
                 </div>
               </Link>
-
-              {/* Explore Dropdown Trigger */}
-              {!isAuthPage && (
-                <div className="hidden lg:flex items-center">
-                  <Link
-                    href="/courses"
-                    className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-bold text-slate-700 hover:text-blue-700 hover:bg-slate-100 rounded-lg transition-colors border border-slate-200"
-                  >
-                    <BookOpen className="h-3.5 w-3.5 text-blue-600" />
-                    <span>एक्सप्लोर करें</span>
-                    <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
-                  </Link>
-                </div>
-              )}
             </div>
 
             {/* Middle: Coursera-Style Search Bar */}
             {!isAuthPage && (
-              <div className="hidden md:flex flex-1 max-w-md mx-2">
+              <div className="hidden md:flex flex-1 max-w-sm mx-2">
                 <form action="/courses" method="GET" className="w-full relative flex items-center">
                   <input
                     type="text"
@@ -130,6 +116,9 @@ export function Navbar() {
                 <nav className="hidden xl:flex items-center gap-1 text-xs font-semibold text-slate-700">
                   <Link href="/courses" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
                     पाठ्यक्रम
+                  </Link>
+                  <Link href="/about" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
+                    हमारे बारे में
                   </Link>
                   <Link href="/apply" className="px-2.5 py-1.5 text-blue-700 hover:text-blue-800 font-bold rounded">
                     प्रवेश आवेदन
@@ -306,6 +295,9 @@ export function Navbar() {
               </Link>
               <Link href="/courses" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
                 पाठ्यक्रम
+              </Link>
+              <Link href="/about" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
+                हमारे बारे में
               </Link>
               <Link href="/apply" className="py-2 px-2 text-blue-700 font-bold hover:bg-blue-50 rounded" onClick={() => setMobileMenuOpen(false)}>
                 प्रवेश आवेदन
