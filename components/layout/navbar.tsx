@@ -89,15 +89,15 @@ export function Navbar() {
               </Link>
             </div>
 
-            {/* Middle: Coursera-Style Search Bar */}
+            {/* Middle: Search Bar */}
             {!isAuthPage && (
-              <div className="hidden md:flex flex-1 max-w-sm mx-2">
+              <div className="hidden md:flex items-center w-48 sm:w-56 lg:w-60 mx-2">
                 <form action="/courses" method="GET" className="w-full relative flex items-center">
                   <input
                     type="text"
                     name="q"
-                    placeholder="आप कौन सा उद्योग या कौशल सीखना चाहते हैं?"
-                    className="w-full h-10 pl-4 pr-11 text-xs bg-slate-50 border border-slate-300 rounded-full focus:outline-none focus:border-blue-600 focus:bg-white transition-all text-slate-800 placeholder:text-slate-400"
+                    placeholder="कोर्स या कौशल खोजें..."
+                    className="w-full h-10 min-h-10 pl-3.5 pr-10 text-xs bg-slate-50 border border-slate-300 rounded-full focus:outline-none focus:border-blue-600 focus:bg-white transition-all text-slate-800 placeholder:text-slate-400"
                   />
                   <button
                     type="submit"
