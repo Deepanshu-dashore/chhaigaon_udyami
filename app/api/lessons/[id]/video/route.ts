@@ -1,18 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireRole } from "@/lib/auth";
-import { CreateLessonSchema } from "@/lib/schemas/course.schema";
-import { createLesson } from "@/services/lesson.service";
+import { CreateVideoSchema } from "@/lib/schemas/media.schema";
+import { attachVideoToLesson } from "@/services/lesson.service";
 
 /**
- * POST /api/lessons
- * Create a new lesson in a module
+ * POST /api/lessons/[id]/video
+ * Attach or update video media (VdoCipher) for a lesson
  */
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     await requireRole(["ADMIN", "SUPER_ADMIN", "CONTENT_MANAGER", "TRAINER"]);
+    const { id } = await params;
     const body = await req.json();
 
-    const validation = CreateLessonSchema.safeParse(body);
+    const payload = {
+      ...body,
+      lessonId: id,
+    };
+
+    const validation = CreateVideoSchema.safeParse(payload);
     if (!validation.success) {
       return NextResponse.json(
         { error: "Validation Failed", details: validation.error.format() },
@@ -20,8 +29,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const lesson = await createLesson(validation.data);
-    return NextResponse.json({ lesson }, { status: 201 });
+    const video = await attachVideoToLesson(id, validation.data);
+    return NextResponse.json({ video }, { status: 201 });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Internal Server Error";
     const status = message.includes("Unauthorized")

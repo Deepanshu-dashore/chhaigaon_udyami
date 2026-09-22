@@ -1,49 +1,74 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { getCurrentUser, requireAuth } from "@/lib/auth";
+import { UpdateLessonProgressSchema } from "@/lib/schemas/enrollment.schema";
+import {
+  getLessonProgress,
+  updateLessonProgress,
+  getCourseOverallProgress,
+} from "@/services/lesson-progress.service";
 
+/**
+ * GET /api/progress
+ * Get lesson progress or course overall progress for the authenticated user
+ */
+export async function GET(req: NextRequest) {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const lessonId = searchParams.get("lessonId");
+    const courseId = searchParams.get("courseId");
+
+    if (lessonId) {
+      const progress = await getLessonProgress(currentUser.id, lessonId);
+      return NextResponse.json({ progress });
+    }
+
+    if (courseId) {
+      const courseProgress = await getCourseOverallProgress(currentUser.id, courseId);
+      return NextResponse.json({ courseProgress });
+    }
+
+    return NextResponse.json(
+      { error: "Either lessonId or courseId is required" },
+      { status: 400 }
+    );
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Internal Server Error";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
+/**
+ * POST /api/progress
+ * Record/Update lesson progress position, watched time, and completion
+ */
 export async function POST(req: NextRequest) {
   try {
+    const currentUser = await requireAuth();
     const body = await req.json();
-    const { userId, lessonId, isCompleted, watchedSeconds, lastPosition, progressPercent } = body;
 
-    if (!userId || !lessonId) {
+    const payload = {
+      ...body,
+      userId: body.userId || currentUser.id,
+    };
+
+    const validation = UpdateLessonProgressSchema.safeParse(payload);
+    if (!validation.success) {
       return NextResponse.json(
-        { error: "userId and lessonId are required" },
+        { error: "Validation Failed", details: validation.error.format() },
         { status: 400 }
       );
     }
 
-    const completed = Boolean(isCompleted);
-
-    const progress = await prisma.lessonProgress.upsert({
-      where: {
-        userId_lessonId: { userId, lessonId },
-      },
-      update: {
-        isCompleted: isCompleted !== undefined ? completed : undefined,
-        completedAt: completed ? new Date() : undefined,
-        watchedSeconds:
-          watchedSeconds !== undefined ? Number(watchedSeconds) : undefined,
-        lastPosition:
-          lastPosition !== undefined ? Number(lastPosition) : undefined,
-        progressPercent:
-          progressPercent !== undefined ? Number(progressPercent) : undefined,
-      },
-      create: {
-        userId,
-        lessonId,
-        isCompleted: completed,
-        completedAt: completed ? new Date() : null,
-        watchedSeconds: Number(watchedSeconds) || 0,
-        lastPosition: Number(lastPosition) || 0,
-        progressPercent: Number(progressPercent) || 0,
-      },
-    });
-
+    const progress = await updateLessonProgress(validation.data);
     return NextResponse.json({ progress });
   } catch (error: unknown) {
-    const message =
-      error instanceof Error ? error.message : "Internal Server Error";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Internal Server Error";
+    const status = message.includes("Unauthorized") ? 401 : 400;
+    return NextResponse.json({ error: message }, { status });
   }
 }
