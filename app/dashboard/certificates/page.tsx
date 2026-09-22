@@ -86,10 +86,10 @@ export default async function DashboardCertificatesPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-8 font-sans">
       {/* Top Banner Header */}
-      <div className="bg-gradient-to-r from-[#0a2540] via-blue-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
+      <div className="bg-slate-900 text-white rounded-xl p-6 sm:p-8 shadow-xs border border-slate-800 relative overflow-hidden">
         <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-white/10 text-amber-300 border border-white/20 backdrop-blur-xs">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-bold bg-white/10 text-amber-300 border border-white/20">
               <Award className="w-3.5 h-3.5 text-amber-400" />
               <span>प्रमाणित कौशल वॉल्ट (Certified Credentials Vault)</span>
             </div>
@@ -105,14 +105,14 @@ export default async function DashboardCertificatesPage() {
             <Link href="/certificates">
               <Button
                 variant="outline"
-                className="bg-white/10 hover:bg-white/20 text-white border-white/30 text-xs font-semibold px-4 py-2 rounded-xl backdrop-blur-xs cursor-pointer"
+                className="bg-white/10 hover:bg-white/20 text-white border-white/30 text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer"
               >
                 <span>सत्यापन पोर्टल</span>
                 <ExternalLink className="w-3.5 h-3.5 ml-1" />
               </Button>
             </Link>
             <Link href="/courses">
-              <Button className="bg-[#0056d2] hover:bg-blue-600 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-xs cursor-pointer">
+              <Button className="bg-[#0056d2] hover:bg-blue-600 text-white font-bold text-xs px-4 py-2 rounded-lg shadow-xs cursor-pointer">
                 <span>नया कोर्स खोजें</span>
               </Button>
             </Link>
@@ -121,15 +121,15 @@ export default async function DashboardCertificatesPage() {
 
         {/* Stats Strip */}
         <div className="relative z-10 grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mt-6 pt-6 border-t border-white/10">
-          <div className="bg-white/5 rounded-2xl p-3 sm:p-4 border border-white/10">
+          <div className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10">
             <span className="text-[11px] text-slate-300 block">कुल अर्जित प्रमाण पत्र</span>
             <span className="text-xl sm:text-2xl font-black text-white">{certificates.length}</span>
           </div>
-          <div className="bg-white/5 rounded-2xl p-3 sm:p-4 border border-white/10">
+          <div className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10">
             <span className="text-[11px] text-slate-300 block">सत्यापन स्थिति</span>
             <span className="text-xl sm:text-2xl font-black text-emerald-400">100% मान्य</span>
           </div>
-          <div className="bg-white/5 rounded-2xl p-3 sm:p-4 border border-white/10 col-span-2 sm:col-span-1">
+          <div className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10 col-span-2 sm:col-span-1">
             <span className="text-[11px] text-slate-300 block">अध्ययनरत पाठ्यक्रम</span>
             <span className="text-xl sm:text-2xl font-black text-amber-300">
               {inProgressCourses.length} प्रगति पर
@@ -148,21 +148,21 @@ export default async function DashboardCertificatesPage() {
         </div>
 
         {certificates.length === 0 ? (
-          <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 text-center space-y-4 shadow-xs">
-            <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-100">
-              <Award className="w-8 h-8 text-blue-600" />
+          <div className="bg-white rounded-xl p-8 sm:p-12 border border-slate-200 text-center space-y-4 shadow-2xs">
+            <div className="w-14 h-14 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-100">
+              <Award className="w-7 h-7 text-blue-600" />
             </div>
             <div className="max-w-md mx-auto space-y-1.5">
               <h3 className="text-lg font-bold text-slate-900 font-headline">
                 अभी तक कोई प्रमाण पत्र जारी नहीं हुआ है
               </h3>
               <p className="text-xs sm:text-sm text-slate-500 font-body">
-                पाठ्यक्रम के सभी पाठ पूरे करें और अंतिम क्विज में 60% अंक प्राप्त करके अपना आधिकारिक डिजिटल प्रमाण पत्र प्राप्त करें।
+                पाठ्यक्रम के सभी पाठ पूरा करें और अंतिम क्विज में 60% अंक प्राप्त करके अपना आधिकारिक डिजिटल प्रमाण पत्र प्राप्त करें।
               </p>
             </div>
             <div className="pt-2">
               <Link href="/courses">
-                <Button className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl cursor-pointer">
+                <Button className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs px-5 py-2.5 rounded-lg cursor-pointer">
                   <span>पाठ्यक्रम शुरू करें</span>
                   <ArrowRight className="w-4 h-4 ml-1.5" />
                 </Button>
@@ -181,11 +181,11 @@ export default async function DashboardCertificatesPage() {
               return (
                 <div
                   key={cert.id}
-                  className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between space-y-4"
+                  className="bg-white rounded-xl p-5 border border-slate-200 shadow-2xs hover:border-blue-300 transition-all flex flex-col justify-between space-y-4"
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
                         <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                         <span>सत्यापित प्रमाण पत्र</span>
                       </span>
@@ -212,7 +212,7 @@ export default async function DashboardCertificatesPage() {
                       <Link href={`/certificates/${cert.verificationCode}`}>
                         <Button
                           size="sm"
-                          className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs h-8 px-3 rounded-lg cursor-pointer inline-flex items-center gap-1"
+                          className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs h-8 px-3 rounded-md cursor-pointer inline-flex items-center gap-1"
                         >
                           <Printer className="w-3.5 h-3.5" />
                           <span>देखें व प्रिंट करें</span>
@@ -239,20 +239,14 @@ export default async function DashboardCertificatesPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {inProgressCourses.map((enrollment) => {
-              const totalLessons =
-                enrollment.course.modules?.reduce(
-                  (acc, mod) => acc + (mod.lessons?.length || 0),
-                  0
-                ) || 1;
-
               return (
                 <div
                   key={enrollment.id}
-                  className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs space-y-4 flex flex-col justify-between"
+                  className="bg-white rounded-xl p-5 border border-slate-200 shadow-2xs space-y-4 flex flex-col justify-between"
                 >
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
-                      <Badge variant="outline" className="text-[10px] text-amber-800 bg-amber-50 border-amber-200 font-bold">
+                      <Badge variant="outline" className="text-[10px] text-amber-800 bg-amber-50 border-amber-200 font-bold rounded-md">
                         प्रमाण पत्र लॉक है
                       </Badge>
                       <Lock className="w-3.5 h-3.5 text-slate-400" />
@@ -272,7 +266,7 @@ export default async function DashboardCertificatesPage() {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="w-full text-xs font-bold text-blue-700 hover:bg-blue-50 border-blue-200 h-8 rounded-lg cursor-pointer flex items-center justify-center gap-1.5"
+                        className="w-full text-xs font-bold text-blue-700 hover:bg-blue-50 border-blue-200 h-8 rounded-md cursor-pointer flex items-center justify-center gap-1.5"
                       >
                         <span>अध्ययन जारी रखें</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -288,7 +282,7 @@ export default async function DashboardCertificatesPage() {
 
       {/* Embedded Quick Verifier Widget */}
       <div className="pt-4">
-        <div className="bg-slate-50 rounded-3xl p-6 border border-slate-200/80">
+        <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
           <h3 className="font-bold text-slate-900 text-base mb-2 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-emerald-600" />
             <span>अन्य प्रमाण पत्र की सत्यता जांचें (Verify Any Credential)</span>

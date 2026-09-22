@@ -113,36 +113,47 @@ export function Navbar() {
             {/* Right: Navigation Links & Auth Buttons */}
             <div className="flex items-center gap-3">
               {!isAuthPage && (
-                <nav className="hidden xl:flex items-center gap-1 text-xs font-semibold text-slate-700">
-                  <Link href="/" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
-                    होम
-                  </Link>
-                  <Link href="/courses" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
-                    पाठ्यक्रम
-                  </Link>
-                  <Link href="/about" className="px-2.5 py-1.5 hover:text-blue-600 rounded">
-                    हमारे बारे में
-                  </Link>
-                  <Link href="/apply" className="px-2.5 py-1.5 text-blue-700 hover:text-blue-800 font-bold rounded">
-                    प्रवेश आवेदन
-                  </Link>
-                  <Link
-                    href="/certificates"
-                    className="px-2.5 py-1.5 hover:text-blue-600 rounded"
-                  >
-                    सर्टिफिकेट्स
-                  </Link>
+                <nav className="hidden xl:flex items-center gap-1.5 text-xs">
+                  {[
+                    { href: "/", label: "होम" },
+                    { href: "/courses", label: "पाठ्यक्रम" },
+                    { href: "/about", label: "हमारे बारे में" },
+                    { href: "/apply", label: "प्रवेश आवेदन" },
+                    { href: "/certificates", label: "सर्टिफिकेट्स" },
+                  ].map((item) => {
+                    const active =
+                      item.href === "/"
+                        ? pathname === "/"
+                        : pathname.startsWith(item.href);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={`px-3 py-1.5 rounded-md transition-all ${
+                          active
+                            ? "bg-blue-50 text-[#0056d2] font-bold border border-blue-200/80 shadow-2xs"
+                            : "text-slate-600 hover:text-blue-700 hover:bg-slate-50 font-medium"
+                        }`}
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  })}
                 </nav>
               )}
 
               {loading ? (
-                <div className="h-9 w-24 bg-slate-200 rounded-xl animate-pulse" />
+                <div className="h-9 w-24 bg-slate-200 rounded-lg animate-pulse" />
               ) : user ? (
                 <div className="flex items-center gap-2.5">
                   {/* Prominent Dashboard Action Button */}
                   <Link
                     href="/dashboard"
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 text-xs font-bold transition shadow-xs"
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition border ${
+                      pathname.startsWith("/dashboard")
+                        ? "bg-blue-600 text-white border-blue-700 shadow-xs"
+                        : "bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200 shadow-2xs"
+                    }`}
                   >
                     <LayoutDashboard className="h-3.5 w-3.5" />
                     <span>डैशबोर्ड</span>
@@ -152,7 +163,7 @@ export function Navbar() {
                   <div className="relative">
                     <button
                       onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                      className="flex items-center gap-2 p-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
+                      className="flex items-center gap-2 p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
                     >
                       <UserAvatar
                         src={user.user_metadata?.avatar_url || user.user_metadata?.picture}
@@ -166,7 +177,7 @@ export function Navbar() {
                     </button>
 
                     {userDropdownOpen && (
-                      <div className="absolute right-0 mt-2 w-52 rounded-2xl bg-white border border-slate-200 shadow-xl py-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+                      <div className="absolute right-0 mt-2 w-52 rounded-lg bg-white border border-slate-200 shadow-lg py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
                         <div className="px-4 py-2 border-b border-slate-100">
                           <p className="text-xs font-bold text-slate-900 truncate">
                             {user.user_metadata?.name || "User"}
@@ -177,7 +188,7 @@ export function Navbar() {
                         </div>
                         <Link
                           href="/dashboard"
-                          className="flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition"
+                          className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition"
                           onClick={() => setUserDropdownOpen(false)}
                         >
                           <LayoutDashboard className="h-4 w-4 text-blue-600" />
@@ -185,7 +196,7 @@ export function Navbar() {
                         </Link>
                         <Link
                           href="/dashboard/certificates"
-                          className="flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-800 transition"
+                          className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-800 transition"
                           onClick={() => setUserDropdownOpen(false)}
                         >
                           <Award className="h-4 w-4 text-amber-600" />
@@ -203,7 +214,7 @@ export function Navbar() {
                             setUserDropdownOpen(false);
                             signOut();
                           }}
-                          className="w-full flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition text-left cursor-pointer border-t border-slate-100"
+                          className="w-full flex items-center gap-2 px-4 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition text-left cursor-pointer border-t border-slate-100"
                         >
                           <LogOut className="h-4 w-4" />
                           <span>लॉग आउट</span>
@@ -218,7 +229,7 @@ export function Navbar() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-xs font-bold text-slate-700 hover:text-blue-600 h-9 px-3"
+                      className="text-xs font-bold text-slate-700 hover:text-blue-600 h-9 px-3 rounded-md"
                     >
                       लॉग इन
                     </Button>
@@ -226,7 +237,7 @@ export function Navbar() {
                   <Link href="/register">
                     <Button
                       size="sm"
-                      className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg h-9 px-4 shadow-xs"
+                      className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-md h-9 px-4 shadow-xs"
                     >
                       रजिस्टर करें
                     </Button>
@@ -237,7 +248,7 @@ export function Navbar() {
               {/* Mobile menu trigger */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-1.5 rounded-lg border border-slate-200 text-slate-700"
+                className="md:hidden p-1.5 rounded-md border border-slate-200 text-slate-700"
                 aria-label="Toggle menu"
               >
                 {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -255,7 +266,7 @@ export function Navbar() {
                 type="text"
                 name="q"
                 placeholder="उद्योग या कौशल खोजें..."
-                className="w-full h-10 pl-3 pr-10 text-xs bg-slate-50 border border-slate-300 rounded-lg"
+                className="w-full h-10 pl-3 pr-10 text-xs bg-slate-50 border border-slate-300 rounded-md"
               />
               <button
                 type="submit"
@@ -266,7 +277,7 @@ export function Navbar() {
             </form>
             <div className="flex flex-col gap-1 text-xs font-semibold text-slate-700 pt-2">
               {user && (
-                <div className="p-3 mb-2 rounded-xl bg-blue-50/80 border border-blue-100 flex items-center justify-between">
+                <div className="p-3 mb-2 rounded-lg bg-blue-50/80 border border-blue-100 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <UserAvatar
                       src={user.user_metadata?.avatar_url || user.user_metadata?.picture}
@@ -285,33 +296,42 @@ export function Navbar() {
                   <Link
                     href="/dashboard"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-2.5 py-1 text-[11px] font-bold bg-[#0056d2] text-white rounded-lg shadow-xs"
+                    className="px-2.5 py-1 text-[11px] font-bold bg-[#0056d2] text-white rounded-md shadow-xs"
                   >
                     डैशबोर्ड
                   </Link>
                 </div>
               )}
 
-              <Link href="/" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
-                होम
-              </Link>
-              <Link href="/dashboard" className="py-2 px-2 text-blue-700 font-bold hover:bg-blue-50 rounded flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
-                <LayoutDashboard className="h-4 w-4 text-blue-600" />
-                <span>डैशबोर्ड</span>
-              </Link>
-              <Link href="/courses" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
-                पाठ्यक्रम
-              </Link>
-              <Link href="/about" className="py-2 px-2 hover:bg-slate-50 rounded" onClick={() => setMobileMenuOpen(false)}>
-                हमारे बारे में
-              </Link>
-              <Link href="/apply" className="py-2 px-2 text-blue-700 font-bold hover:bg-blue-50 rounded" onClick={() => setMobileMenuOpen(false)}>
-                प्रवेश आवेदन
-              </Link>
-              <Link href="/certificates" className="py-2 px-2 hover:bg-slate-50 rounded flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
-                <Award className="h-4 w-4 text-amber-600" />
-                <span>सर्टिफिकेट्स</span>
-              </Link>
+              {[
+                { href: "/", label: "होम" },
+                { href: "/dashboard", label: "डैशबोर्ड", icon: LayoutDashboard },
+                { href: "/courses", label: "पाठ्यक्रम" },
+                { href: "/about", label: "हमारे बारे में" },
+                { href: "/apply", label: "प्रवेश आवेदन" },
+                { href: "/certificates", label: "सर्टिफिकेट्स", icon: Award },
+              ].map((item) => {
+                const active =
+                  item.href === "/"
+                    ? pathname === "/"
+                    : pathname.startsWith(item.href);
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`py-2 px-3 rounded-md flex items-center gap-2 transition-all ${
+                      active
+                        ? "bg-blue-50 text-[#0056d2] font-bold border-l-4 border-[#0056d2]"
+                        : "hover:bg-slate-50 text-slate-700"
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {Icon && <Icon className="h-4 w-4 text-blue-600" />}
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
 
               {user ? (
                 <button
@@ -319,7 +339,7 @@ export function Navbar() {
                     setMobileMenuOpen(false);
                     signOut();
                   }}
-                  className="py-2 px-2 text-rose-600 hover:bg-rose-50 rounded flex items-center gap-2 text-left cursor-pointer border-t border-slate-100 mt-2"
+                  className="py-2 px-3 text-rose-600 hover:bg-rose-50 rounded-md flex items-center gap-2 text-left cursor-pointer border-t border-slate-100 mt-2"
                 >
                   <LogOut className="h-4 w-4" />
                   <span>लॉग आउट</span>
@@ -329,7 +349,7 @@ export function Navbar() {
                   <Link
                     href="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="py-2 text-center text-xs font-bold text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-50"
+                    className="py-2 text-center text-xs font-bold text-slate-700 border border-slate-200 rounded-md hover:bg-slate-50"
                   >
                     लॉग इन
                   </Link>

@@ -71,7 +71,7 @@ export function CertificateActions({
   };
 
   return (
-    <div className="no-print bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-4">
+    <div className="no-print bg-white rounded-xl p-4 sm:p-5 border border-slate-200 shadow-xs space-y-4">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
         <div>
           <h3 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
@@ -83,7 +83,7 @@ export function CertificateActions({
           </p>
         </div>
 
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <span>सत्यापित व सक्रिय</span>
         </div>
@@ -94,7 +94,7 @@ export function CertificateActions({
         {/* Print / Save as PDF */}
         <Button
           onClick={handlePrint}
-          className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-xs inline-flex items-center gap-2 cursor-pointer active:scale-98 transition-all"
+          className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-lg shadow-xs inline-flex items-center gap-2 cursor-pointer transition-all"
         >
           <Printer className="w-4 h-4" />
           <span>प्रिंट या PDF सेव करें (Print Certificate)</span>
@@ -104,7 +104,7 @@ export function CertificateActions({
         <Button
           onClick={handleCopyLink}
           variant="outline"
-          className="text-xs sm:text-sm font-semibold px-3.5 py-2.5 rounded-xl border-slate-300 hover:bg-slate-50 inline-flex items-center gap-2 cursor-pointer transition-all"
+          className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-lg border-slate-300 hover:bg-slate-50 inline-flex items-center gap-2 cursor-pointer transition-all"
         >
           {copied ? (
             <>
@@ -123,7 +123,7 @@ export function CertificateActions({
         <Button
           onClick={handleWhatsAppShare}
           variant="outline"
-          className="text-xs sm:text-sm font-semibold px-3.5 py-2.5 rounded-xl border-emerald-300 text-emerald-700 hover:bg-emerald-50 inline-flex items-center gap-2 cursor-pointer transition-all"
+          className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-lg border-emerald-300 text-emerald-700 hover:bg-emerald-50 inline-flex items-center gap-2 cursor-pointer transition-all"
         >
           <FaWhatsapp className="w-4 h-4 text-emerald-600" />
           <span>व्हाट्सएप शेयर</span>
@@ -133,7 +133,7 @@ export function CertificateActions({
         <Button
           onClick={handleLinkedInShare}
           variant="outline"
-          className="text-xs sm:text-sm font-semibold px-3.5 py-2.5 rounded-xl border-blue-200 text-blue-700 hover:bg-blue-50 inline-flex items-center gap-2 cursor-pointer transition-all"
+          className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-lg border-blue-200 text-blue-700 hover:bg-blue-50 inline-flex items-center gap-2 cursor-pointer transition-all"
         >
           <FaLinkedin className="w-4 h-4 text-blue-600" />
           <span>LinkedIn शेयर</span>

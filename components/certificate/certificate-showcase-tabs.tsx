@@ -85,70 +85,43 @@ export function CertificateShowcaseTabs() {
     <div className="space-y-6">
       
       {/* Top View Mode & Category Switcher */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 no-print max-w-4xl mx-auto border-b border-slate-200 pb-3">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 no-print w-full max-w-[95%] mx-auto border-b border-slate-200/80 pb-3">
         {/* Category Tabs */}
         <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-          <button
-            type="button"
-            onClick={() => setActiveTab("fssai")}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
-              activeTab === "fssai"
-                ? "bg-[#0056d2] text-white border-[#0056d2] shadow-xs"
-                : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200"
-            }`}
-          >
-            <Award className="w-3.5 h-3.5" />
-            <span>FSSAI खाद्य सुरक्षा</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab("pmegp")}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
-              activeTab === "pmegp"
-                ? "bg-[#0056d2] text-white border-[#0056d2] shadow-xs"
-                : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200"
-            }`}
-          >
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>PMEGP ₹50L DPR</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab("dairy")}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
-              activeTab === "dairy"
-                ? "bg-[#0056d2] text-white border-[#0056d2] shadow-xs"
-                : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200"
-            }`}
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>नाबार्ड डेयरी</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab("organic")}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
-              activeTab === "organic"
-                ? "bg-[#0056d2] text-white border-[#0056d2] shadow-xs"
-                : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200"
-            }`}
-          >
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>जैविक खाद</span>
-          </button>
+          {[
+            { id: "fssai", label: "FSSAI खाद्य सुरक्षा", icon: Award },
+            { id: "pmegp", label: "PMEGP ₹50L DPR", icon: ShieldCheck },
+            { id: "dairy", label: "नाबार्ड डेयरी", icon: Sparkles },
+            { id: "organic", label: "जैविक खाद", icon: CheckCircle2 },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
+                  isActive
+                    ? "bg-[#0056d2] text-white border-[#0056d2] shadow-xs"
+                    : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200"
+                }`}
+              >
+                <Icon className={`w-3.5 h-3.5 ${isActive ? "text-white" : "text-slate-500"}`} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* View Mode Toggle (Interactive HTML vs Studio Mockup) */}
-        <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 shrink-0">
+        <div className="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200 shrink-0">
           <button
             type="button"
             onClick={() => setViewMode("interactive")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-md text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
               viewMode === "interactive"
-                ? "bg-white text-slate-900 shadow-2xs"
+                ? "bg-white text-slate-900 shadow-2xs border border-slate-200/60"
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
@@ -158,9 +131,9 @@ export function CertificateShowcaseTabs() {
           <button
             type="button"
             onClick={() => setViewMode("mockup")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-md text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
               viewMode === "mockup"
-                ? "bg-white text-slate-900 shadow-2xs"
+                ? "bg-white text-slate-900 shadow-2xs border border-slate-200/60"
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
@@ -171,7 +144,7 @@ export function CertificateShowcaseTabs() {
       </div>
 
       {/* Action Toolbar */}
-      <div className="max-w-4xl mx-auto">
+      <div className="w-full max-w-[95%] mx-auto">
         <CertificateActions
           certificateNumber={currentCert.certificateNumber}
           verificationCode={currentCert.verificationCode}
@@ -181,11 +154,11 @@ export function CertificateShowcaseTabs() {
       </div>
 
       {/* Main Certificate Showcase Rendering */}
-      <div className="max-w-4xl mx-auto py-2">
+      <div className="w-full max-w-[95%] mx-auto py-2">
         {viewMode === "interactive" ? (
           <CertificateView certificate={currentCert} />
         ) : (
-          <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border-4 border-white group bg-slate-900">
+          <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-lg border-2 border-slate-200 group bg-slate-900">
             <Image
               src="/images/certificate-preview-showcase.jpg"
               alt="Official Chhaigaon Udyami Diploma Certificate of Excellence Mockup"
@@ -194,10 +167,10 @@ export function CertificateShowcaseTabs() {
               className="object-contain w-full h-full group-hover:scale-102 transition-transform duration-500 ease-out"
               priority
             />
-            <div className="absolute bottom-4 left-4 right-4 p-3.5 rounded-2xl bg-white/95 backdrop-blur-md border border-white/50 shadow-md flex items-center justify-between">
+            <div className="absolute bottom-4 left-4 right-4 p-3 rounded-lg bg-white/95 backdrop-blur-md border border-slate-200 shadow-md flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center">
-                  <Award className="w-5 h-5" />
+                <div className="w-7 h-7 rounded-md bg-amber-100 text-amber-800 flex items-center justify-center">
+                  <Award className="w-4 h-4" />
                 </div>
                 <div>
                   <span className="block text-xs font-bold text-slate-900">
@@ -225,7 +198,7 @@ export function CertificateShowcaseTabs() {
         <Link href={`/certificates/${currentCert.verificationCode}`}>
           <Button
             variant="outline"
-            className="text-xs sm:text-sm font-bold text-[#0056d2] border-blue-200 hover:bg-blue-50 px-5 py-2.5 rounded-xl inline-flex items-center gap-2 cursor-pointer shadow-xs"
+            className="text-xs sm:text-sm font-bold text-[#0056d2] border-blue-200 hover:bg-blue-50 px-5 py-2 rounded-lg inline-flex items-center gap-2 cursor-pointer shadow-xs"
           >
             <span>इस प्रमाण पत्र का ऑनलाइन सत्यापन रिकॉर्ड खोलें</span>
             <ExternalLink className="w-4 h-4" />

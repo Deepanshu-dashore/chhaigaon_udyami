@@ -37,41 +37,57 @@ const defaultFaqs: FAQItem[] = [
   },
 ];
 
-export function FaqAccordion() {
+export function FaqAccordion({
+  items = defaultFaqs,
+  showCategoryFilters = true,
+  className = "",
+}: {
+  items?: FAQItem[];
+  showCategoryFilters?: boolean;
+  className?: string;
+}) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [activeCategory, setActiveCategory] = useState<string>("सभी");
 
-  const categories = ["सभी", "सर्टिफिकेट एवं मान्यता", "सरकारी सब्सिडी व लोन", "पाठ्यक्रम एवं भाषा", "प्रोजेक्ट रिपोर्ट (DPR)"];
+  const availableCategories = Array.from(
+    new Set(items.map((i) => i.category).filter(Boolean))
+  ) as string[];
 
-  const filteredFaqs = activeCategory === "सभी"
-    ? defaultFaqs
-    : defaultFaqs.filter((f) => f.category === activeCategory);
+  const hasCategories = availableCategories.length > 1 && showCategoryFilters;
+  const categories = ["सभी", ...availableCategories];
+
+  const filteredFaqs =
+    hasCategories && activeCategory !== "सभी"
+      ? items.filter((f) => f.category === activeCategory)
+      : items;
 
   const toggleFaq = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-8">
+    <div className={`w-full max-w-4xl mx-auto space-y-6 ${className}`}>
       {/* Category Filter Tabs */}
-      <div className="flex flex-wrap items-center justify-center gap-2">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => {
-              setActiveCategory(cat);
-              setOpenIndex(null);
-            }}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-              activeCategory === cat
-                ? "bg-[#0056d2] text-white shadow-xs"
-                : "bg-slate-100 hover:bg-slate-200 text-slate-700"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+      {hasCategories && (
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => {
+                setActiveCategory(cat);
+                setOpenIndex(null);
+              }}
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer border ${
+                activeCategory === cat
+                  ? "bg-[#0056d2] text-white border-[#0056d2] shadow-2xs"
+                  : "bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Accordion List */}
       <div className="divide-y divide-slate-200 border-y border-slate-200 bg-white">
@@ -81,15 +97,17 @@ export function FaqAccordion() {
             <div key={i} className="transition-colors">
               <button
                 onClick={() => toggleFaq(i)}
-                className="w-full py-5 text-left flex items-center justify-between gap-4 cursor-pointer group"
+                className="w-full py-4 text-left flex items-center justify-between gap-4 cursor-pointer group"
                 aria-expanded={isOpen}
               >
                 <span className="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#0056d2] transition-colors font-headline">
                   {faq.q}
                 </span>
                 <div
-                  className={`h-7 w-7 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 ${
-                    isOpen ? "rotate-180 bg-blue-50 text-[#0056d2]" : "bg-slate-100 text-slate-500"
+                  className={`h-7 w-7 rounded-md flex items-center justify-center shrink-0 transition-transform duration-300 ${
+                    isOpen
+                      ? "rotate-180 bg-blue-50 text-[#0056d2] border border-blue-200/60"
+                      : "bg-slate-100 text-slate-500 border border-slate-200/50"
                   }`}
                 >
                   <ChevronDown className="h-4 w-4" />
@@ -97,8 +115,8 @@ export function FaqAccordion() {
               </button>
 
               {isOpen && (
-                <div className="pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed font-body animate-fadeIn">
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 text-slate-700">
+                <div className="pb-4 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed font-body animate-in fade-in duration-200">
+                  <div className="p-4 rounded-lg bg-slate-50 border border-slate-200/80 text-slate-700 leading-relaxed">
                     {faq.a}
                   </div>
                 </div>
