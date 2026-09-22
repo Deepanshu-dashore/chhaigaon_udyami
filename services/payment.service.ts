@@ -1,7 +1,19 @@
 import prisma from "@/lib/prisma";
 import { createRazorpayOrder, verifyRazorpaySignature } from "@/lib/razorpay";
+import { resolvePrismaUserId } from "./user-profile.service";
 
-export async function initiateCoursePurchase(userId: string, courseId: string) {
+/**
+ * Initiate Course Purchase (Create Razorpay order & database Order record)
+ */
+export async function initiateCoursePurchase(
+  userIdOrSupabaseId: string,
+  courseId: string
+) {
+  const prismaUserId = await resolvePrismaUserId(userIdOrSupabaseId);
+  if (!prismaUserId) {
+    throw new Error("User not found");
+  }
+
   const course = await prisma.course.findUnique({
     where: { id: courseId },
   });
@@ -10,22 +22,40 @@ export async function initiateCoursePurchase(userId: string, courseId: string) {
     throw new Error("Course not found");
   }
 
+  if (course.status !== "PUBLISHED") {
+    throw new Error("Cannot purchase an unpublished course");
+  }
+
+  // Check if user already has an active enrollment
+  const existingEnrollment = await prisma.enrollment.findUnique({
+    where: {
+      userId_courseId: {
+        userId: prismaUserId,
+        courseId,
+      },
+    },
+  });
+
+  if (existingEnrollment && existingEnrollment.status === "ACTIVE") {
+    throw new Error("You are already enrolled in this course");
+  }
+
   const amountNumber = Number(course.price);
-  const receipt = `rcpt_${Date.now()}_${userId.slice(0, 4)}`;
+  const receipt = `rcpt_${Date.now()}_${prismaUserId.slice(0, 4)}`;
 
   const razorpayOrder = await createRazorpayOrder({
     amount: amountNumber,
     receipt,
     notes: {
-      userId,
+      userId: prismaUserId,
       courseId,
     },
   });
 
-  // Create Order record in DB
+  // Create Order & Payment records in DB
   const order = await prisma.order.create({
     data: {
-      userId,
+      userId: prismaUserId,
       courseId,
       amount: course.price,
       currency: "INR",
@@ -33,7 +63,7 @@ export async function initiateCoursePurchase(userId: string, courseId: string) {
       razorpayOrderId: razorpayOrder.id,
       payment: {
         create: {
-          userId,
+          userId: prismaUserId,
           amount: course.price,
           currency: "INR",
           status: "PENDING",
@@ -42,12 +72,22 @@ export async function initiateCoursePurchase(userId: string, courseId: string) {
     },
     include: {
       payment: true,
+      course: {
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+        },
+      },
     },
   });
 
-  return { order: razorpayOrder, dbOrder: order };
+  return { razorpayOrder, order };
 }
 
+/**
+ * Verify Razorpay payment signature & complete payment/enrollment
+ */
 export async function verifyAndCompletePayment(
   razorpayOrderId: string,
   razorpayPaymentId: string,
@@ -104,4 +144,56 @@ export async function verifyAndCompletePayment(
   });
 
   return payment;
+}
+
+/**
+ * Get user payment and order history
+ */
+export async function getUserPaymentHistory(userIdOrSupabaseId: string) {
+  const prismaUserId = await resolvePrismaUserId(userIdOrSupabaseId);
+  if (!prismaUserId) return [];
+
+  return prisma.order.findMany({
+    where: { userId: prismaUserId },
+    include: {
+      course: {
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          thumbnail: true,
+        },
+      },
+      payment: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+/**
+ * Get single Order details by Order ID or Razorpay Order ID
+ */
+export async function getOrderById(orderId: string) {
+  return prisma.order.findFirst({
+    where: {
+      OR: [{ id: orderId }, { razorpayOrderId: orderId }],
+    },
+    include: {
+      course: {
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+        },
+      },
+      payment: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+  });
 }
