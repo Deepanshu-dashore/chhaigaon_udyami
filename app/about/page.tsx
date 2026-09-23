@@ -32,30 +32,45 @@ export const metadata = {
 const missionVisionValues = [
   {
     icon: Target,
-    title: "हमारा मिशन (Our Mission)",
-    color: "from-blue-600 to-indigo-700",
-    bgColor: "bg-blue-50/70",
-    borderColor: "border-blue-200",
-    textColor: "text-blue-700",
+    title: "हमारा मिशन",
+    subtitle: "OUR MISSION",
+    tagline: "व्यावहारिक कौशल व स्वरोज़गार निर्माण",
+    cardBg: "bg-[#ebf3fe] border-blue-200/80 text-blue-950",
+    illustration: "/images/mission-illustration.jpg",
     desc: "ग्रामीण युवाओं एवं महिलाओं को व्यावहारिक व्यावसायिक कौशल, बैंक-मान्य DPR रिपोर्ट्स और सब्सिडी गाइडेंस प्रदान कर उनके अपने गाँव में ही सफल लघु उद्योग स्थापित करने में सक्षम बनाना।",
+    highlights: [
+      "व्यावहारिक उद्योग शिक्षण",
+      "बैंक मान्य DPR व लोन सहायता",
+      "गांव में ही स्थायी स्वरोजगार",
+    ],
   },
   {
     icon: Compass,
-    title: "हमारा विजन (Our Vision)",
-    color: "from-emerald-600 to-teal-700",
-    bgColor: "bg-emerald-50/70",
-    borderColor: "border-emerald-200",
-    textColor: "text-emerald-700",
+    title: "हमारा विजन",
+    subtitle: "OUR VISION",
+    tagline: "आत्मनिर्भर व सशक्त ग्रामीण भारत",
+    cardBg: "bg-[#e6f4ea] border-emerald-200/80 text-emerald-950",
+    illustration: "/images/vision-illustration.jpg",
     desc: "एक ऐसे आत्मनिर्भर ग्रामीण भारत का निर्माण करना जहाँ हर पंचायत में कम से कम 5 नए सफल लघु उद्योग हों, पलायन रुके और स्थानीय स्तर पर सम्मानजनक रोज़गार के अवसर निर्मित हों।",
+    highlights: [
+      "हर पंचायत में 5+ लघु उद्योग",
+      "शहरों की ओर पलायन रोकना",
+      "स्थानीय आर्थिक स्वावलंबन",
+    ],
   },
   {
     icon: HeartHandshake,
-    title: "मूल सिद्धांत (Core Values)",
-    color: "from-amber-600 to-orange-700",
-    bgColor: "bg-amber-50/70",
-    borderColor: "border-amber-200",
-    textColor: "text-amber-800",
+    title: "मूल सिद्धांत",
+    subtitle: "CORE VALUES",
+    tagline: "100% पारदर्शिता व अटूट प्रतिबद्धता",
+    cardBg: "bg-[#fef7e0] border-amber-200/80 text-amber-950",
+    illustration: "/images/core-values-illustration.jpg",
     desc: "ज़मीनी सच्चाई व सरलता, 100% पारदर्शिता, बिना किसी छुपे शुल्क के निरंतर मेंटरशिप, और हर विद्यार्थी की सफलता के प्रति अटूट प्रतिबद्धता।",
+    highlights: [
+      "100% पारदर्शिता & ईमानदारी",
+      "बिना छुपा शुल्क मेंटरशिप",
+      "आजीवन कम्युनिटी सपोर्ट",
+    ],
   },
 ];
 
@@ -288,48 +303,66 @@ export default function AboutPage() {
         </section>
 
         {/* ================= SECTION 3: MISSION, VISION & CORE VALUES ================= */}
-        <section className="py-12 lg:py-16 border-b border-slate-200 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <section className="py-16 lg:py-24 border-b border-slate-200 bg-[#f9fafb] relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
             
-            <div className="text-center max-w-2xl mx-auto space-y-2">
+            {/* Header */}
+            <div className="text-center max-w-2xl mx-auto space-y-3">
               <SectionBadge icon={Target} variant="secondary">
                 हमारा संकल्प
               </SectionBadge>
 
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-950 tracking-tight font-headline">
-                मिशन, विजन एवं सिद्धांत
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-950 tracking-tight font-headline">
+                मिशन, विजन एवं मूल सिद्धांत
               </h2>
 
-              <p className="text-xs sm:text-sm text-slate-600 font-body">
-                जो हमें ग्रामीण भारत के हर महत्वाकांक्षी युवा के साथ मजबूती से खड़ा करता है।
+              <p className="text-xs sm:text-sm text-slate-600 font-body leading-relaxed">
+                वे मूल सिद्धांत और लक्ष्य जो हमें ग्रामीण भारत के हर महत्वाकांक्षी युवा के साथ मजबूती से जोड़ते हैं।
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Reference-style cards grid matching attached layout */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
               {missionVisionValues.map((item, idx) => {
-                const IconComp = item.icon;
                 return (
                   <div
                     key={idx}
-                    className={`rounded-2xl border ${item.borderColor} ${item.bgColor} p-6 shadow-2xs hover:shadow-md transition-all space-y-4 flex flex-col justify-between`}
+                    className={`rounded-3xl border ${item.cardBg} p-7 sm:p-8 flex flex-col justify-between relative overflow-hidden min-h-115 shadow-xs hover:shadow-xl transition-all duration-300 group`}
                   >
-                    <div className="space-y-3">
-                      <div className={`h-12 w-12 rounded-xl bg-linear-to-br ${item.color} text-white flex items-center justify-center shadow-xs`}>
-                        <IconComp className="h-6 w-6" />
+                    {/* Top Content: Title + Subtitle + Description + Bullet highlights */}
+                    <div className="space-y-4 relative z-10">
+                      <div>
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-1 font-sans">
+                          {item.subtitle}
+                        </span>
+                        <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight font-headline leading-snug">
+                          {item.title}
+                        </h3>
                       </div>
 
-                      <h3 className={`font-bold text-lg ${item.textColor} font-headline`}>
-                        {item.title}
-                      </h3>
-
-                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-body">
+                      <p className="text-xs sm:text-sm text-slate-700 font-body leading-relaxed">
                         {item.desc}
                       </p>
+
+                      <div className="pt-2 space-y-2">
+                        {item.highlights.map((hl, hIdx) => (
+                          <div key={hIdx} className="flex items-center gap-2 text-xs font-semibold text-slate-800">
+                            <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                            <span>{hl}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
 
-                    <div className="pt-3 border-t border-slate-200/60 flex items-center gap-2 text-xs font-bold text-slate-800">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                      <span>100% प्रतिबद्धता</span>
+                    {/* Bottom Right Hand-Drawn Illustration (as seen in reference design) */}
+                    <div className="pt-6 flex justify-end relative z-10">
+                      <div className="w-52 sm:w-60 h-44 sm:h-48 rounded-2xl overflow-hidden border border-slate-900/10 shadow-md bg-white p-2 group-hover:scale-103 transition-transform duration-300">
+                        <img
+                          src={item.illustration}
+                          alt={item.title}
+                          className="w-full h-full object-contain object-center rounded-xl"
+                        />
+                      </div>
                     </div>
                   </div>
                 );
@@ -525,7 +558,7 @@ export default function AboutPage() {
         {/* ================= SECTION 7: FULL-WIDTH CTA BANNER ================= */}
         <section className="py-8 sm:py-10 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="rounded-2xl bg-[#023574] text-white overflow-hidden shadow-xl relative flex flex-col lg:flex-row items-center justify-between border border-[#0d3f7a] min-h-[220px] lg:min-h-[240px]">
+            <div className="rounded-2xl bg-[#023574] text-white overflow-hidden shadow-xl relative flex flex-col lg:flex-row items-center justify-between border border-[#0d3f7a] min-h-55 lg:min-h-60">
               {/* Overlapping SVG Concentric Circles Pattern Overlay */}
               <div
                 className="absolute inset-0 pointer-events-none opacity-20"
