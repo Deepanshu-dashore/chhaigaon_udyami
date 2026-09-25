@@ -7,6 +7,7 @@ import { CourseCard } from "@/components/course/course-card";
 import { HeroVideoPreview } from "@/components/home/hero-video-preview";
 import { FaqAccordion } from "@/components/home/faq-accordion";
 import { Button } from "@/components/ui/button";
+import { SectionBadge } from "@/components/ui/section-badge";
 import {
   ArrowRight,
   CheckCircle2,
@@ -90,12 +91,60 @@ const defaultCourses: CourseItem[] = [
     lessonsCount: 10,
     category: "डिजिटल व्यवसाय",
   },
+  {
+    id: "c-5",
+    title: "उन्नत बकरी पालन एवं व्यावसायिक पशुधन प्रबंधन",
+    slug: "goat-farming-livestock-business",
+    shortDesc: "नस्ल चयन, शेड निर्माण, आहार प्रबंधन व NABARD सब्सिडी मार्गदर्शन।",
+    thumbnail: "/images/hero-entrepreneurs.jpg",
+    price: 899,
+    discountedPrice: 449,
+    level: "शुरुआती (Beginner)",
+    lessonsCount: 14,
+    category: "पशुपालन एवं डेयरी",
+  },
+  {
+    id: "c-6",
+    title: "सोलर रूफटॉप एवं सूर्य घर मुफ्त बिजली योजना स्वरोज़गार",
+    slug: "solar-rooftop-pm-surya-ghar",
+    shortDesc: "सोलर पैनल इंस्टालेशन, सरकारी सब्सिडी आवेदन व वेंडर नेटवर्किंग।",
+    thumbnail: "/images/solar-enterprise.jpg",
+    price: 1199,
+    discountedPrice: 599,
+    level: "मध्यम (Intermediate)",
+    lessonsCount: 15,
+    category: "अक्षय ऊर्जा",
+  },
+  {
+    id: "c-7",
+    title: "महिला स्वयं सहायता समूह (SHG) कुटीर उद्योग एवं ब्रांडिंग",
+    slug: "women-shg-handicrafts-branding",
+    shortDesc: "समूह ऋण प्रक्रिया, उत्पाद पैकेजिंग, सिलाई-कढ़ाई व स्थानीय बाज़ार लिंकेज।",
+    thumbnail: "/images/rural-entrepreneur-story.jpg",
+    price: 0,
+    discountedPrice: 0,
+    level: "सभी के लिए (All Levels)",
+    lessonsCount: 11,
+    category: "महिला सशक्तीकरण",
+  },
+  {
+    id: "c-8",
+    title: "PMEGP व मुद्रा लोन DPR (प्रोजेक्ट रिपोर्ट) निर्माण गाइड",
+    slug: "pmegp-mudra-loan-dpr-masterclass",
+    shortDesc: "बैंक-मान्य DPR फाइलिंग, प्रोजेक्ट कॉस्टिंग व 35% सब्सिडी क्लेम गाइड।",
+    thumbnail: "/images/cert-msme-collage.jpg",
+    price: 499,
+    discountedPrice: 249,
+    level: "सभी के लिए (All Levels)",
+    lessonsCount: 9,
+    category: "ऋण एवं सब्सिडी",
+  },
 ];
 
 const enterpriseRoles = [
   {
     title: "डेयरी फार्म एवं मिल्क प्रोसेसिंग प्लांट",
-    desc: "10 से 50 दुधारू पशुओं की आधुनिक इकाई, स्वच्छ दुग्ध उत्पादन, FSSAI मानक एवं ₹10 लाख PM मुद्रा/PMEGP ऋण की संपूर्ण प्रक्रिया।",
+    desc: "दुधारू पशु प्रबंधन, स्वच्छ दुग्ध उत्पादन एवं ₹10 लाख लोन प्रक्रिया।",
     monthlyEarning: "₹65,000 - ₹1,40,000 / माह",
     tag: "उच्च मांग",
     slug: "modern-dairy-farming",
@@ -103,7 +152,7 @@ const enterpriseRoles = [
   },
   {
     title: "मसाला एवं लघु खाद्य प्रसंस्करण उद्योग",
-    desc: "स्थानीय मिर्च, धनिया, हल्दी व आटा-दलिया पिसाई उद्योग, आधुनिक मशीनरी, FSSAI मानक, पैकेजिंग व 35% PM FME सब्सिडी।",
+    desc: "मसाला पिसाई, पैकेजिंग व 35% PM FME सब्सिडी सहायता।",
     monthlyEarning: "₹45,000 - ₹95,000 / माह",
     tag: "35% PM FME सब्सिडी",
     slug: "food-processing-micro-business",
@@ -111,7 +160,7 @@ const enterpriseRoles = [
   },
   {
     title: "जैविक खाद एवं वर्मीकम्पोस्ट उत्पादन",
-    desc: "कम पूंजी में केंचुआ खाद यूनिट, जैविक एनपीके निर्माण, नर्सरी व किसानों को थोक आपूर्ति नेटवर्क व ऑर्गेनिक सर्टिफिकेशन।",
+    desc: "कम लागत केंचुआ खाद यूनिट एवं जैविक बिक्री नेटवर्क।",
     monthlyEarning: "₹35,000 - ₹75,000 / माह",
     tag: "कम लागत",
     slug: "organic-farming-vermicompost",
@@ -119,7 +168,7 @@ const enterpriseRoles = [
   },
   {
     title: "ग्रामीण ई-कॉमर्स एवं ONDC डिजिटल विक्रेता",
-    desc: "गाँव के हस्तशिल्प व कृषि उत्पादों को WhatsApp Business एवं ONDC पर लिस्ट करें और अखिल भारतीय डिलीवरी से जोड़ें।",
+    desc: "WhatsApp व ONDC पर गाँव के उत्पाद ऑनलाइन बेचना सीखें।",
     monthlyEarning: "₹30,000 - ₹80,000 / माह",
     tag: "डिजिटल भारत",
     slug: "rural-digital-commerce-marketing",
@@ -205,7 +254,7 @@ export default async function HomePage() {
           },
         },
       },
-      take: 6,
+      take: 8,
     })) as unknown as DbCourseWithModules[];
 
     if (dbCourses && dbCourses.length > 0) {
@@ -242,10 +291,9 @@ export default async function HomePage() {
             <div className="w-full lg:w-[54%] py-10 sm:py-14 lg:py-16 space-y-4 text-left z-10">
               
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-[#0056d2] border border-blue-200 shadow-2xs">
-                <Sparkles className="h-3.5 w-3.5 text-[#0056d2]" />
-                <span>कौशल विकास एवं ग्रामीण स्वावलंबन</span>
-              </div>
+              <SectionBadge icon={Sparkles} variant="primary">
+                कौशल विकास एवं ग्रामीण स्वावलंबन
+              </SectionBadge>
 
               {/* Main Title (H1) */}
               <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-black text-slate-950 tracking-tight leading-[1.18] font-headline">
@@ -374,6 +422,136 @@ export default async function HomePage() {
           </div>
         </section>
 
+        {/* ================= ABOUT CHHAIGAON UDYAMI ================= */}
+        <section
+          className="py-14 lg:py-18 relative overflow-hidden border-b border-blue-900 text-white"
+          style={{
+            background: "url('/images/ourstd-bckgrnd.webp') no-repeat center center / cover",
+          }}
+        >
+          {/* Blue Gradient Overlay */}
+          <div className="absolute inset-0 bg-linear-to-r from-blue-900 via-[#0056d2]/90 to-blue-900 pointer-events-none" />
+
+          {/* Overlapping Concentric Circles SVG Pattern Overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-40 mix-blend-overlay"
+            style={{
+              backgroundImage: "url('/images/bg-concentric-circles.svg')",
+              backgroundRepeat: "repeat",
+              backgroundSize: "140px 140px",
+            }}
+          />
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              
+              {/* Left Column: Image with Floating Logo Badge */}
+              <div className="lg:col-span-5 flex justify-center">
+                <div className="relative w-full rounded-2xl overflow-hidden border border-white/20 shadow-2xl bg-white/10 group">
+                  <img
+                    src="/images/about-mission-team.jpg"
+                    alt="छैगांव उद्यमी - ग्रामीण कौशल एवं स्वावलंबन"
+                    className="w-full h-72 sm:h-80 lg:h-96 object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  />
+                  
+                  {/* Logo Overlay Badge */}
+                  <div className="absolute bottom-4 left-4 right-4 z-10">
+                    <div className="flex items-center gap-3 bg-white/95 backdrop-blur-md p-3 rounded-xl border border-white/80 shadow-lg">
+                      <img
+                        src="/logo.png"
+                        alt="छैगांव उद्यमी लोगो"
+                        className="w-10 h-10 object-contain shrink-0"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between gap-1">
+                          <h4 className="text-xs sm:text-sm font-extrabold text-slate-950 font-headline">
+                            छैगांव उद्यमी
+                          </h4>
+                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-200 uppercase tracking-wider">
+                            ISO 9001:2015
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-600 font-medium font-label">
+                          ग्रामीण कौशल एवं स्वावलंबन मंच
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Full Width Text & Content */}
+              <div className="lg:col-span-7 space-y-5 text-left">
+                
+                <SectionBadge icon={Sparkles} variant="glass">
+                  परिचय व उद्देश्य
+                </SectionBadge>
+
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-snug font-headline">
+                  ग्रामीण स्वावलंबन से, सशक्त भारत का निर्माण
+                </h2>
+
+                <p className="text-sm text-blue-100/90 leading-relaxed font-body">
+                  छैगांव उद्यमी ग्रामीण एवं कस्बाई भारत के युवाओं, महिलाओं और किसानों को स्वावलंबी बनाने के लिए समर्पित एक प्रमुख व्यावहारिक कौशल व उद्यमिता विकास मंच है। हमारा प्राथमिक लक्ष्य ग्रामीण क्षेत्रों से पलायन रोकना, स्थानीय संसाधनों का सही उपयोग करना और गाँव के स्तर पर ही सम्मानजनक व स्थायी स्वरोज़गार निर्मित करना है।
+                </p>
+
+                <p className="text-sm text-blue-100/90 leading-relaxed font-body">
+                  केवल किताबी ज्ञान देने की बजाय, हम आपको ज़मीनी व्यावसायिक तकनीक, उत्पाद निर्माण प्रक्रिया, FSSAI व MSME मानक, बैंक-मान्य प्रोजेक्ट रिपोर्ट (DPR) तैयार करना, PMEGP व मुद्रा लोन आवेदन तथा 35% तक सरकारी सब्सिडी मार्गदर्शन प्रदान करते हैं, ताकि आप 100% आत्मविश्वास के साथ अपना सफल उद्यम स्थापित कर सकें।
+                </p>
+
+                {/* Highlights Grid - Full Width */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                  <div className="flex items-center gap-2.5 bg-white/10 border border-white/20 backdrop-blur-xs rounded-xl p-3 text-white">
+                    <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400 shrink-0" />
+                    <span className="text-xs sm:text-sm font-semibold text-white">100% व्यावहारिक हिंदी शिक्षण</span>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 bg-white/10 border border-white/20 backdrop-blur-xs rounded-xl p-3 text-white">
+                    <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400 shrink-0" />
+                    <span className="text-xs sm:text-sm font-semibold text-white">PMEGP व मुद्रा लोन DPR सहायता</span>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 bg-white/10 border border-white/20 backdrop-blur-xs rounded-xl p-3 text-white">
+                    <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400 shrink-0" />
+                    <span className="text-xs sm:text-sm font-semibold text-white">35% तक सरकारी सब्सिडी मार्गदर्शन</span>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 bg-white/10 border border-white/20 backdrop-blur-xs rounded-xl p-3 text-white">
+                    <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400 shrink-0" />
+                    <span className="text-xs sm:text-sm font-semibold text-white">24x7 QR-सत्यापित प्रमाण पत्र</span>
+                  </div>
+                </div>
+
+                {/* Hero-Style Action Buttons */}
+                <div className="flex flex-wrap items-center gap-3.5 pt-3">
+                  <Link href="/about">
+                    <Button
+                      size="lg"
+                      className="px-5 py-3 h-11 text-xs sm:text-sm font-semibold rounded-[4px] bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-md transition-colors flex items-center gap-2 cursor-pointer font-label"
+                    >
+                      <span>हमारे बारे में जानें</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </Link>
+
+                  <Link href="/courses">
+                    <Button
+                      size="lg"
+                      variant="ghost"
+                      className="px-5 py-3 h-11 text-xs sm:text-sm font-semibold rounded-[4px] border border-white/40 text-white bg-white/10 hover:bg-white/20 backdrop-blur-xs transition-colors flex items-center gap-2 cursor-pointer font-label"
+                    >
+                      <span>कोर्सेज एक्सप्लोर करें</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </section>
+
         {/* ================= EXPLORE ROLES & ENTERPRISE TRACKS ================= */}
         <section className="py-10 lg:py-12 border-b border-slate-200 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -401,7 +579,7 @@ export default async function HomePage() {
                   key={idx}
                   className="rounded-2xl border border-slate-200 hover:border-[#0056d2]/50 bg-white p-4.5 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between group"
                 >
-                  <div className="space-y-3">
+                  <div className="space-y-2.5">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-[#0056d2] border border-blue-100">
                         {role.tag}
@@ -419,7 +597,7 @@ export default async function HomePage() {
                       {role.desc}
                     </p>
 
-                    <div className="bg-emerald-50/90 border border-emerald-100 rounded-xl p-2.5">
+                    <div className="bg-emerald-50/90 border border-emerald-100 rounded-xl p-2">
                       <span className="text-[10px] uppercase font-bold text-emerald-800 block tracking-wider">
                         अनुमानित मासिक आय क्षमता
                       </span>
@@ -429,7 +607,7 @@ export default async function HomePage() {
                     </div>
                   </div>
 
-                  <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between">
+                  <div className="pt-2.5 mt-2.5 border-t border-slate-100 flex items-center justify-between">
                     <span className="text-[11px] font-semibold text-slate-500">
                       प्रमाणित पाठ्यक्रम
                     </span>
@@ -449,20 +627,43 @@ export default async function HomePage() {
         </section>
 
         {/* ================= FEATURED COURSES CATALOG ================= */}
-        <section id="courses" className="py-10 lg:py-12 border-b border-slate-200 bg-slate-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <section
+          id="courses"
+          className="py-14 lg:py-18 relative overflow-hidden border-b border-blue-900 text-white"
+          style={{
+            background: "url('/images/ourstd-bckgrnd.webp') no-repeat center center / cover",
+          }}
+        >
+          {/* Blue Gradient Overlay */}
+          <div className="absolute inset-0 bg-linear-to-r from-blue-900 via-[#0056d2]/90 to-blue-900 pointer-events-none" />
+
+          {/* Overlapping Concentric Circles SVG Pattern */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-40 mix-blend-overlay"
+            style={{
+              backgroundImage: "url('/images/bg-concentric-circles.svg')",
+              backgroundRepeat: "repeat",
+              backgroundSize: "140px 140px",
+            }}
+          />
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 relative z-10">
             
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div className="space-y-1">
-                <h2 className="text-2xl sm:text-3xl font-bold text-slate-950 tracking-tight font-headline">
+              <div className="space-y-1.5">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-blue-100 border border-white/20 backdrop-blur-xs font-label">
+                  <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+                  <span>प्रमाणित मास्टरक्लासेस</span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight font-headline">
                   लोकप्रिय उद्यमिता मास्टरक्लासेस
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-600 max-w-xl font-body">
-                  सरल हिंदी भाषा में उद्योग विशेषज्ञों द्वारा तैयार किए गए व्यावहारिक कोर्सेज, जिसमें प्रोजेक्ट रिपोर्ट व सब्सिडी फॉर्म शामिल हैं।
+                <p className="text-xs sm:text-sm text-blue-100/90 font-body max-w-md">
+                  व्यावहारिक उद्योग शिक्षण, प्रोजेक्ट रिपोर्ट व 35% सब्सिडी फॉर्म मार्गदर्शन।
                 </p>
               </div>
 
-              <Link href="/courses" className="inline-flex items-center gap-1 text-sm font-bold text-[#0056d2] hover:underline">
+              <Link href="/courses" className="inline-flex items-center gap-1 text-sm font-bold text-amber-300 hover:text-white transition-colors">
                 <span>सभी कोर्सेज देखें</span>
                 <ChevronRight className="h-4 w-4" />
               </Link>
@@ -596,81 +797,6 @@ export default async function HomePage() {
                   </Link>
                 </div>
               </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* ================= PLANS & PRICING TIERS ================= */}
-        <section className="py-10 lg:py-14 border-b border-slate-200 bg-slate-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            
-            <div className="text-center max-w-2xl mx-auto space-y-2">
-              <h2 className="text-2xl sm:text-4xl font-bold text-slate-950 tracking-tight font-headline">
-                अपने लक्ष्य के अनुसार सही योजना चुनें
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600 font-body">
-                पारदर्शी योजनाएं — बिना किसी छुपे शुल्क के। आजीवन ज्ञान एवं बैंक लोन सहायता।
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
-              {plansList.map((plan, idx) => (
-                <div
-                  key={idx}
-                  className={`rounded-2xl bg-white border p-5 sm:p-6 flex flex-col justify-between transition-all relative ${
-                    plan.isPopular
-                      ? "border-[#0056d2] shadow-lg ring-1 ring-[#0056d2]/20"
-                      : "border-slate-200 shadow-2xs hover:shadow-md"
-                  }`}
-                >
-                  {plan.isPopular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-linear-to-r from-blue-700 to-[#0056d2] text-white text-[10px] font-bold tracking-wide uppercase shadow-xs border border-white/30 inline-flex items-center gap-1 whitespace-nowrap">
-                      <Star className="w-3 h-3 fill-amber-300 text-amber-300 shrink-0" />
-                      <span>सर्वोत्तम विकल्प</span>
-                    </div>
-                  )}
-
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="text-base font-bold text-slate-900 font-headline">{plan.title}</h3>
-                      <p className="text-xs text-slate-500 mt-0.5 font-body">{plan.subtitle}</p>
-                    </div>
-
-                    <div>
-                      <span className="text-2xl sm:text-3xl font-extrabold text-slate-950 font-headline">
-                        {plan.price}
-                      </span>
-                      <span className="text-xs text-slate-500 ml-1.5 font-medium">/ {plan.period}</span>
-                    </div>
-
-                    <Link href="/auth/register" className="block">
-                      <Button
-                        className={`w-full py-2 h-9 text-xs font-bold rounded-lg cursor-pointer ${
-                          plan.buttonVariant === "primary"
-                            ? "bg-[#0056d2] hover:bg-blue-800 text-white shadow-xs"
-                            : "border border-[#0056d2] text-[#0056d2] bg-white hover:bg-blue-50"
-                        }`}
-                      >
-                        {plan.buttonText}
-                      </Button>
-                    </Link>
-
-                    {/* Features List */}
-                    <div className="pt-3 border-t border-slate-100 space-y-2">
-                      <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider">
-                        मुख्य विशेषताएं:
-                      </span>
-                      {plan.features.map((feat, fIdx) => (
-                        <div key={fIdx} className="flex items-start gap-2 text-xs text-slate-700">
-                          <Check className="h-3.5 w-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                          <span>{feat}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
             </div>
 
           </div>

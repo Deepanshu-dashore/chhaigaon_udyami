@@ -330,24 +330,24 @@ export default function AboutPage() {
                     className={`rounded-3xl border ${item.cardBg} p-7 sm:p-8 flex flex-col justify-between relative overflow-hidden min-h-115 shadow-xs hover:shadow-xl transition-all duration-300 group`}
                   >
                     {/* Top Content: Title + Subtitle + Description + Bullet highlights */}
-                    <div className="space-y-4 relative z-10">
+                    <div className="space-y-4 sm:space-y-5 relative z-10">
                       <div>
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-1 font-sans">
+                        <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 block mb-1.5 font-sans">
                           {item.subtitle}
                         </span>
-                        <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight font-headline leading-snug">
+                        <h3 className="text-2xl sm:text-3xl lg:text-[32px] font-extrabold text-slate-950 tracking-tight font-headline leading-snug">
                           {item.title}
                         </h3>
                       </div>
 
-                      <p className="text-xs sm:text-sm text-slate-700 font-body leading-relaxed">
+                      <p className="text-sm sm:text-base text-slate-700/90 font-body leading-relaxed sm:leading-loose">
                         {item.desc}
                       </p>
 
-                      <div className="pt-2 space-y-2">
+                      <div className="pt-2 space-y-2.5">
                         {item.highlights.map((hl, hIdx) => (
-                          <div key={hIdx} className="flex items-center gap-2 text-xs font-semibold text-slate-800">
-                            <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                          <div key={hIdx} className="flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-slate-800">
+                            <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 shrink-0" />
                             <span>{hl}</span>
                           </div>
                         ))}
@@ -356,11 +356,11 @@ export default function AboutPage() {
 
                     {/* Bottom Right Hand-Drawn Illustration (as seen in reference design) */}
                     <div className="pt-6 flex justify-end relative z-10">
-                      <div className="w-52 sm:w-60 h-44 sm:h-48 rounded-2xl overflow-hidden border border-slate-900/10 shadow-md bg-white p-2 group-hover:scale-103 transition-transform duration-300">
+                      <div className="w-52 sm:w-60 h-44 sm:h-48 rounded-2xl overflow-hidden group-hover:scale-103 transition-transform duration-300">
                         <img
                           src={item.illustration}
                           alt={item.title}
-                          className="w-full h-full object-contain object-center rounded-xl"
+                          className="w-full h-full object-contain object-center mix-blend-multiply"
                         />
                       </div>
                     </div>

@@ -118,6 +118,7 @@ export function Navbar() {
                     { href: "/", label: "होम" },
                     { href: "/courses", label: "पाठ्यक्रम" },
                     { href: "/about", label: "हमारे बारे में" },
+                    { href: "/contact", label: "संपर्क करें" },
                     { href: "/apply", label: "प्रवेश आवेदन" },
                     { href: "/certificates", label: "सर्टिफिकेट्स" },
                   ].map((item) => {
@@ -308,6 +309,7 @@ export function Navbar() {
                 { href: "/dashboard", label: "डैशबोर्ड", icon: LayoutDashboard },
                 { href: "/courses", label: "पाठ्यक्रम" },
                 { href: "/about", label: "हमारे बारे में" },
+                { href: "/contact", label: "संपर्क करें" },
                 { href: "/apply", label: "प्रवेश आवेदन" },
                 { href: "/certificates", label: "सर्टिफिकेट्स", icon: Award },
               ].map((item) => {

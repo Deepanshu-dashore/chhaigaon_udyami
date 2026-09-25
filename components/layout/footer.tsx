@@ -227,49 +227,57 @@ export function Footer({ showValueBanner = false }: FooterProps) {
 
           {/* Quick Platform Links */}
           <div className="space-y-3">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-on-surface font-headline">मंच (Platform)</h4>
-            <ul className="space-y-2 text-sm text-on-surface-variant">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-900 font-headline">मंच (Platform)</h4>
+            <ul className="space-y-2 text-sm text-slate-600">
               <li>
-                <Link href="/about" className="hover:text-primary transition-colors">
+                <Link href="/about" className="hover:text-[#0056d2] transition-colors">
                   हमारे बारे में (About Us)
                 </Link>
               </li>
               <li>
-                <Link href="/login" className="hover:text-primary transition-colors">
-                  लॉग इन (Sign In)
+                <Link href="/contact" className="hover:text-[#0056d2] transition-colors">
+                  संपर्क करें (Contact Us)
                 </Link>
               </li>
               <li>
-                <Link href="/register" className="hover:text-primary transition-colors">
-                  निःशुल्क पंजीकरण (Register)
+                <Link href="/apply" className="hover:text-[#0056d2] transition-colors">
+                  प्रवेश आवेदन (Apply)
                 </Link>
               </li>
               <li>
-                <Link href="/dashboard" className="hover:text-emerald-600 transition-colors">
+                <Link href="/certificates" className="hover:text-[#0056d2] transition-colors">
+                  सर्टिफिकेट्स (Certificates)
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard" className="hover:text-[#0056d2] transition-colors">
                   विद्यार्थी डैशबोर्ड
-                </Link>
-              </li>
-              <li>
-                <Link href="/#faq" className="hover:text-emerald-600 transition-colors">
-                  अक्सर पूछे जाने वाले सवाल (FAQ)
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy" className="hover:text-emerald-600 transition-colors">
-                  गोपनीयता नीति (Privacy Policy)
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-slate-200 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© {new Date().getFullYear()} Chhaigaon Udyami. All rights reserved. आत्मनिर्भर भारत की ओर अग्रसर।</p>
-          <div className="flex items-center gap-1 text-slate-600">
-            <span>Made with</span>
-            <Heart className="h-3.5 w-3.5 text-red-500 fill-red-500" />
-            <span>for Rural Entrepreneurs</span>
+        {/* Legal & Compliance Quick Bar */}
+        <div className="border-t border-slate-200 mt-10 pt-5 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-3">
+          <p>© {new Date().getFullYear()} Chhaigaon Udyami. सर्वाधिकार सुरक्षित। आत्मनिर्भर ग्रामीण भारत।</p>
+          
+          <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-medium text-slate-600">
+            <Link href="/privacy" className="hover:text-[#0056d2] transition-colors">
+              गोपनीयता नीति (Privacy Policy)
+            </Link>
+            <span className="text-slate-300">•</span>
+            <Link href="/terms" className="hover:text-[#0056d2] transition-colors">
+              नियम और शर्तें (Terms & Conditions)
+            </Link>
+            <span className="text-slate-300">•</span>
+            <Link href="/disclaimer" className="hover:text-[#0056d2] transition-colors">
+              अस्वीकरण (Disclaimer)
+            </Link>
+            <span className="text-slate-300">•</span>
+            <Link href="/refund-policy" className="hover:text-[#0056d2] transition-colors">
+              वापसी नीति (Refund Policy)
+            </Link>
           </div>
         </div>
       </div>
