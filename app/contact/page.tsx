@@ -5,8 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { FaqAccordion } from "@/components/home/faq-accordion";
 import { Button } from "@/components/ui/button";
 import { SectionBadge } from "@/components/ui/section-badge";
+import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import {
   Mail,
@@ -202,7 +204,7 @@ export default function ContactPage() {
               <h3 className="font-bold text-slate-900 text-base font-headline">मुख्य कार्यालय</h3>
               <p className="text-xs text-slate-500 mt-1">छैगांव माखन, खंडवा (म.प्र.)</p>
               <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                विकासखंड परिसर, छैगांव माखन, ज़िला खंडवा, मध्य प्रदेश - 450771
+                डॉ. सी.वी. रमन विश्वविद्यालय परिसर, छैगांव माखन, ज़िला खंडवा, मध्य प्रदेश - 450771
               </p>
             </div>
 
@@ -367,100 +369,144 @@ export default function ContactPage() {
             <div className="lg:col-span-5 space-y-6">
               
               {/* Working Hours & Physical Office */}
-              <div className="bg-gradient-to-br from-slate-900 to-blue-950 text-white p-7 rounded-3xl shadow-md">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-300">
-                    <Building2 className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg font-headline">छैगांव माखन केंद्र</h3>
-                    <p className="text-xs text-blue-200">कौशल विकास व ग्रामीण परामर्श केंद्र</p>
-                  </div>
-                </div>
+              <div
+                className="relative overflow-hidden text-white p-7 rounded-3xl shadow-lg border border-blue-800/40"
+                style={{
+                  background: "url('/images/ourstd-bckgrnd.webp') no-repeat center center / cover",
+                }}
+              >
+                {/* Blue Gradient Overlay */}
+                <div className="absolute inset-0 bg-linear-to-br from-blue-950 via-[#0056d2]/90 to-blue-900 pointer-events-none" />
 
-                <div className="space-y-4 text-xs sm:text-sm text-slate-300">
-                  <div className="flex items-start gap-3 border-b border-slate-800 pb-3">
-                    <MapPin className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
+                {/* Overlapping Concentric Circles SVG Pattern Overlay */}
+                <div
+                  className="absolute inset-0 pointer-events-none opacity-40 mix-blend-overlay"
+                  style={{
+                    backgroundImage: "url('/images/bg-concentric-circles-white.svg')",
+                    backgroundRepeat: "repeat",
+                    backgroundSize: "140px 140px",
+                  }}
+                />
+
+                <div className="relative z-10">
+                  {/* Header */}
+                  <div className="flex items-center gap-3">
+                    <div className="text-blue-300 shrink-0">
+                      <Building2 className="w-6 h-6" />
+                    </div>
                     <div>
-                      <p className="font-semibold text-white">स्थान पता:</p>
-                      <p className="mt-0.5 text-slate-300 leading-relaxed">
-                        विकासखंड रोड, जनपद पंचायत के समीप, छैगांव माखन, ज़िला खंडवा, मध्य प्रदेश - 450771
-                      </p>
+                      <h3 className="font-bold text-lg font-headline text-white">छैगांव माखन केंद्र</h3>
+                      <p className="text-xs text-blue-100/90">कौशल विकास व ग्रामीण परामर्श केंद्र</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 border-b border-slate-800 pb-3">
-                    <Clock className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-white">कार्यालय कार्य समय:</p>
-                      <p className="mt-0.5 text-slate-300">सोमवार से शनिवार: 09:00 AM - 06:00 PM</p>
-                      <p className="text-xs text-slate-400">रविवार: अवकाश (व्हाट्सएप ऑनलाइन सपोर्ट उपलब्ध)</p>
+                  <Separator className="bg-white/25 my-3.5" />
+
+                  <div className="space-y-3.5 text-xs sm:text-sm text-slate-200">
+                    {/* 1. Address */}
+                    <div className="flex items-start gap-3">
+                      <MapPin className="w-5 h-5 text-blue-300 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-semibold text-white">स्थान पता:</p>
+                        <p className="mt-0.5 text-slate-200 leading-relaxed">
+                          डॉ. सी.वी. रमन विश्वविद्यालय परिसर, छैगांव माखन, ज़िला खंडवा, मध्य प्रदेश - 450771
+                        </p>
+                      </div>
+                    </div>
+
+                    <Separator className="bg-white/25" />
+
+                    {/* 2. Working Hours */}
+                    <div className="flex items-start gap-3">
+                      <Clock className="w-5 h-5 text-emerald-300 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-semibold text-white">कार्यालय कार्य समय:</p>
+                        <p className="mt-0.5 text-slate-200">सोमवार से शनिवार: 09:00 AM - 06:00 PM</p>
+                        <p className="text-xs text-slate-300/80">रविवार: अवकाश (व्हाट्सएप ऑनलाइन सपोर्ट उपलब्ध)</p>
+                      </div>
+                    </div>
+
+                    <Separator className="bg-white/25" />
+
+                    {/* 3. Website */}
+                    <div className="flex items-start gap-3">
+                      <Globe2 className="w-5 h-5 text-amber-300 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-semibold text-white">डिजिटल पोर्टल:</p>
+                        <p className="mt-0.5 text-slate-200 font-medium">www.chhaigaonudyami.in</p>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
-                    <Globe2 className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-semibold text-white">डिजिटल पोर्टल:</p>
-                      <p className="mt-0.5 text-slate-300">www.chhaigaonudyami.in</p>
-                    </div>
-                  </div>
-                </div>
+                  <Separator className="bg-white/25 my-3.5" />
 
-                <div className="mt-6 pt-5 border-t border-slate-800 flex items-center justify-between">
-                  <span className="text-xs text-slate-400 font-medium">सोशल मीडिया पर जुड़ें:</span>
-                  <div className="flex items-center gap-2">
-                    <a
-                      href="https://whatsapp.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-white flex items-center justify-center transition-all"
-                    >
-                      <FaWhatsapp className="w-4 h-4" />
-                    </a>
-                    <a
-                      href="https://youtube.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-8 h-8 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white flex items-center justify-center transition-all"
-                    >
-                      <FaYoutube className="w-4 h-4" />
-                    </a>
-                    <a
-                      href="https://facebook.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 hover:bg-blue-500 hover:text-white flex items-center justify-center transition-all"
-                    >
-                      <FaFacebook className="w-4 h-4" />
-                    </a>
-                    <a
-                      href="https://instagram.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 hover:bg-pink-500 hover:text-white flex items-center justify-center transition-all"
-                    >
-                      <FaInstagram className="w-4 h-4" />
-                    </a>
+                  {/* 4. Social Links */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-slate-300/90 font-medium">सोशल मीडिया पर जुड़ें:</span>
+                    <div className="flex items-center gap-2">
+                      <a
+                        href="https://whatsapp.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all"
+                      >
+                        <FaWhatsapp className="w-4 h-4" />
+                      </a>
+                      <a
+                        href="https://youtube.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all"
+                      >
+                        <FaYoutube className="w-4 h-4" />
+                      </a>
+                      <a
+                        href="https://facebook.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all"
+                      >
+                        <FaFacebook className="w-4 h-4" />
+                      </a>
+                      <a
+                        href="https://instagram.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all"
+                      >
+                        <FaInstagram className="w-4 h-4" />
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Map Location Card / Visual Placeholder */}
-              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs text-center">
-                <div className="relative rounded-2xl overflow-hidden bg-slate-100 h-44 border border-slate-200 flex flex-col items-center justify-center p-4">
-                  <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg animate-bounce mb-2">
-                    <MapPin className="w-6 h-6" />
+              {/* Live Embedded Google Maps Card */}
+              <div className="bg-white p-3.5 rounded-3xl border border-slate-200/80 shadow-xs">
+                <div className="relative rounded-2xl overflow-hidden bg-slate-100 h-64 border border-slate-200">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3703.917320686106!2d76.22523707549057!3d21.82212518003325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd8116f759b43d1%3A0x7f69c9b8c7674282!2sDr.%20C.V.%20Raman%20University!5e0!3m2!1sen!2sin!4v1790420618621!5m2!1sen!2sin"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    className="w-full h-full"
+                  />
+                </div>
+                <div className="mt-3 flex items-center justify-between gap-2 px-1">
+                  <div>
+                    <p className="font-bold text-slate-900 text-xs sm:text-sm font-headline">डॉ. सी.वी. रमन विश्वविद्यालय परिसर</p>
+                    <p className="text-[11px] text-slate-500">छैगांव माखन, खंडवा (मध्य प्रदेश)</p>
                   </div>
-                  <p className="font-bold text-slate-900 text-sm font-headline">खंडवा-इंदौर रोड, छैगांव माखन</p>
-                  <p className="text-xs text-slate-500 mt-0.5">मध्य प्रदेश, भारत</p>
                   <a
-                    href="https://maps.google.com/?q=Chhaigaon+Makhan+Khandwa"
+                    href="https://www.google.com/maps/place/Dr.+C.V.+Raman+University/@21.8221252,76.2252371,17z"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-[#0056d2] hover:underline"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-[#0056d2] hover:underline shrink-0"
                   >
-                    <span>गूगल मैप्स पर दिशा-निर्देश देखें</span>
+                    <span>गूगल मैप्स पर देखें</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </a>
                 </div>
@@ -472,46 +518,18 @@ export default function ContactPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="bg-slate-100/70 border-t border-slate-200 py-16">
+        <section className="bg-white border-t border-slate-200 py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-10">
-              <SectionBadge icon={HelpCircle} variant="primary" className="mb-3">अक्सर पूछे जाने वाले सवाल</SectionBadge>
+              <SectionBadge icon={HelpCircle} variant="primary" className="mb-3">
+                अक्सर पूछे जाने वाले सवाल
+              </SectionBadge>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-headline">
                 संपर्क से जुड़े सामान्य प्रश्न
               </h2>
             </div>
 
-            <div className="space-y-4">
-              {contactFaqs.map((faq, index) => {
-                const isOpen = openFaq === index;
-                return (
-                  <div
-                    key={index}
-                    className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs transition-all"
-                  >
-                    <button
-                      onClick={() => setOpenFaq(isOpen ? null : index)}
-                      className="w-full px-6 py-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-sm sm:text-base hover:text-[#0056d2] transition-colors cursor-pointer"
-                    >
-                      <span className="flex items-center gap-2.5">
-                        <HelpCircle className="w-5 h-5 text-[#0056d2] shrink-0" />
-                        <span>{faq.q}</span>
-                      </span>
-                      <ChevronDown
-                        className={`w-5 h-5 text-slate-400 shrink-0 transition-transform duration-200 ${
-                          isOpen ? "rotate-180 text-[#0056d2]" : ""
-                        }`}
-                      />
-                    </button>
-                    {isOpen && (
-                      <div className="px-6 pb-5 pt-1 text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-slate-50/50">
-                        {faq.a}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <FaqAccordion items={contactFaqs} showCategoryFilters={false} />
           </div>
         </section>
       </main>
