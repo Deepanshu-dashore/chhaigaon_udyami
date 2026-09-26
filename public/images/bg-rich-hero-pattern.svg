@@ -1,0 +1,34 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="rich-hero-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#091428" />
+      <stop offset="40%" stop-color="#0f2b5c" />
+      <stop offset="80%" stop-color="#0056d2" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+
+    <radialGradient id="emerald-glow" cx="15%" cy="80%" r="45%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="amber-glow" cx="85%" cy="20%" r="45%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+    </radialGradient>
+
+    <pattern id="hex-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 40 10 L 40 30 L 20 40 L 0 30 L 0 10 Z" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.06" />
+    </pattern>
+  </defs>
+
+  <rect width="100%" height="100%" fill="url(#rich-hero-bg)" />
+  <rect width="100%" height="100%" fill="url(#emerald-glow)" />
+  <rect width="100%" height="100%" fill="url(#amber-glow)" />
+  <rect width="100%" height="100%" fill="url(#hex-grid)" />
+
+  <!-- Dynamic Curved Vectors with Distinct Colors -->
+  <path d="M-50 200 Q 300 50, 650 300 T 1300 250" stroke="#38bdf8" stroke-width="2" fill="none" opacity="0.3" />
+  <path d="M-50 240 Q 300 90, 650 340 T 1300 290" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="6 6" fill="none" opacity="0.25" />
+  <path d="M-50 280 Q 300 130, 650 380 T 1300 330" stroke="#f59e0b" stroke-width="1.5" fill="none" opacity="0.2" />
+</svg>

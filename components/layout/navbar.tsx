@@ -34,7 +34,7 @@ export function Navbar() {
       {/* Top Announcement Bar (Coursera Style) */}
       {showAnnouncement && (
         <div className="bg-[#0056d2] text-white text-xs py-2 px-4 flex items-center justify-between font-medium shadow-xs">
-          <div className="max-w-7xl mx-auto w-full flex items-center justify-center gap-2 text-center">
+          <div className="max-w-[90dvw] mx-auto w-full flex items-center justify-center gap-2 text-center">
             <span className="inline-flex items-center gap-1.5 font-bold text-amber-300">
               <Sparkles className="h-3.5 w-3.5" />
               <span>विशेष अपडेट 2026:</span>
@@ -91,13 +91,13 @@ export function Navbar() {
 
             {/* Middle: Search Bar */}
             {!isAuthPage && (
-              <div className="hidden md:flex items-center w-48 sm:w-56 lg:w-60 mx-2">
+              <div className="hidden md:flex items-center w-32 sm:w-48 lg:w-48 mx-2">
                 <form action="/courses" method="GET" className="w-full relative flex items-center">
                   <input
                     type="text"
                     name="q"
                     placeholder="कोर्स या कौशल खोजें..."
-                    className="w-full h-10 min-h-10 pl-3.5 pr-10 text-xs bg-slate-50 border border-slate-300 rounded-full focus:outline-none focus:border-blue-600 focus:bg-white transition-all text-slate-800 placeholder:text-slate-400"
+                    className="w-full h-8 min-h-8 pl-3.5 pr-10 text-xs bg-slate-50 border border-slate-300 rounded-full focus:outline-none focus:border-blue-600 focus:bg-white transition-all text-slate-800 placeholder:text-slate-400"
                   />
                   <button
                     type="submit"

@@ -125,10 +125,7 @@ export default function ContactPage() {
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center max-w-3xl mx-auto">
-              <SectionBadge
-                icon={HelpCircle}
-                className="bg-white/15 text-blue-100 border border-white/25 backdrop-blur-md shadow-xs rounded-full px-3 py-1 inline-flex items-center gap-2 text-xs font-semibold whitespace-nowrap mb-4"
-              >
+              <SectionBadge icon={HelpCircle} variant="glass" className="mb-4">
                 संपर्क व परामर्श हेल्पडेस्क
               </SectionBadge>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-headline tracking-tight leading-tight text-white drop-shadow-xs">
@@ -478,7 +475,7 @@ export default function ContactPage() {
         <section className="bg-slate-100/70 border-t border-slate-200 py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-10">
-              <SectionBadge className="bg-blue-100 text-[#0056d2] mb-3 inline-flex">अक्सर पूछे जाने वाले सवाल</SectionBadge>
+              <SectionBadge icon={HelpCircle} variant="primary" className="mb-3">अक्सर पूछे जाने वाले सवाल</SectionBadge>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-headline">
                 संपर्क से जुड़े सामान्य प्रश्न
               </h2>

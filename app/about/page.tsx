@@ -232,8 +232,13 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* ================= SECTION 2: WHY CHOOSE US (MOVED TO 2ND PLACE WITH SVG & GRADIENT BG) ================= */}
-        <section className="py-14 lg:py-18 relative overflow-hidden border-b border-blue-900 text-white">
+        {/* ================= SECTION 2: WHY CHOOSE US ================= */}
+        <section
+          className="py-14 lg:py-18 relative overflow-hidden border-b border-blue-900 text-white"
+          style={{
+            background: "url('/images/ourstd-bckgrnd.webp') no-repeat center center / cover",
+          }}
+        >
           {/* Blue Gradient Overlay */}
           <div className="absolute inset-0 bg-linear-to-r from-blue-900 via-[#0056d2]/90 to-blue-900 pointer-events-none" />
 
@@ -250,7 +255,7 @@ export default function AboutPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 relative z-10">
             
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <SectionBadge icon={Sparkles} variant="primary">
+              <SectionBadge icon={Sparkles} variant="outline">
                 हमारी विशिष्टता
               </SectionBadge>
 
@@ -441,7 +446,7 @@ export default function AboutPage() {
 
         {/* ================= SECTION 5: TIMELINE JOURNEY ================= */}
         <section
-          className="py-14 lg:py-20 border-t border-orange-200/80 relative overflow-hidden"
+          className="py-14 lg:py-20 border-t border-blue-900 relative overflow-hidden text-white"
           style={{
             background: "url('/images/ourstd-bckgrnd.webp') no-repeat center center / cover",
           }}
@@ -462,7 +467,7 @@ export default function AboutPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 relative z-10">
             
             <div className="text-center max-w-2xl mx-auto space-y-2">
-              <SectionBadge icon={CircleDot} variant="primary">
+              <SectionBadge icon={CircleDot} variant="outline">
                 हमारी विकास यात्रा
               </SectionBadge>
 

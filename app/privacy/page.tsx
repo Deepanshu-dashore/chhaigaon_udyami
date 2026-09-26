@@ -63,10 +63,7 @@ export default function PrivacyPolicyPage() {
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-3xl">
-              <SectionBadge
-                icon={ShieldCheck}
-                className="bg-white/15 text-blue-100 border border-white/25 backdrop-blur-md shadow-xs rounded-full px-3 py-1 inline-flex items-center gap-2 text-xs font-semibold whitespace-nowrap mb-3"
-              >
+              <SectionBadge icon={ShieldCheck} variant="glass" className="mb-3">
                 कानूनी नीति व डेटा सुरक्षा
               </SectionBadge>
               <h1 className="text-3xl sm:text-4xl font-extrabold font-headline tracking-tight leading-tight text-white drop-shadow-xs">

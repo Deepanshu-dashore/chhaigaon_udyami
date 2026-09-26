@@ -1,0 +1,73 @@
+<svg width="1440" height="800" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Multi-color Background Gradient -->
+    <linearGradient id="bg-multi-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b192c" />
+      <stop offset="35%" stop-color="#003b8e" />
+      <stop offset="70%" stop-color="#0056d2" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+
+    <!-- Radial Glow Cyan -->
+    <radialGradient id="glow-cyan" cx="20%" cy="30%" r="50%" fx="20%" fy="30%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Radial Glow Purple/Amber Accent -->
+    <radialGradient id="glow-purple" cx="80%" cy="70%" r="55%" fx="80%" fy="70%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="#d97706" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#1e1b4b" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Wave Gradient 1 -->
+    <linearGradient id="wave-grad-1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.25" />
+      <stop offset="50%" stop-color="#818cf8" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.2" />
+    </linearGradient>
+
+    <!-- Wave Gradient 2 -->
+    <linearGradient id="wave-grad-2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.2" />
+      <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0.25" />
+    </linearGradient>
+
+    <!-- Dot Pattern -->
+    <pattern id="dot-matrix" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="1.5" fill="#ffffff" opacity="0.12" />
+      <circle cx="20" cy="20" r="1" fill="#38bdf8" opacity="0.15" />
+    </pattern>
+
+    <!-- Concentric Ring Pattern -->
+    <pattern id="rings-pattern" x="0" y="0" width="160" height="160" patternUnits="userSpaceOnUse">
+      <circle cx="80" cy="80" r="30" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.08" />
+      <circle cx="80" cy="80" r="60" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.1" />
+      <circle cx="80" cy="80" r="90" fill="none" stroke="#fbbf24" stroke-width="1" stroke-dasharray="4 4" opacity="0.08" />
+    </pattern>
+  </defs>
+
+  <!-- Base Rectangle with Multi-color Gradient -->
+  <rect width="100%" height="100%" fill="url(#bg-multi-grad)" />
+
+  <!-- Ambient Glow Layers -->
+  <rect width="100%" height="100%" fill="url(#glow-cyan)" />
+  <rect width="100%" height="100%" fill="url(#glow-purple)" />
+
+  <!-- Dot Matrix Overlay -->
+  <rect width="100%" height="100%" fill="url(#dot-matrix)" />
+
+  <!-- Concentric Rings Grid Overlay -->
+  <rect width="100%" height="100%" fill="url(#rings-pattern)" />
+
+  <!-- Fluid Flowing Wave Lines with Vibrant Colors -->
+  <path d="M-100 350 C 300 200, 700 500, 1540 300 L 1540 800 L -100 800 Z" fill="url(#wave-grad-1)" />
+  <path d="M-100 480 C 400 320, 850 620, 1540 420 L 1540 800 L -100 800 Z" fill="url(#wave-grad-2)" />
+
+  <!-- Decorative Glowing SVG Accent Orbs -->
+  <circle cx="150" cy="180" r="120" fill="#06b6d4" opacity="0.12" filter="blur(40px)" />
+  <circle cx="1250" cy="550" r="160" fill="#a855f7" opacity="0.14" filter="blur(50px)" />
+  <circle cx="720" cy="100" r="100" fill="#f59e0b" opacity="0.1" filter="blur(35px)" />
+</svg>
