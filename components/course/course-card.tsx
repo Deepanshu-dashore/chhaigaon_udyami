@@ -1,7 +1,9 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils";
-import { Star, ArrowRight, User } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 
 interface CourseCardProps {
   id: string;
@@ -34,8 +36,24 @@ export function CourseCard({
   rating = 4.8,
   reviewsCount = 420,
   totalHours = "4.5 घंटे",
+  category,
 }: CourseCardProps) {
   const isFree = price === 0 || discountedPrice === 0;
+  const DEFAULT_THUMBNAIL = "/images/dairy-course.jpg";
+
+  const [imgSrc, setImgSrc] = useState<string>(
+    thumbnail && thumbnail.trim() !== "" ? thumbnail : DEFAULT_THUMBNAIL
+  );
+
+  useEffect(() => {
+    setImgSrc(thumbnail && thumbnail.trim() !== "" ? thumbnail : DEFAULT_THUMBNAIL);
+  }, [thumbnail]);
+
+  const handleImageError = () => {
+    if (imgSrc !== DEFAULT_THUMBNAIL) {
+      setImgSrc(DEFAULT_THUMBNAIL);
+    }
+  };
 
   const formattedReviews =
     reviewsCount >= 1000
@@ -45,79 +63,88 @@ export function CourseCard({
   const partnerLogoInitial = (instructor || "CU").charAt(0).toUpperCase();
 
   return (
-    <div className="group flex flex-col bg-white rounded-xl border border-slate-200/90 hover:border-slate-300 hover:shadow-lg transition-all duration-300 p-2.5 sm:p-3 h-full justify-between">
+    <article className="group flex flex-col bg-white rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-300 p-2.5 sm:p-3 h-full justify-between overflow-hidden">
       <div>
         {/* 1. Thumbnail Image */}
-        <Link href={`/courses/${slug}`} className="relative block aspect-[16/9] w-full rounded-lg overflow-hidden bg-slate-900 mb-2.5">
+        <Link
+          href={`/courses/${slug}`}
+          className="relative block aspect-[16/9] w-full rounded-lg overflow-hidden bg-slate-100 mb-2"
+        >
           <img
-            src={thumbnail || "/images/dairy-course.jpg"}
+            src={imgSrc}
             alt={title}
+            onError={handleImageError}
             className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-300 ease-out"
           />
         </Link>
 
         {/* 2. Partner / Organization Row */}
-        <div className="flex items-center gap-1.5 mb-1">
-          <div className="w-4 h-4 flex items-center justify-center text-slate-500 shrink-0">
-            <User className="w-3 h-3 text-slate-600" />
+        <div className="flex items-center gap-1.5 mb-1.5 min-h-[22px]">
+          <div className="w-5 h-5 rounded border border-slate-200 bg-white p-0.5 flex items-center justify-center text-[11px] font-black text-[#0056d2] shadow-2xs shrink-0">
+            {partnerLogoInitial}
           </div>
-          <span className="text-[12px] font-medium text-slate-600 line-clamp-1">
+          <span className="text-[12px] font-medium text-slate-800 line-clamp-1">
             {instructor}
           </span>
         </div>
 
-        {/* 3. Course Title */}
+        {/* 3. Course Title (Fixed height for strict grid alignment across cards) */}
         <Link href={`/courses/${slug}`} className="block mb-1.5">
-          <h3 className="font-bold text-[15px] sm:text-[16px] text-slate-900 group-hover:text-[#0056d2] transition-colors line-clamp-2 leading-snug">
+          <h3 className="font-bold text-[14px] sm:text-[15px] text-slate-900 group-hover:text-[#0056d2] transition-colors line-clamp-2 leading-snug min-h-[40px] sm:min-h-[44px]">
             {title}
           </h3>
         </Link>
 
-        {/* 4. Metadata Line */}
-        <div className="flex items-center gap-1 text-[12px] text-slate-500 font-medium leading-tight mb-2 flex-wrap">
-          <span className="font-semibold text-slate-800 flex items-center gap-0.5">
-            <span className="text-amber-500 font-black text-xs">★</span>
-            <span>{rating.toFixed(1)}</span>
-            <span className="font-normal text-slate-400">({formattedReviews})</span>
+        {/* 4. Metadata Line (Fixed height for clean row baseline) */}
+        <div className="text-[12px] text-slate-600 font-normal leading-normal mb-2.5 min-h-[36px] line-clamp-2">
+          <span className="font-semibold text-slate-800">
+            <span className="text-slate-900 font-bold">★ {rating.toFixed(1)}</span>{" "}
+            <span className="font-normal text-slate-500">({formattedReviews})</span>
           </span>
-          <span className="text-slate-300">·</span>
+          <span className="mx-1 text-slate-400">·</span>
           <span>{level}</span>
-          <span className="text-slate-300">·</span>
-          <span>Course</span>
-          <span className="text-slate-300">·</span>
+          <span className="mx-1 text-slate-400">·</span>
+          <span>{category || "प्रमाणपत्र"}</span>
+          <span className="mx-1 text-slate-400">·</span>
           <span>{totalHours}</span>
         </div>
-      </div>
 
-      {/* 5. Bottom Badges Row */}
-      <div className="pt-2 flex items-center justify-between gap-2 mt-auto border-t border-slate-100">
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-[#efe7fc] text-[#5b21b6]">
-            Top program
+        {/* 5. Dedicated Badges Row (Prevents wrapping collisions with price) */}
+        <div className="flex items-center gap-1.5 flex-wrap mb-2 min-h-[24px]">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#fce8e6] text-[#b00020]">
+            <TrendingUp className="w-3 h-3 text-[#b00020]" />
+            Trending right now
           </span>
           {isFree ? (
-            <span className="px-2 py-0.5 rounded-md text-[11px] font-semibold border border-slate-300 text-slate-700 bg-slate-50/60">
+            <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#e8f0fe] text-[#1a73e8]">
               Free trial
             </span>
           ) : (
-            <span className="px-2 py-0.5 rounded-md text-[11px] font-semibold border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 transition-colors">
+            <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
               Preview
             </span>
           )}
         </div>
+      </div>
+
+      {/* 6. Footer Price Row (Pinned at bottom border) */}
+      <div className="pt-2 border-t border-slate-100 flex items-center justify-between mt-auto">
+        <span className="text-[11px] font-medium text-slate-500">
+          {isFree ? "निःशुल्क कोर्स" : "पूर्ण एक्सेस"}
+        </span>
 
         <div>
           {isFree ? (
-            <span className="text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
               निःशुल्क
             </span>
           ) : (
             <div className="flex items-baseline gap-1">
-              <span className="text-base sm:text-lg font-black text-slate-950">
+              <span className="text-sm sm:text-base font-black text-slate-950">
                 {formatCurrency(discountedPrice || price)}
               </span>
               {discountedPrice && (
-                <span className="text-[11px] text-slate-400 line-through">
+                <span className="text-[10px] text-slate-400 line-through">
                   {formatCurrency(price)}
                 </span>
               )}
@@ -125,7 +152,13 @@ export function CourseCard({
           )}
         </div>
       </div>
-    </div>
+    </article>
   );
 }
+
+
+
+
+
+
 
