@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, ArrowRight } from "lucide-react";
 
 interface CourseCardProps {
   id: string;
@@ -109,7 +109,7 @@ export function CourseCard({
           <span>{totalHours}</span>
         </div>
 
-        {/* 5. Dedicated Badges Row (Prevents wrapping collisions with price) */}
+        {/* 5. Dedicated Badges Row */}
         <div className="flex items-center gap-1.5 flex-wrap mb-2 min-h-[24px]">
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#fce8e6] text-[#b00020]">
             <TrendingUp className="w-3 h-3 text-[#b00020]" />
@@ -127,15 +127,11 @@ export function CourseCard({
         </div>
       </div>
 
-      {/* 6. Footer Price Row (Pinned at bottom border) */}
-      <div className="pt-2 border-t border-slate-100 flex items-center justify-between mt-auto">
-        <span className="text-[11px] font-medium text-slate-500">
-          {isFree ? "निःशुल्क कोर्स" : "पूर्ण एक्सेस"}
-        </span>
-
+      {/* 6. Footer Price & Enroll CTA Row */}
+      <div className="pt-2.5 mt-auto border-t border-slate-100 flex items-center justify-between gap-2">
         <div>
           {isFree ? (
-            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
               निःशुल्क
             </span>
           ) : (
@@ -151,6 +147,14 @@ export function CourseCard({
             </div>
           )}
         </div>
+
+        <Link
+          href={`/courses/${slug}`}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#0056d2] hover:bg-blue-700 text-white text-xs font-semibold shadow-2xs hover:shadow-xs transition-all shrink-0 cursor-pointer"
+        >
+          <span>{isFree ? "निःशुल्क प्रवेश लें" : "प्रवेश लें"}</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
       </div>
     </article>
   );

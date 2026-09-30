@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/footer";
 import { CourseCard } from "@/components/course/course-card";
 import { HeroVideoPreview } from "@/components/home/hero-video-preview";
 import { FaqAccordion } from "@/components/home/faq-accordion";
+import { CredentialsScrollSection } from "@/components/home/credentials-scroll-section";
 import { Button } from "@/components/ui/button";
 import { SectionBadge } from "@/components/ui/section-badge";
 import { Separator } from "@/components/ui/separator";
@@ -701,132 +702,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ================= TURN LEARNING INTO PROOF & PROGRESS SECTIONS ================= */}
-        <section id="credentials" className="py-10 lg:py-14 border-b border-slate-200 bg-white overflow-hidden space-y-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            
-            {/* ROW 1: Turn your learning into proof */}
-            <div className="grid text-justify grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
-              {/* Left: Text */}
-              <div className="lg:col-span-7 space-y-3.5">
-                <SectionBadge icon={Award} variant="primary">
-                  सत्यापित प्रमाणन
-                </SectionBadge>
-
-                <h2 className="text-2xl sm:text-3xl font-bold text-slate-950 tracking-tight leading-tight font-headline">
-                  सीखने को आधिकारिक प्रमाण में बदलें
-                </h2>
-
-                <p className="text-sm sm:text-base text-slate-700 leading-[1.75] font-body">
-                  सफलतापूर्वक कोर्स पूरा करने पर आपको <strong className="font-bold text-slate-950">आधिकारिक QR-सत्यापित सर्टिफिकेट</strong> एवं <strong className="font-bold text-slate-950">बैंक-मान्य DPR (प्रोजेक्ट रिपोर्ट)</strong> प्राप्त होती है, जिसे आप <strong className="font-bold text-slate-950">PMEGP</strong>, <strong className="font-bold text-slate-950">PM मुद्रा लोन</strong> और अपने व्यावसायिक पोर्टफोलियो में सीधा उपयोग कर सकते हैं।
-                </p>
-
-                <p className="text-sm sm:text-base text-slate-700 leading-[1.75] font-body">
-                  यह प्रमाण पत्र आपकी व्यावसायिक दक्षता को प्रमाणित करता है और <strong className="font-bold text-slate-950">जिला उद्योग केंद्र (DIC खंडवा)</strong> व <strong className="font-bold text-slate-950">NABARD मार्गदर्शिका</strong> के अनुसार वित्तीय स्वीकृतियों हेतु 100% मान्य है।
-                </p>
-
-                <p className="text-sm sm:text-base text-slate-700 leading-[1.75] font-body">
-                  इसके अलावा, हमारा प्लेटफ़ॉर्म आपको <strong className="font-bold text-slate-950">24x7 ऑनलाइन वैरिफिकेशन</strong> की सुविधा देता है, ताकि बैंक अधिकारी या वित्तीय संस्थान किसी भी समय आपके रिकॉर्ड की प्रामाणिकता जाँच सकें।
-                </p>
-
-                <div className="space-y-2.5 pt-1 text-xs sm:text-sm font-medium text-slate-700">
-                  <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                    <span><strong className="font-bold text-slate-950">24x7 ऑनलाइन तत्काल QR सत्यापन</strong> कोड व डिजिटल रिकॉर्ड</span>
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                    <span><strong className="font-bold text-slate-950">PM मुद्रा एवं PMEGP बैंक ऋण</strong> हेतु आधिकारिक रूप से मान्य</span>
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                    <span><strong className="font-bold text-slate-950">जिला उद्योग केंद्र (DIC) व NABARD</strong> मार्गदर्शिका से संरेखित</span>
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <Link href="/courses">
-                    <Button className="bg-[#0056d2] hover:bg-blue-800 text-white font-bold rounded-lg px-5 py-2.5 text-xs shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
-                      <span>सर्टिफाइड कोर्स चुनें</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-
-              {/* Right: Graphic Mockup */}
-              <div className="lg:col-span-5 flex justify-center lg:justify-end">
-                <img
-                  src="/images/certificate-fan-proof.jpg"
-                  alt="सत्यापित डिजिटल सर्टिफिकेट्स - छैगांव उद्यमी"
-                  className="max-w-lg scale-110 w-full h-auto object-cover hover:scale-[1.015] transition-transform duration-500"
-                />
-              </div>
-            </div>
-
-            <Separator className="bg-slate-200/80" />
-
-            {/* ROW 2: Daily Progress */}
-            <div className="grid text-justify grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
-              {/* Left: Graphic Mockup */}
-              <div className="lg:col-span-5 order-2 lg:order-1 flex justify-center lg:justify-start">
-                <img
-                  src="/images/learning-progress-proof.jpg"
-                  alt="दैनिक शिक्षण प्रगति एवं लर्निंग पाथ - छैगांव उद्यमी"
-                  className="max-w-lg rotate-y-180 scale-110 w-full h-auto object-cover hover:scale-[1.015] transition-transform duration-500"
-                />
-              </div>
-
-              {/* Right: Text */}
-              <div className="lg:col-span-7 order-1 lg:order-2 space-y-3.5">
-                <SectionBadge icon={Sparkles} variant="emerald">
-                  दैनिक प्रगति
-                </SectionBadge>
-
-                <h2 className="text-2xl sm:text-3xl font-bold text-slate-950 tracking-tight leading-tight font-headline">
-                  प्रतिदिन कुछ ही मिनटों में करें प्रगति
-                </h2>
-
-                <p className="text-sm sm:text-base text-slate-700 leading-[1.75] font-body">
-                  स्पष्ट स्टेप्स और <strong className="font-bold text-slate-950">10-15 मिनट के संक्षिप्त वीडियो अध्यायों</strong> के साथ बिना किसी बाधा के निरंतर आगे बढ़ें और अपने मोबाइल पर व्यावहारिक ज्ञान प्राप्त करें।
-                </p>
-
-                <p className="text-sm sm:text-base text-slate-700 leading-[1.75] font-body">
-                  प्रत्येक मॉड्यूल के साथ <strong className="font-bold text-slate-950">डाउनलोड योग्य व्यावहारिक कार्यपुस्तिकाएं (Workbooks)</strong> और <strong className="font-bold text-slate-950">स्व-मूल्यांकन क्विज</strong> प्रदान किए जाते हैं, जिससे आप अपनी समझ और प्रगति का सटीक आकलन कर सकें।
-                </p>
-
-                <p className="text-sm sm:text-base text-slate-700 leading-[1.75] font-body">
-                  कोर्स पूर्ण करने के बाद भी आप अकेले नहीं हैं — हमारी समर्पित विशेषज्ञ टीम द्वारा आपको निरंतर <strong className="font-bold text-slate-950">आजीवन मेंटरशिप सहायता</strong> एवं कम्युनिटी सपोर्ट प्रदान किया जाता है।
-                </p>
-
-                <div className="space-y-2.5 pt-1 text-xs sm:text-sm font-medium text-slate-700">
-                  <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                    <span><strong className="font-bold text-slate-950">मोबाइल एवं धीमे इंटरनेट</strong> पर भी सहज चलने वाले HD वीडियो</span>
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                    <span>प्रत्येक मॉड्यूल के बाद <strong className="font-bold text-slate-950">लघु स्व-मूल्यांकन क्विज</strong></span>
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                    <span>डाउनलोड योग्य <strong className="font-bold text-slate-950">व्यावहारिक कार्यपुस्तिकाएं (Workbooks)</strong></span>
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <Link href="/auth/register">
-                    <Button className="bg-slate-900 hover:bg-black text-white font-bold rounded-lg px-5 py-2.5 text-xs shadow-xs inline-flex items-center gap-1.5 cursor-pointer">
-                      <span>निःशुल्क शुरुआत करें</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </section>
+        {/* ================= TURN LEARNING INTO PROOF & PROGRESS SECTIONS (GSAP + MOTION) ================= */}
+        <CredentialsScrollSection />
 
         {/* ================= FULL-WIDTH MILESTONE CTA BANNER (CLEAN & COMPACT) ================= */}
         <section className="py-6 sm:py-8 bg-white">

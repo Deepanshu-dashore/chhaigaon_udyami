@@ -38,12 +38,8 @@ const adminTabs = [
   { label: "Overview", href: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Users", href: "/admin/users", icon: Users },
   { label: "Courses", href: "/admin/courses", icon: BookOpen },
-  { label: "Videos", href: "/admin/videos", icon: Video },
-  { label: "Payments", href: "/admin/payments", icon: CreditCard },
-  { label: "Certificates", href: "/admin/certificates", icon: Award },
   { label: "Schemes", href: "/admin/schemes", icon: FileText },
-  { label: "Guidance", href: "/admin/startup-guidance", icon: Lightbulb },
-  { label: "Linkages", href: "/admin/market-linkages", icon: Store },
+  { label: "Leads & Applications", href: "/admin/leads", icon: Store },
 ];
 
 interface AdminHeaderProps {
