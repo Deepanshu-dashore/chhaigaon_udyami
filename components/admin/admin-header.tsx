@@ -32,14 +32,19 @@ import {
   CheckCircle2,
   AlertCircle,
   TrendingUp,
+  PanelLeft,
 } from "lucide-react";
 
 const adminTabs = [
   { label: "Overview", href: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Users", href: "/admin/users", icon: Users },
   { label: "Courses", href: "/admin/courses", icon: BookOpen },
+  { label: "Enrollments", href: "/admin/enrollments", icon: Award },
   { label: "Schemes", href: "/admin/schemes", icon: FileText },
-  { label: "Leads & Applications", href: "/admin/leads", icon: Store },
+  { label: "Leads & Partners", href: "/admin/leads", icon: Store },
+  { label: "Payments", href: "/admin/payments", icon: CreditCard },
+  { label: "Certificates", href: "/admin/certificates", icon: ShieldCheck },
+  { label: "Resources", href: "/admin/resources", icon: Lightbulb },
 ];
 
 interface AdminHeaderProps {
@@ -49,9 +54,10 @@ interface AdminHeaderProps {
     role?: string | null;
     avatarUrl?: string | null;
   };
+  onOpenMobileNav?: () => void;
 }
 
-export function AdminHeader({ user }: AdminHeaderProps) {
+export function AdminHeader({ user, onOpenMobileNav }: AdminHeaderProps) {
   const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState("");
   const [logoError, setLogoError] = useState(false);
@@ -89,7 +95,18 @@ export function AdminHeader({ user }: AdminHeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo & Brand Identity */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {onOpenMobileNav && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onOpenMobileNav}
+                className="lg:hidden size-9 rounded-xl text-slate-600 hover:bg-slate-100 cursor-pointer shrink-0"
+              >
+                <PanelLeft className="size-5 text-slate-700" />
+                <span className="sr-only">Toggle Sidebar</span>
+              </Button>
+            )}
             <Link href="/admin/dashboard" className="flex items-center gap-2.5">
               <div className="relative size-9 rounded-xl bg-white border border-slate-200 overflow-hidden shadow-2xs flex items-center justify-center shrink-0">
                 {!logoError ? (

@@ -2,7 +2,7 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
-import { AdminHeader } from "@/components/admin/admin-header";
+import { AdminLayoutWrapper } from "@/components/admin/admin-layout-wrapper";
 
 export const dynamic = "force-dynamic";
 
@@ -54,18 +54,15 @@ export default async function AdminLayout({
   const userRole = dbUser?.role || authUser.user_metadata?.role || "ADMIN";
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-      <AdminHeader
-        user={{
-          name: displayName,
-          email: authUser.email,
-          role: userRole,
-          avatarUrl,
-        }}
-      />
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
-        {children}
-      </main>
-    </div>
+    <AdminLayoutWrapper
+      user={{
+        name: displayName,
+        email: authUser.email,
+        role: userRole,
+        avatarUrl,
+      }}
+    >
+      {children}
+    </AdminLayoutWrapper>
   );
 }
