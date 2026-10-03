@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { AdminSearchInput } from "@/components/admin/admin-search-input";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -144,7 +145,7 @@ export default function AdminPartnersPage() {
             size="sm"
             onClick={fetchPartners}
             disabled={loading}
-            className="rounded-xl border-slate-200 text-slate-700 text-xs h-9 gap-1.5"
+            className="rounded-lg border-slate-200 text-slate-700 text-xs h-9 gap-1.5"
           >
             <RefreshCw className={`size-3.5 ${loading ? "animate-spin" : ""}`} />
             <span>रिफ्रेश</span>
@@ -153,7 +154,7 @@ export default function AdminPartnersPage() {
           <Button
             onClick={() => setCreateOpen(true)}
             size="sm"
-            className="rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-9 gap-1.5 shadow-sm cursor-pointer"
+            className="rounded-lg bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-9 gap-1.5 shadow-sm cursor-pointer"
           >
             <Plus className="size-4" />
             <span>नया पार्टनर जोड़ें</span>
@@ -164,16 +165,11 @@ export default function AdminPartnersPage() {
       {/* Search Bar */}
       <Card className="bg-white border-slate-200 shadow-xs">
         <CardContent className="p-4">
-          <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
-            <Input
-              type="text"
-              placeholder="नाम, व्यवसाय प्रकार या स्थान से खोजें..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="h-10 pl-9 pr-3 rounded-xl bg-slate-50 border-slate-200 text-xs"
-            />
-          </div>
+          <AdminSearchInput
+            value={search}
+            onChange={(val) => setSearch(val)}
+            placeholder="Search by Partner Name, Business Type, Location, Contact or ID... (Esc to clear)"
+          />
         </CardContent>
       </Card>
 

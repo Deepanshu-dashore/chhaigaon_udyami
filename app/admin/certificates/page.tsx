@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,6 +49,12 @@ export default function AdminCertificatesPage() {
   const [certificates, setCertificates] = useState<CertificateItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+
+  // Pagination State
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const totalPages = Math.ceil(certificates.length / limit) || 1;
+  const paginatedCertificates = certificates.slice((page - 1) * limit, page * limit);
 
   // Modal State
   const [createOpen, setCreateOpen] = useState(false);
@@ -214,9 +221,12 @@ export default function AdminCertificatesPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
             <Input
               type="text"
-              placeholder="प्रमाणपत्र नंबर, वेरिफिकेशन कोड या छात्र नाम से खोजें..."
+              placeholder="Search by Certificate Number, Verification Code or Student Name..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
               className="h-10 pl-9 pr-3 rounded-xl bg-slate-50 border-slate-200 text-xs"
             />
           </div>
@@ -250,7 +260,7 @@ export default function AdminCertificatesPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {certificates.map((cert) => (
+                  {paginatedCertificates.map((cert) => (
                     <TableRow key={cert.id} className="hover:bg-slate-50/80 border-b border-slate-100">
                       <TableCell className="text-xs font-mono font-bold text-slate-900">
                         {cert.certificateNumber}
@@ -293,6 +303,17 @@ export default function AdminCertificatesPage() {
                 </TableBody>
               </Table>
             </div>
+          )}
+
+          {!loading && certificates.length > 0 && (
+            <AdminPagination
+              meta={{ total: certificates.length, page, limit, totalPages }}
+              onPageChange={setPage}
+              onLimitChange={(newLimit) => {
+                setLimit(newLimit);
+                setPage(1);
+              }}
+            />
           )}
         </CardContent>
       </Card>

@@ -1,26 +1,58 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-// GET /api/admin/courses - Fetch all courses for management dashboard
+// GET /api/admin/courses - Fetch courses with pagination & search
 export async function GET(req: NextRequest) {
   try {
-    const courses = await prisma.course.findMany({
-      orderBy: { createdAt: "desc" },
-      include: {
-        createdBy: {
-          select: { id: true, name: true, email: true },
-        },
-        _count: {
-          select: {
-            modules: true,
-            enrollments: true,
-            certificates: true,
+    const { searchParams } = new URL(req.url);
+    const search = searchParams.get("search")?.trim() || "";
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
+    const limit = Math.max(1, parseInt(searchParams.get("limit") || "10", 10));
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: "insensitive" } },
+        { slug: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
+      ];
+    }
+
+    const [courses, total] = await Promise.all([
+      prisma.course.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: "desc" },
+        include: {
+          createdBy: {
+            select: { id: true, name: true, email: true },
+          },
+          _count: {
+            select: {
+              modules: true,
+              enrollments: true,
+              certificates: true,
+            },
           },
         },
+      }),
+      prisma.course.count({ where }),
+    ]);
+
+    return NextResponse.json({
+      success: true,
+      courses,
+      data: courses,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       },
     });
-
-    return NextResponse.json({ success: true, courses });
   } catch (error: any) {
     console.error("Error fetching admin courses:", error);
     return NextResponse.json(

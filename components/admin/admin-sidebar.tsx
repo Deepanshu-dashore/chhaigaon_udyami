@@ -18,157 +18,162 @@ import {
   Users,
   BookOpen,
   Landmark,
-  Store,
   Award,
-  FolderKanban,
   GraduationCap,
   Globe,
   ChevronLeft,
   ChevronRight,
-  ShieldCheck,
   ExternalLink,
-  Sparkles,
   TrendingUp,
   FileText,
   CreditCard,
   Lightbulb,
   UserCheck,
+  HelpCircle,
+  Activity,
+  Bell,
+  Settings,
+  Building2,
+  Video,
+  Database,
+  Crown,
 } from "lucide-react";
 
 export interface NavItem {
   title: string;
-  hindiTitle?: string;
   href: string;
   icon: React.ElementType;
-  badge?: string;
-  badgeColor?: string;
   isExternal?: boolean;
+  superAdminOnly?: boolean;
 }
 
 export interface NavGroup {
   groupLabel: string;
-  hindiGroupLabel?: string;
+  isSuperAdminGroup?: boolean;
   items: NavItem[];
 }
 
 export const adminNavGroups: NavGroup[] = [
   {
     groupLabel: "Main Console",
-    hindiGroupLabel: "मुख्य नियंत्रण",
     items: [
       {
         title: "Overview",
-        hindiTitle: "डैशबोर्ड ओवरव्यू",
         href: "/admin/dashboard",
         icon: LayoutDashboard,
-        badge: "Live",
-        badgeColor: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
       },
     ],
   },
   {
     groupLabel: "Academic & Users",
-    hindiGroupLabel: "प्रशिक्षण व उपयोगकर्ता",
     items: [
       {
         title: "User Directory",
-        hindiTitle: "उपयोगकर्ता प्रबंधन",
         href: "/admin/users",
         icon: Users,
-        badge: "Users",
-        badgeColor: "bg-purple-500/10 text-purple-600 border-purple-500/20",
       },
       {
         title: "Courses & Content",
-        hindiTitle: "कोर्सेस व लेक्चर्स",
         href: "/admin/courses",
         icon: BookOpen,
-        badge: "VdoCipher",
-        badgeColor: "bg-blue-500/10 text-blue-600 border-blue-500/20",
+      },
+      {
+        title: "Video Library (VdoCipher)",
+        href: "/admin/videos",
+        icon: Video,
+      },
+      {
+        title: "Quizzes & Assessments",
+        href: "/admin/quizzes",
+        icon: HelpCircle,
       },
       {
         title: "Student Enrollments",
-        hindiTitle: "विद्यार्थी नामांकन",
         href: "/admin/enrollments",
         icon: UserCheck,
-        badge: "Access",
-        badgeColor: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
       },
       {
         title: "Certificates Issuance",
-        hindiTitle: "प्रमाणपत्र जारीकरण",
         href: "/admin/certificates",
         icon: Award,
-        badge: "QR Verify",
-        badgeColor: "bg-purple-500/10 text-purple-600 border-purple-500/20",
       },
     ],
   },
   {
     groupLabel: "Schemes & B2B Services",
-    hindiGroupLabel: "योजनाएं व बाजार सेवाएं",
     items: [
       {
         title: "Government Schemes",
-        hindiTitle: "योजनाएं व सब्सिडी",
         href: "/admin/schemes",
         icon: Landmark,
-        badge: "PMEGP/Mudra",
-        badgeColor: "bg-amber-500/10 text-amber-600 border-amber-500/20",
       },
       {
         title: "Leads & Applications",
-        hindiTitle: "लीड्स व आवेदन",
         href: "/admin/leads",
-        icon: Store,
-        badge: "Leads",
-        badgeColor: "bg-indigo-500/10 text-indigo-600 border-indigo-500/20",
+        icon: FileText,
       },
       {
         title: "B2B Market Partners",
-        hindiTitle: "मार्केट पार्टनर्स",
         href: "/admin/partners",
-        icon: Store,
-        badge: "Partners",
-        badgeColor: "bg-blue-500/10 text-blue-600 border-blue-500/20",
+        icon: Building2,
       },
       {
         title: "Startup Resources",
-        hindiTitle: "स्टार्टअप गाइड व टूल्स",
         href: "/admin/resources",
         icon: Lightbulb,
-        badge: "DPR Tools",
-        badgeColor: "bg-rose-500/10 text-rose-600 border-rose-500/20",
       },
     ],
   },
   {
     groupLabel: "Finance & Accounting",
-    hindiGroupLabel: "वित्तीय लेखा-जोखा",
     items: [
       {
         title: "Payments & Orders",
-        hindiTitle: "भुगतान एवं लेन-देन",
         href: "/admin/payments",
         icon: CreditCard,
-        badge: "Razorpay",
-        badgeColor: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
+      },
+    ],
+  },
+  {
+    groupLabel: "Super Admin Controls",
+    isSuperAdminGroup: true,
+    items: [
+      {
+        title: "Security & Audit Logs",
+        href: "/admin/audit-logs",
+        icon: Activity,
+        superAdminOnly: true,
+      },
+      {
+        title: "Database & Infrastructure",
+        href: "/admin/database",
+        icon: Database,
+        superAdminOnly: true,
+      },
+      {
+        title: "Platform Notifications",
+        href: "/admin/notifications",
+        icon: Bell,
+        superAdminOnly: true,
+      },
+      {
+        title: "Settings & Access Control",
+        href: "/admin/settings",
+        icon: Settings,
+        superAdminOnly: true,
       },
     ],
   },
   {
     groupLabel: "Quick Portals",
-    hindiGroupLabel: "पोर्टल लिंक",
     items: [
       {
         title: "Learner Portal",
-        hindiTitle: "विद्यार्थी व्यू",
         href: "/dashboard",
         icon: GraduationCap,
       },
       {
         title: "Public Website",
-        hindiTitle: "मुख्य वेबसाइट",
         href: "/",
         icon: Globe,
         isExternal: true,
@@ -198,6 +203,11 @@ export function AdminSidebar({
   const pathname = usePathname();
   const [logoError, setLogoError] = useState(false);
 
+  const isSuperAdmin =
+    user?.role === "SUPER_ADMIN" ||
+    user?.email === "dipanshu.dashore.dev@gmail.com" ||
+    user?.email === "admin@chhaigaonudyami.in";
+
   return (
     <TooltipProvider delayDuration={150}>
       <aside
@@ -213,7 +223,7 @@ export function AdminSidebar({
             href="/admin/dashboard"
             className="flex items-center gap-2.5 overflow-hidden"
           >
-            <div className="relative size-9 rounded-xl bg-white border border-slate-200 shadow-2xs flex items-center justify-center shrink-0">
+            <div className="relative size-9 rounded-lg bg-white border border-slate-200 shadow-2xs flex items-center justify-center shrink-0">
               {!logoError ? (
                 <Image
                   src="/assets/chhaigaon-udyami-logo.png"
@@ -225,7 +235,7 @@ export function AdminSidebar({
                   priority
                 />
               ) : (
-                <div className="size-full bg-[#0056d2] text-white flex items-center justify-center font-bold text-xs">
+                <div className="size-full bg-[#0056d2] text-white flex items-center justify-center font-bold text-xs rounded-lg">
                   CU
                 </div>
               )}
@@ -238,8 +248,9 @@ export function AdminSidebar({
                     Chhaigaon Udyami
                   </span>
                 </div>
-                <span className="text-[10px] text-purple-700 font-semibold tracking-wide uppercase">
-                  Admin Console
+                <span className="text-[10px] text-[#0056d2] font-semibold tracking-wide uppercase flex items-center gap-1">
+                  {/* {isSuperAdmin && <Crown className="size-2.5 text-amber-500 inline" />} */}
+                  <span>{isSuperAdmin ? "Super Admin Console" : "Admin Console"}</span>
                 </span>
               </div>
             )}
@@ -251,7 +262,7 @@ export function AdminSidebar({
               variant="ghost"
               size="icon"
               onClick={onToggleCollapse}
-              className="hidden md:flex size-7 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
+              className="hidden md:flex size-7 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
               title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
             >
               {isCollapsed ? (
@@ -263,127 +274,88 @@ export function AdminSidebar({
           )}
         </div>
 
-        {/* System Status Banner inside Sidebar when expanded */}
-        {!isCollapsed && (
-          <div className="mx-3 mt-3 p-2.5 rounded-xl bg-purple-50/70 border border-purple-100/80 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="relative flex size-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full size-2 bg-emerald-500" />
-              </span>
-              <span className="text-[11px] font-bold text-slate-800">
-                DB & Auth Status
-              </span>
-            </div>
-            <Badge className="bg-purple-600 text-white text-[9px] font-bold px-1.5 py-0 h-4">
-              ACTIVE
-            </Badge>
-          </div>
-        )}
-
         {/* Navigation Items List */}
-        <div className="flex-1 overflow-y-auto py-3 px-2.5 space-y-5 scrollbar-thin scrollbar-thumb-slate-200">
-          {adminNavGroups.map((group, groupIdx) => (
-            <div key={groupIdx} className="space-y-1">
-              {!isCollapsed ? (
-                <div className="px-2 pb-1 flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                    {group.groupLabel}
-                  </span>
-                  {group.hindiGroupLabel && (
-                    <span className="text-[9px] text-slate-400 font-medium">
-                      {group.hindiGroupLabel}
+        <div className="flex-1 overflow-y-auto py-3 px-2.5 space-y-4 scrollbar-thin scrollbar-thumb-slate-200">
+          {adminNavGroups
+            .filter((group) => !group.isSuperAdminGroup || isSuperAdmin)
+            .map((group, groupIdx) => (
+              <div key={groupIdx} className="space-y-1">
+                {!isCollapsed ? (
+                  <div className="px-2 pb-1 flex items-center justify-between">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                      {group.groupLabel}
                     </span>
-                  )}
-                </div>
-              ) : (
-                <div className="h-px bg-slate-100 my-2" />
-              )}
+                  </div>
+                ) : (
+                  <div className="h-px bg-slate-100 my-2" />
+                )}
 
-              <div className="space-y-0.5">
-                {group.items.map((item) => {
-                  const isActive =
-                    pathname === item.href ||
-                    (item.href !== "/admin/dashboard" &&
-                      item.href.startsWith("/admin/") &&
-                      pathname.startsWith(item.href));
+                <div className="space-y-0.5">
+                  {group.items.map((item) => {
+                    const isActive =
+                      pathname === item.href ||
+                      (item.href !== "/admin/dashboard" &&
+                        item.href.startsWith("/admin/") &&
+                        pathname.startsWith(item.href));
 
-                  const Icon = item.icon;
+                    const Icon = item.icon;
 
-                  const linkContent = (
-                    <Link
-                      href={item.href}
-                      target={item.isExternal ? "_blank" : undefined}
-                      rel={item.isExternal ? "noopener noreferrer" : undefined}
-                      className={cn(
-                        "group relative flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-xs font-semibold transition-all duration-150 cursor-pointer",
-                        isActive
-                          ? "bg-purple-600 text-white shadow-xs font-bold"
-                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
-                      )}
-                    >
-                      <Icon
+                    const linkContent = (
+                      <Link
+                        href={item.href}
+                        target={item.isExternal ? "_blank" : undefined}
+                        rel={item.isExternal ? "noopener noreferrer" : undefined}
                         className={cn(
-                          "size-4 shrink-0 transition-transform duration-150 group-hover:scale-110",
+                          "group relative flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium transition-all duration-150 cursor-pointer",
                           isActive
-                            ? "text-white"
-                            : "text-slate-400 group-hover:text-purple-600"
+                            ? "bg-[#0056d2] text-white shadow-2xs font-semibold"
+                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
                         )}
-                      />
+                      >
+                        <Icon
+                          className={cn(
+                            "size-4 shrink-0 transition-transform duration-150 group-hover:scale-105",
+                            isActive
+                              ? "text-white"
+                              : "text-slate-400 group-hover:text-[#0056d2]"
+                          )}
+                        />
 
-                      {!isCollapsed && (
-                        <div className="flex-1 flex items-center justify-between min-w-0">
-                          <span className="truncate">{item.title}</span>
-                          {item.badge && (
-                            <span
-                              className={cn(
-                                "text-[9px] font-bold px-1.5 py-0.5 rounded-full border shrink-0 ml-1.5",
-                                isActive
-                                  ? "bg-white/20 text-white border-white/30"
-                                  : item.badgeColor ||
-                                      "bg-slate-100 text-slate-600 border-slate-200"
-                              )}
-                            >
-                              {item.badge}
-                            </span>
-                          )}
-                          {item.isExternal && (
-                            <ExternalLink
-                              className={cn(
-                                "size-3 shrink-0 ml-1 opacity-60",
-                                isActive ? "text-white" : "text-slate-400"
-                              )}
-                            />
-                          )}
-                        </div>
-                      )}
-                    </Link>
-                  );
-
-                  if (isCollapsed) {
-                    return (
-                      <Tooltip key={item.href}>
-                        <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
-                        <TooltipContent
-                          side="right"
-                          className="font-bold text-xs bg-slate-900 text-white border-0 shadow-lg px-2.5 py-1.5"
-                        >
-                          <p>{item.title}</p>
-                          {item.hindiTitle && (
-                            <p className="text-[10px] text-slate-300 font-normal">
-                              {item.hindiTitle}
-                            </p>
-                          )}
-                        </TooltipContent>
-                      </Tooltip>
+                        {!isCollapsed && (
+                          <div className="flex-1 flex items-center justify-between min-w-0">
+                            <span className="truncate">{item.title}</span>
+                            {item.isExternal && (
+                              <ExternalLink
+                                className={cn(
+                                  "size-3 shrink-0 ml-1 opacity-60",
+                                  isActive ? "text-white" : "text-slate-400"
+                                )}
+                              />
+                            )}
+                          </div>
+                        )}
+                      </Link>
                     );
-                  }
 
-                  return <React.Fragment key={item.href}>{linkContent}</React.Fragment>;
-                })}
+                    if (isCollapsed) {
+                      return (
+                        <Tooltip key={item.href}>
+                          <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
+                          <TooltipContent
+                            side="right"
+                            className="font-semibold text-xs bg-slate-900 text-white border-0 shadow-md px-2.5 py-1.5"
+                          >
+                            <p>{item.title}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      );
+                    }
+
+                    return <React.Fragment key={item.href}>{linkContent}</React.Fragment>;
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
         {/* Footer / User Profile Card */}
@@ -391,13 +363,18 @@ export function AdminSidebar({
           {!isCollapsed ? (
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 min-w-0">
-                <div className="size-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs border border-purple-200 shrink-0">
+                <div className="relative size-8 rounded-full bg-blue-50 text-[#0056d2] flex items-center justify-center font-bold text-xs border border-blue-200 shrink-0">
                   {user?.name?.[0]?.toUpperCase() || "A"}
+                  {isSuperAdmin && (
+                    <Crown className="absolute -top-1 -right-1 size-3 text-amber-500 fill-amber-400 drop-shadow-2xs" />
+                  )}
                 </div>
                 <div className="flex flex-col min-w-0">
-                  <span className="text-xs font-bold text-slate-900 truncate">
-                    {user?.name || "Admin User"}
-                  </span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-xs font-semibold text-slate-900 truncate">
+                      {user?.name || "Admin User"}
+                    </span>
+                  </div>
                   <span className="text-[10px] text-slate-400 truncate">
                     {user?.email || "admin@chhaigaon.in"}
                   </span>
@@ -407,7 +384,7 @@ export function AdminSidebar({
                 asChild
                 variant="ghost"
                 size="icon"
-                className="size-7 rounded-lg text-slate-400 hover:text-purple-600 hover:bg-purple-50 cursor-pointer"
+                className="size-7 rounded-md text-slate-400 hover:text-[#0056d2] hover:bg-blue-50 cursor-pointer"
                 title="Switch to Learner Portal"
               >
                 <Link href="/dashboard">
@@ -418,12 +395,15 @@ export function AdminSidebar({
           ) : (
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="size-8 mx-auto rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs border border-purple-200 cursor-pointer">
+                <div className="relative size-8 mx-auto rounded-full bg-blue-50 text-[#0056d2] flex items-center justify-center font-bold text-xs border border-blue-200 cursor-pointer">
                   {user?.name?.[0]?.toUpperCase() || "A"}
+                  {isSuperAdmin && (
+                    <Crown className="absolute -top-1 -right-1 size-3 text-amber-500 fill-amber-400" />
+                  )}
                 </div>
               </TooltipTrigger>
               <TooltipContent side="right" className="bg-slate-900 text-white text-xs">
-                {user?.name || "Admin"} ({user?.role || "ADMIN"})
+                {user?.name || "Admin"} ({isSuperAdmin ? "SUPER_ADMIN" : user?.role || "ADMIN"})
               </TooltipContent>
             </Tooltip>
           )}
@@ -432,3 +412,4 @@ export function AdminSidebar({
     </TooltipProvider>
   );
 }
+

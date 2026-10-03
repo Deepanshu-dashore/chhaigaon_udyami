@@ -1,9 +1,12 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import { AdminSearchInput } from "@/components/admin/admin-search-input";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import { AdminPagination, PaginationMeta } from "@/components/admin/admin-pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ButtonGroup, ButtonGroupItem } from "@/components/ui/button-group";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -51,6 +54,16 @@ export default function AdminEnrollmentsPage() {
   const [search, setSearch] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("ALL");
 
+  // Pagination State
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [meta, setMeta] = useState<PaginationMeta>({
+    total: 0,
+    page: 1,
+    limit: 10,
+    totalPages: 1,
+  });
+
   // Modal State
   const [createOpen, setCreateOpen] = useState(false);
   const [users, setUsers] = useState<any[]>([]);
@@ -65,18 +78,21 @@ export default function AdminEnrollmentsPage() {
       const params = new URLSearchParams();
       if (search) params.set("search", search);
       if (selectedStatus !== "ALL") params.set("status", selectedStatus);
+      params.set("page", page.toString());
+      params.set("limit", limit.toString());
 
       const res = await fetch(`/api/admin/enrollments?${params.toString()}`);
       const data = await res.json();
       if (data.success) {
         setEnrollments(data.data);
+        if (data.meta) setMeta(data.meta);
       }
     } catch (err) {
       toast.error("नामांकन डेटा लोड करने में त्रुटि");
     } finally {
       setLoading(false);
     }
-  }, [search, selectedStatus]);
+  }, [search, selectedStatus, page, limit]);
 
   useEffect(() => {
     fetchEnrollments();
@@ -149,7 +165,7 @@ export default function AdminEnrollmentsPage() {
             size="sm"
             onClick={fetchEnrollments}
             disabled={loading}
-            className="rounded-xl border-slate-200 text-slate-700 text-xs h-9 gap-1.5"
+            className="rounded-lg border-slate-200 text-slate-700 text-xs h-9 gap-1.5"
           >
             <RefreshCw className={`size-3.5 ${loading ? "animate-spin" : ""}`} />
             <span>रिफ्रेश</span>
@@ -158,7 +174,7 @@ export default function AdminEnrollmentsPage() {
           <Button
             onClick={handleOpenCreateModal}
             size="sm"
-            className="rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-9 gap-1.5 shadow-sm cursor-pointer"
+            className="rounded-lg bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-9 gap-1.5 shadow-sm cursor-pointer"
           >
             <UserCheck className="size-4" />
             <span>मैन्युअल नामांकन जोड़ें</span>
@@ -176,7 +192,7 @@ export default function AdminEnrollmentsPage() {
                 {enrollments.filter((e) => e.status === "ACTIVE").length}
               </p>
             </div>
-            <div className="size-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <div className="size-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
               <CheckCircle2 className="size-5" />
             </div>
           </CardContent>
@@ -190,7 +206,7 @@ export default function AdminEnrollmentsPage() {
                 {enrollments.filter((e) => e.status === "COMPLETED").length}
               </p>
             </div>
-            <div className="size-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+            <div className="size-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
               <GraduationCap className="size-5" />
             </div>
           </CardContent>
@@ -204,7 +220,7 @@ export default function AdminEnrollmentsPage() {
                 {enrollments.length}
               </p>
             </div>
-            <div className="size-10 rounded-xl bg-blue-50 text-[#0056d2] flex items-center justify-center">
+            <div className="size-10 rounded-lg bg-blue-50 text-[#0056d2] flex items-center justify-center">
               <BookOpen className="size-5" />
             </div>
           </CardContent>
@@ -214,35 +230,33 @@ export default function AdminEnrollmentsPage() {
       {/* Filter & Search Bar */}
       <Card className="bg-white border-slate-200 shadow-xs">
         <CardContent className="p-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
-            <Input
-              type="text"
-              placeholder="छात्र के नाम, ईमेल या कोर्स शीर्षक से खोजें..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="h-10 pl-9 pr-3 rounded-xl bg-slate-50 border-slate-200 text-xs"
-            />
-          </div>
+          <AdminSearchInput
+            value={search}
+            onChange={(val) => {
+              setSearch(val);
+              setPage(1);
+            }}
+            placeholder="Search by Student Name, Email, Course or Enrollment ID... (Esc to clear)"
+          />
 
-          <div className="flex items-center gap-2">
-            {["ALL", "ACTIVE", "COMPLETED"].map((st) => (
-              <Button
-                key={st}
-                type="button"
-                size="sm"
-                variant={selectedStatus === st ? "default" : "ghost"}
-                onClick={() => setSelectedStatus(st)}
-                className={`h-8 px-3 rounded-lg text-xs font-semibold ${
-                  selectedStatus === st
-                    ? "bg-[#0056d2] text-white"
-                    : "text-slate-600 hover:bg-slate-100"
-                }`}
+          <ButtonGroup>
+            {[
+              { id: "ALL", label: "All" },
+              { id: "ACTIVE", label: "Active" },
+              { id: "COMPLETED", label: "Completed" },
+            ].map(({ id, label }) => (
+              <ButtonGroupItem
+                key={id}
+                isActive={selectedStatus === id}
+                onClick={() => {
+                  setSelectedStatus(id);
+                  setPage(1);
+                }}
               >
-                {st === "ALL" ? "सभी" : st === "ACTIVE" ? "सक्रिय" : "पूर्ण"}
-              </Button>
+                {label}
+              </ButtonGroupItem>
             ))}
-          </div>
+          </ButtonGroup>
         </CardContent>
       </Card>
 
@@ -307,12 +321,23 @@ export default function AdminEnrollmentsPage() {
               </Table>
             </div>
           )}
+
+          {!loading && enrollments.length > 0 && (
+            <AdminPagination
+              meta={meta}
+              onPageChange={setPage}
+              onLimitChange={(newLimit) => {
+                setLimit(newLimit);
+                setPage(1);
+              }}
+            />
+          )}
         </CardContent>
       </Card>
 
       {/* Create Enrollment Modal */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent className="sm:max-w-md bg-white rounded-2xl p-6 border-slate-200">
+        <DialogContent className="sm:max-w-md bg-white rounded-lg p-6 border-slate-200">
           <DialogHeader>
             <DialogTitle className="text-lg font-bold font-headline text-slate-900 flex items-center gap-2">
               <UserCheck className="size-5 text-[#0056d2]" />
@@ -332,7 +357,7 @@ export default function AdminEnrollmentsPage() {
                 value={selectedUser}
                 onChange={(e) => setSelectedUser(e.target.value)}
                 required
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800"
+                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800"
               >
                 <option value="">-- उपयोगकर्ता का चयन करें --</option>
                 {users.map((u) => (
@@ -351,7 +376,7 @@ export default function AdminEnrollmentsPage() {
                 value={selectedCourse}
                 onChange={(e) => setSelectedCourse(e.target.value)}
                 required
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800"
+                className="w-full h-10 px-3 rounded-lg border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800"
               >
                 <option value="">-- कोर्स का चयन करें --</option>
                 {courses.map((c) => (
@@ -367,14 +392,14 @@ export default function AdminEnrollmentsPage() {
                 type="button"
                 variant="outline"
                 onClick={() => setCreateOpen(false)}
-                className="rounded-xl text-xs h-10"
+                className="rounded-lg text-xs h-10"
               >
                 रद्द करें
               </Button>
               <Button
                 type="submit"
                 disabled={submitting}
-                className="rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-10 gap-2 cursor-pointer"
+                className="rounded-lg bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-10 gap-2 cursor-pointer"
               >
                 {submitting && <Spinner size="sm" variant="white" />}
                 <span>नामांकन प्रदान करें</span>

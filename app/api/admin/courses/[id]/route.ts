@@ -1,6 +1,48 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+// GET /api/admin/courses/[id] - Fetch single course with modules & lessons
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+
+    const course = await prisma.course.findUnique({
+      where: { id },
+      include: {
+        createdBy: {
+          select: { id: true, name: true, email: true },
+        },
+        modules: {
+          orderBy: { order: "asc" },
+          include: {
+            lessons: {
+              orderBy: { order: "asc" },
+              include: {
+                video: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!course) {
+      return NextResponse.json({ error: "Course not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, course });
+  } catch (error: any) {
+    console.error("Error fetching course detail:", error);
+    return NextResponse.json(
+      { error: error?.message || "Failed to fetch course details" },
+      { status: 500 }
+    );
+  }
+}
+
 // PATCH /api/admin/courses/[id] - Update course details or status
 export async function PATCH(
   req: NextRequest,
@@ -14,6 +56,9 @@ export async function PATCH(
       where: { id },
       data: {
         ...(body.title !== undefined && { title: body.title }),
+        ...(body.slug !== undefined && {
+          slug: body.slug.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+        }),
         ...(body.status !== undefined && { status: body.status }),
         ...(body.price !== undefined && {
           price: parseFloat(body.price) || 0,

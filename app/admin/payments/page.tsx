@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import { AdminPagination, PaginationMeta } from "@/components/admin/admin-pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ButtonGroup, ButtonGroupItem } from "@/components/ui/button-group";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -51,25 +53,38 @@ export default function AdminPaymentsPage() {
   const [search, setSearch] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("ALL");
 
+  // Pagination State
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [meta, setMeta] = useState<PaginationMeta>({
+    total: 0,
+    page: 1,
+    limit: 10,
+    totalPages: 1,
+  });
+
   const fetchPayments = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
       if (search) params.set("search", search);
       if (selectedStatus !== "ALL") params.set("status", selectedStatus);
+      params.set("page", page.toString());
+      params.set("limit", limit.toString());
 
       const res = await fetch(`/api/admin/payments?${params.toString()}`);
       const data = await res.json();
       if (data.success) {
         setOrders(data.data);
         if (data.stats) setStats(data.stats);
+        if (data.meta) setMeta(data.meta);
       }
     } catch (err) {
       toast.error("भुगतान डेटा लोड करने में समस्या आई");
     } finally {
       setLoading(false);
     }
-  }, [search, selectedStatus]);
+  }, [search, selectedStatus, page, limit]);
 
   useEffect(() => {
     fetchPayments();
@@ -169,31 +184,35 @@ export default function AdminPaymentsPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
             <Input
               type="text"
-              placeholder="Order ID, ग्राहक नाम या कोर्स से खोजें..."
+              placeholder="Search by Order ID, Customer Name or Course..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
               className="h-10 pl-9 pr-3 rounded-xl bg-slate-50 border-slate-200 text-xs"
             />
           </div>
 
-          <div className="flex items-center gap-2">
-            {["ALL", "PAID", "CREATED", "FAILED"].map((st) => (
-              <Button
-                key={st}
-                type="button"
-                size="sm"
-                variant={selectedStatus === st ? "default" : "ghost"}
-                onClick={() => setSelectedStatus(st)}
-                className={`h-8 px-3 rounded-lg text-xs font-semibold ${
-                  selectedStatus === st
-                    ? "bg-[#0056d2] text-white"
-                    : "text-slate-600 hover:bg-slate-100"
-                }`}
+          <ButtonGroup>
+            {[
+              { id: "ALL", label: "All" },
+              { id: "PAID", label: "Paid" },
+              { id: "CREATED", label: "Pending" },
+              { id: "FAILED", label: "Failed" },
+            ].map(({ id, label }) => (
+              <ButtonGroupItem
+                key={id}
+                isActive={selectedStatus === id}
+                onClick={() => {
+                  setSelectedStatus(id);
+                  setPage(1);
+                }}
               >
-                {st === "ALL" ? "सभी" : st === "PAID" ? "सफल (Paid)" : st === "CREATED" ? "लंबित" : "विफल"}
-              </Button>
+                {label}
+              </ButtonGroupItem>
             ))}
-          </div>
+          </ButtonGroup>
         </CardContent>
       </Card>
 
@@ -267,6 +286,17 @@ export default function AdminPaymentsPage() {
                 </TableBody>
               </Table>
             </div>
+          )}
+
+          {!loading && orders.length > 0 && (
+            <AdminPagination
+              meta={meta}
+              onPageChange={setPage}
+              onLimitChange={(newLimit) => {
+                setLimit(newLimit);
+                setPage(1);
+              }}
+            />
           )}
         </CardContent>
       </Card>

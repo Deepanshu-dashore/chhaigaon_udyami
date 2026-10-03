@@ -2,9 +2,12 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import UserAvatar from "@/components/ui/user-avatar";
+import { AdminSearchInput } from "@/components/admin/admin-search-input";
+import { AdminPagination, PaginationMeta } from "@/components/admin/admin-pagination";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ButtonGroup, ButtonGroupItem } from "@/components/ui/button-group";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -84,6 +87,16 @@ export default function AdminUsersPage() {
   const [selectedRole, setSelectedRole] = useState("ALL");
   const [selectedStatus, setSelectedStatus] = useState("ALL");
 
+  // Pagination State
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [meta, setMeta] = useState<PaginationMeta>({
+    total: 0,
+    page: 1,
+    limit: 10,
+    totalPages: 1,
+  });
+
   // Create User Modal State
   const [createOpen, setCreateOpen] = useState(false);
   const [createLoading, setCreateLoading] = useState(false);
@@ -115,11 +128,16 @@ export default function AdminUsersPage() {
       if (search) params.set("search", search);
       if (selectedRole !== "ALL") params.set("role", selectedRole);
       if (selectedStatus !== "ALL") params.set("status", selectedStatus);
+      params.set("page", page.toString());
+      params.set("limit", limit.toString());
 
       const res = await fetch(`/api/admin/users?${params.toString()}`);
       const data = await res.json();
       if (data.success) {
         setUsers(data.data);
+        if (data.meta) {
+          setMeta(data.meta);
+        }
       } else {
         toast.error(data.error || "उपयोगकर्ता लोड करने में विफल");
       }
@@ -128,7 +146,7 @@ export default function AdminUsersPage() {
     } finally {
       setLoading(false);
     }
-  }, [search, selectedRole, selectedStatus]);
+  }, [search, selectedRole, selectedStatus, page, limit]);
 
   useEffect(() => {
     fetchUsers();
@@ -258,7 +276,7 @@ export default function AdminUsersPage() {
             size="sm"
             onClick={fetchUsers}
             disabled={loading}
-            className="rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 text-xs h-9 gap-1.5"
+            className="rounded-lg border-slate-200 text-slate-700 hover:bg-slate-50 text-xs h-9 gap-1.5"
           >
             <RefreshCw className={`size-3.5 ${loading ? "animate-spin" : ""}`} />
             <span>रिफ्रेश</span>
@@ -267,7 +285,7 @@ export default function AdminUsersPage() {
           <Button
             onClick={() => setCreateOpen(true)}
             size="sm"
-            className="rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-9 gap-1.5 shadow-sm cursor-pointer"
+            className="rounded-lg bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-9 gap-1.5 shadow-sm cursor-pointer"
           >
             <UserPlus className="size-4" />
             <span>नया उपयोगकर्ता जोड़ें</span>
@@ -285,7 +303,7 @@ export default function AdminUsersPage() {
                 {roleCounts.total}
               </p>
             </div>
-            <div className="size-9 rounded-xl bg-blue-50 text-[#0056d2] flex items-center justify-center">
+            <div className="size-9 rounded-lg bg-blue-50 text-[#0056d2] flex items-center justify-center">
               <Users className="size-4.5" />
             </div>
           </CardContent>
@@ -299,7 +317,7 @@ export default function AdminUsersPage() {
                 {roleCounts.students}
               </p>
             </div>
-            <div className="size-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <div className="size-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
               <GraduationCap className="size-4.5" />
             </div>
           </CardContent>
@@ -313,7 +331,7 @@ export default function AdminUsersPage() {
                 {roleCounts.trainers}
               </p>
             </div>
-            <div className="size-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+            <div className="size-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
               <Briefcase className="size-4.5" />
             </div>
           </CardContent>
@@ -327,7 +345,7 @@ export default function AdminUsersPage() {
                 {roleCounts.admins}
               </p>
             </div>
-            <div className="size-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+            <div className="size-9 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
               <ShieldCheck className="size-4.5" />
             </div>
           </CardContent>
@@ -337,44 +355,36 @@ export default function AdminUsersPage() {
       {/* Search & Filter Bar */}
       <Card className="bg-white border-slate-200/80 shadow-xs">
         <CardContent className="p-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
-            <Input
-              type="text"
-              placeholder="नाम, ईमेल या मोबाइल से खोजें..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="h-10 pl-9 pr-3 rounded-xl bg-slate-50/70 border-slate-200 text-xs focus-visible:bg-white"
-            />
-          </div>
+          <AdminSearchInput
+            value={search}
+            onChange={(val) => {
+              setSearch(val);
+              setPage(1);
+            }}
+            placeholder="Search by Name, Email, Mobile or User ID... (Esc to clear)"
+          />
 
-          <div className="flex flex-wrap items-center gap-2">
+          <ButtonGroup>
             {/* Role Filter Buttons */}
-            {["ALL", "STUDENT", "TRAINER", "MARKET_PARTNER", "ADMIN"].map((role) => (
-              <Button
-                key={role}
-                type="button"
-                size="sm"
-                variant={selectedRole === role ? "default" : "ghost"}
-                onClick={() => setSelectedRole(role)}
-                className={`h-8 px-2.5 rounded-lg text-xs font-semibold cursor-pointer ${
-                  selectedRole === role
-                    ? "bg-[#0056d2] text-white shadow-2xs"
-                    : "text-slate-600 hover:bg-slate-100"
-                }`}
+            {[
+              { id: "ALL", label: "All" },
+              { id: "STUDENT", label: "Students" },
+              { id: "TRAINER", label: "Trainers" },
+              { id: "MARKET_PARTNER", label: "Partners" },
+              { id: "ADMIN", label: "Admins" },
+            ].map(({ id, label }) => (
+              <ButtonGroupItem
+                key={id}
+                isActive={selectedRole === id}
+                onClick={() => {
+                  setSelectedRole(id);
+                  setPage(1);
+                }}
               >
-                {role === "ALL"
-                  ? "सभी"
-                  : role === "STUDENT"
-                  ? "उद्यमी"
-                  : role === "TRAINER"
-                  ? "प्रशिक्षक"
-                  : role === "MARKET_PARTNER"
-                  ? "पार्टनर"
-                  : "एडमिन"}
-              </Button>
+                {label}
+              </ButtonGroupItem>
             ))}
-          </div>
+          </ButtonGroup>
         </CardContent>
       </Card>
 
@@ -543,12 +553,23 @@ export default function AdminUsersPage() {
               </Table>
             </div>
           )}
+
+          {!loading && users.length > 0 && (
+            <AdminPagination
+              meta={meta}
+              onPageChange={setPage}
+              onLimitChange={(newLimit) => {
+                setLimit(newLimit);
+                setPage(1);
+              }}
+            />
+          )}
         </CardContent>
       </Card>
 
       {/* 1. Create User Modal Dialog */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent className="sm:max-w-lg bg-white rounded-2xl p-6 border-slate-200">
+        <DialogContent className="sm:max-w-lg bg-white rounded-lg p-6 border-slate-200">
           <DialogHeader className="pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2 text-[#0056d2]">
               <UserPlus className="size-5" />

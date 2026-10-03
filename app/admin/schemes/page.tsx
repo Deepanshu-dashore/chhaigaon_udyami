@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { AdminSearchInput } from "@/components/admin/admin-search-input";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -162,14 +164,22 @@ export default function AdminSchemesPage() {
 
   const filteredSchemes = schemes.filter(
     (s) =>
-      s.title.toLowerCase().includes(search.toLowerCase()) ||
-      (s.department && s.department.toLowerCase().includes(search.toLowerCase()))
+      s.title?.toLowerCase().includes(search.toLowerCase()) ||
+      (s.department && s.department.toLowerCase().includes(search.toLowerCase())) ||
+      (s.description && s.description.toLowerCase().includes(search.toLowerCase())) ||
+      (s.benefits && s.benefits.toLowerCase().includes(search.toLowerCase())) ||
+      (s.id && s.id.toLowerCase().includes(search.toLowerCase()))
   );
+
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const totalPages = Math.ceil(filteredSchemes.length / limit) || 1;
+  const paginatedSchemes = filteredSchemes.slice((page - 1) * limit, page * limit);
 
   return (
     <div className="space-y-6 font-sans">
       {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-lg border border-slate-200 shadow-2xs">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Landmark className="h-5 w-5 text-amber-600" />
@@ -188,7 +198,7 @@ export default function AdminSchemesPage() {
             size="sm"
             onClick={fetchSchemes}
             disabled={loading}
-            className="h-9 rounded-xl text-xs gap-1.5 cursor-pointer"
+            className="h-9 rounded-lg text-xs gap-1.5 cursor-pointer"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
             <span>रिफ्रेश</span>
@@ -196,13 +206,13 @@ export default function AdminSchemesPage() {
 
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
             <DialogTrigger asChild>
-              <Button size="sm" className="h-9 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs gap-1.5 shadow-xs cursor-pointer">
+              <Button size="sm" className="h-9 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs gap-1.5 shadow-xs cursor-pointer">
                 <Plus className="h-4 w-4" />
                 <span>नई योजना जोड़ें</span>
               </Button>
             </DialogTrigger>
 
-            <DialogContent className="max-w-lg rounded-2xl bg-white p-6 shadow-2xl">
+            <DialogContent className="max-w-lg rounded-lg bg-white p-6 shadow-2xl">
               <DialogHeader>
                 <DialogTitle className="text-lg font-bold font-headline text-slate-950 flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-amber-600" />
@@ -312,25 +322,23 @@ export default function AdminSchemesPage() {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input
-            type="text"
-            placeholder="योजना या विभाग खोजें..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="h-9 pl-9 text-xs rounded-xl bg-slate-50 border-slate-200"
-          />
-        </div>
+      <div className="flex items-center justify-between gap-4 bg-white p-4 rounded-lg border border-slate-200 shadow-2xs">
+        <AdminSearchInput
+          value={search}
+          onChange={(val) => {
+            setSearch(val);
+            setPage(1);
+          }}
+          placeholder="Search by Scheme Title, Department, Category or ID... (Esc to clear)"
+        />
 
         <div className="text-xs text-slate-500 font-semibold">
-          कुल योजनाएं: <strong className="text-slate-900">{filteredSchemes.length}</strong>
+          Total Schemes: <strong className="text-slate-900">{filteredSchemes.length}</strong>
         </div>
       </div>
 
       {/* Schemes Data Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+      <div className="bg-white rounded-lg border border-slate-200 shadow-2xs overflow-hidden">
         <Table>
           <TableHeader className="bg-slate-50">
             <TableRow>
@@ -349,14 +357,14 @@ export default function AdminSchemesPage() {
                   डेटा लोड हो रहा है...
                 </TableCell>
               </TableRow>
-            ) : filteredSchemes.length === 0 ? (
+            ) : paginatedSchemes.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-center py-8 text-xs text-slate-500">
                   कोई सरकारी योजना दर्ज नहीं है।
                 </TableCell>
               </TableRow>
             ) : (
-              filteredSchemes.map((scheme) => (
+              paginatedSchemes.map((scheme) => (
                 <TableRow key={scheme.id} className="hover:bg-slate-50/80 transition-colors">
                   <TableCell className="font-medium">
                     <div className="space-y-0.5 max-w-xs">
@@ -425,6 +433,17 @@ export default function AdminSchemesPage() {
             )}
           </TableBody>
         </Table>
+
+        {!loading && filteredSchemes.length > 0 && (
+          <AdminPagination
+            meta={{ total: filteredSchemes.length, page, limit, totalPages }}
+            onPageChange={setPage}
+            onLimitChange={(newLimit) => {
+              setLimit(newLimit);
+              setPage(1);
+            }}
+          />
+        )}
       </div>
     </div>
   );

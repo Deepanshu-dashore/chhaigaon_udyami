@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { AdminSearchInput } from "@/components/admin/admin-search-input";
+import { AdminPagination, PaginationMeta } from "@/components/admin/admin-pagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -58,24 +60,42 @@ export default function AdminLeadsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  const fetchLeads = async () => {
+  // Pagination State
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [meta, setMeta] = useState<PaginationMeta>({
+    total: 0,
+    page: 1,
+    limit: 10,
+    totalPages: 1,
+  });
+
+  const fetchLeads = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/leads");
+      const params = new URLSearchParams();
+      if (search) params.set("search", search);
+      params.set("page", page.toString());
+      params.set("limit", limit.toString());
+
+      const res = await fetch(`/api/admin/leads?${params.toString()}`);
       const data = await res.json();
       if (res.ok && data.leads) {
         setLeads(data.leads);
+        if (data.meta) {
+          setMeta(data.meta);
+        }
       }
     } catch (err) {
       console.error("Failed to load leads:", err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [search, page, limit]);
 
   useEffect(() => {
     fetchLeads();
-  }, []);
+  }, [fetchLeads]);
 
   const handleStatusChange = async (leadId: string, newStatus: string) => {
     try {
@@ -112,14 +132,17 @@ export default function AdminLeadsPage() {
   const filteredLeads = leads.filter(
     (l) =>
       (l.user?.name && l.user.name.toLowerCase().includes(search.toLowerCase())) ||
+      (l.user?.email && l.user.email.toLowerCase().includes(search.toLowerCase())) ||
       (l.user?.mobile && l.user.mobile.includes(search)) ||
-      (l.message && l.message.toLowerCase().includes(search.toLowerCase()))
+      (l.message && l.message.toLowerCase().includes(search.toLowerCase())) ||
+      (l.partner?.name && l.partner.name.toLowerCase().includes(search.toLowerCase())) ||
+      (l.id && l.id.toLowerCase().includes(search.toLowerCase()))
   );
 
   return (
     <div className="space-y-6 font-sans">
       {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-lg border border-slate-200 shadow-2xs">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Store className="h-5 w-5 text-purple-600" />
@@ -137,7 +160,7 @@ export default function AdminLeadsPage() {
           size="sm"
           onClick={fetchLeads}
           disabled={loading}
-          className="h-9 rounded-xl text-xs gap-1.5 cursor-pointer self-start sm:self-auto"
+          className="h-9 rounded-lg text-xs gap-1.5 cursor-pointer self-start sm:self-auto"
         >
           <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
           <span>रिफ्रेश</span>
@@ -145,25 +168,23 @@ export default function AdminLeadsPage() {
       </div>
 
       {/* Search and Stats */}
-      <div className="flex items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input
-            type="text"
-            placeholder="नाम, मोबाइल या ट्रैकिंग आईडी खोजें..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="h-9 pl-9 text-xs rounded-xl bg-slate-50 border-slate-200"
-          />
-        </div>
+      <div className="flex items-center justify-between gap-4 bg-white p-4 rounded-lg border border-slate-200 shadow-2xs">
+        <AdminSearchInput
+          value={search}
+          onChange={(val) => {
+            setSearch(val);
+            setPage(1);
+          }}
+          placeholder="Search by Applicant Name, Mobile, Email, Interest or Lead ID... (Esc to clear)"
+        />
 
         <div className="text-xs text-slate-500 font-semibold">
-          कुल लीड्स: <strong className="text-slate-900">{filteredLeads.length}</strong>
+          Total Leads: <strong className="text-slate-900">{filteredLeads.length}</strong>
         </div>
       </div>
 
       {/* Leads Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+      <div className="bg-white rounded-lg border border-slate-200 shadow-2xs overflow-hidden">
         <Table>
           <TableHeader className="bg-slate-50">
             <TableRow>
@@ -242,6 +263,17 @@ export default function AdminLeadsPage() {
             )}
           </TableBody>
         </Table>
+
+        {!loading && leads.length > 0 && (
+          <AdminPagination
+            meta={meta}
+            onPageChange={setPage}
+            onLimitChange={(newLimit) => {
+              setLimit(newLimit);
+              setPage(1);
+            }}
+          />
+        )}
       </div>
     </div>
   );

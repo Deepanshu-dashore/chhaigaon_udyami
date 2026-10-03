@@ -127,234 +127,239 @@ export default function PrivacyPolicyPage() {
             </aside>
 
             {/* Right Side Minimalist Content Box */}
-            <div className="lg:col-span-8 bg-white p-5 sm:p-8 rounded-2xl border border-slate-200/80 shadow-2xs space-y-6 text-slate-700 leading-relaxed text-xs sm:text-sm">
+            <div className="lg:col-span-8 bg-white p-6 sm:p-10 rounded-2xl border border-slate-200/80 shadow-2xs space-y-8 text-slate-700 text-sm sm:text-base leading-relaxed sm:leading-loose">
               
               {/* Section 1 */}
-              <section id="intro" className="scroll-mt-24">
+              <section id="intro" className="scroll-mt-24 space-y-3">
                 <div>
-                  <h2 className="text-lg mb-1.5 sm:text-xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2">
+                  <h2 className="text-xl sm:text-2xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2.5">
                     <ShieldCheck className="w-7 h-7 p-1.5 rounded-md bg-[#0056d2]/15 text-[#0056d2] shrink-0" />
                     <span>1. परिचय (Introduction & Scope)</span>
                   </h2>
-                  <p className="text-xs text-slate-500 font-normal mt-0.5">
+                  <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1">
                     मंच का उद्देश्य, दायरा और डेटा प्रसंस्करण की मूल नीति
                   </p>
                 </div>
                 
                 <Separator className="bg-slate-100/80 my-3" />
                 
-                <p className="text-slate-600 leading-relaxed font-sans text-xs sm:text-sm pt-1">
-                  छैगांव उद्यमी ("हम", "हमारा" या "मंच") ग्रामीण कौशल विकास और उद्यमिता प्रशिक्षण हेतु एक समर्पित डिजिटल प्लेटफॉर्म है। यह गोपनीयता नीति बताती है कि जब आप हमारी वेबसाइट (<code className="text-xs bg-blue-50 text-[#0056d2] px-1.5 py-0.5 rounded font-medium">www.chhaigaonudyami.in</code>) का उपयोग करते हैं या पाठ्यक्रमों में नामांकन लेते हैं, तो आपकी जानकारी का किस प्रकार संग्रह और प्रसंस्करण किया जाता है।
+                <p className="text-slate-700 leading-relaxed sm:leading-loose pt-1">
+                  छैगांव उद्यमी ("हम", "हमारा" या "मंच") ग्रामीण कौशल विकास और उद्यमिता प्रशिक्षण हेतु एक समर्पित डिजिटल प्लेटफॉर्म है। यह गोपनीयता नीति बताती है कि जब आप हमारी वेबसाइट (<code className="text-xs sm:text-sm bg-blue-50 text-[#0056d2] px-2 py-0.5 rounded font-medium">www.chhaigaonudyami.in</code>) का उपयोग करते हैं या पाठ्यक्रमों में नामांकन लेते हैं, तो आपकी जानकारी का किस प्रकार संग्रह और प्रसंस्करण किया जाता है।
                 </p>
                 
-                <p className="text-xs text-slate-500 bg-slate-50 p-3 rounded-xl border border-slate-100 mt-3">
+                <div className="text-xs sm:text-sm text-slate-600 bg-slate-50/80 p-4 rounded-xl border-l-4 border-[#0056d2] mt-4 leading-relaxed">
                   हमारी सेवाओं का उपयोग करके, आप इस नीति में वर्णित शर्तों के अनुसार डेटा संग्रह और उपयोग के लिए अपनी सहमति प्रदान करते हैं।
-                </p>
+                </div>
               </section>
 
               {/* Section 2 */}
-              <section id="data-collected" className="scroll-mt-24">
-                <Separator className="bg-slate-100/80 my-5" />
+              <section id="data-collected" className="scroll-mt-24 space-y-3">
+                <Separator className="bg-slate-100/80 my-6" />
 
                 <div>
-                  <h2 className="text-lg mb-1.5 sm:text-xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2">
+                  <h2 className="text-xl sm:text-2xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2.5">
                     <Database className="w-7 h-7 p-1.5 rounded-md bg-emerald-600/15 text-emerald-600 shrink-0" />
                     <span>2. एकत्रित की जाने वाली जानकारी (Data We Collect)</span>
                   </h2>
-                  <p className="text-xs text-slate-500 font-normal mt-0.5">
+                  <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1">
                     हमारे द्वारा उपयोगकर्ताओं से एकत्रित किए जाने वाले डेटा की श्रेणीबद्ध सूची
                   </p>
                 </div>
 
                 <Separator className="bg-slate-100/80 my-3" />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                  <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-100 hover:border-blue-200 transition-colors">
-                    <h4 className="font-bold text-slate-900 text-xs font-headline mb-0.5">व्यक्तिगत पहचान जानकारी</h4>
-                    <p className="text-xs text-slate-500 leading-relaxed">पूरा नाम, मोबाइल नंबर, ईमेल पता, डाक पता, राज्य एवं ज़िला।</p>
-                  </div>
-
-                  <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-100 hover:border-blue-200 transition-colors">
-                    <h4 className="font-bold text-slate-900 text-xs font-headline mb-0.5">खाता व प्रोफाइल डेटा</h4>
-                    <p className="text-xs text-slate-500 leading-relaxed">यूजरनेम, पासवर्ड, प्रोफ़ाइल चित्र, शैक्षणिक योग्यता और उद्यम संबंधी रुचियां।</p>
-                  </div>
-
-                  <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-100 hover:border-blue-200 transition-colors">
-                    <h4 className="font-bold text-slate-900 text-xs font-headline mb-0.5">पाठ्यक्रम व प्रगति डेटा</h4>
-                    <p className="text-xs text-slate-500 leading-relaxed">देखें गए वीडियो, पूर्ण किए गए क्विज़, प्राप्त अंक और जारी किए गए प्रमाण पत्र (Certificates)।</p>
-                  </div>
-
-                  <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-100 hover:border-blue-200 transition-colors">
-                    <h4 className="font-bold text-slate-900 text-xs font-headline mb-0.5">सुरक्षित भुगतान जानकारी</h4>
-                    <p className="text-xs text-slate-500 leading-relaxed">RBI पंजीकृत पेमेंट्स पार्टनर्स (Razorpay/PhonePe) द्वारा केवल सुरक्षित ट्रांजैक्शन आईडी प्रोसेस होती है।</p>
-                  </div>
-                </div>
+                <ul className="space-y-3.5 pt-2 text-slate-700">
+                  <li className="flex items-start gap-3">
+                    <span className="w-2 h-2 rounded-full bg-[#0056d2] shrink-0 mt-2.5" />
+                    <div className="leading-relaxed sm:leading-loose">
+                      <strong className="font-semibold text-slate-900">व्यक्तिगत पहचान जानकारी:</strong> पूरा नाम, मोबाइल नंबर, ईमेल पता, डाक पता, राज्य एवं ज़िला।
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-2 h-2 rounded-full bg-[#0056d2] shrink-0 mt-2.5" />
+                    <div className="leading-relaxed sm:leading-loose">
+                      <strong className="font-semibold text-slate-900">खाता व प्रोफाइल डेटा:</strong> यूजरनेम, पासवर्ड, प्रोफ़ाइल चित्र, शैक्षणिक योग्यता और उद्यम संबंधी रुचियां।
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-2 h-2 rounded-full bg-[#0056d2] shrink-0 mt-2.5" />
+                    <div className="leading-relaxed sm:leading-loose">
+                      <strong className="font-semibold text-slate-900">पाठ्यक्रम व प्रगति डेटा:</strong> देखें गए वीडियो, पूर्ण किए गए क्विज़, प्राप्त अंक और जारी किए गए प्रमाण पत्र (Certificates)।
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="w-2 h-2 rounded-full bg-[#0056d2] shrink-0 mt-2.5" />
+                    <div className="leading-relaxed sm:leading-loose">
+                      <strong className="font-semibold text-slate-900">सुरक्षित भुगतान जानकारी:</strong> RBI पंजीकृत पेमेंट्स पार्टनर्स (Razorpay/PhonePe) द्वारा केवल सुरक्षित ट्रांजैक्शन आईडी प्रोसेस होती है।
+                    </div>
+                  </li>
+                </ul>
               </section>
 
               {/* Section 3 */}
-              <section id="use-of-data" className="scroll-mt-24">
-                <Separator className="bg-slate-100/80 my-5" />
+              <section id="use-of-data" className="scroll-mt-24 space-y-3">
+                <Separator className="bg-slate-100/80 my-6" />
 
                 <div>
-                  <h2 className="text-lg mb-1.5 sm:text-xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2">
+                  <h2 className="text-xl sm:text-2xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2.5">
                     <UserCheck className="w-7 h-7 p-1.5 rounded-md bg-purple-600/15 text-purple-600 shrink-0" />
                     <span>3. जानकारी का उपयोग (How We Use Information)</span>
                   </h2>
-                  <p className="text-xs text-slate-500 font-normal mt-0.5">
+                  <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1">
                     डेटा के उपयोग का व्यावसायिक उद्देश्य व कानूनी सीमा
                   </p>
                 </div>
 
                 <Separator className="bg-slate-100/80 my-3" />
 
-                <div className="space-y-2 pt-1">
+                <ul className="space-y-3 pt-2 text-slate-700">
                   {[
                     "प्रमाणित शिक्षण प्रदान करना: पाठ्यक्रम सामग्री, क्विज़ और डिजिटल प्रमाण पत्र जारी करने के लिए।",
                     "सरकारी योजना व लोन परामर्श: PMEGP, मुद्रा लोन हेतु आवश्यक विस्तृत प्रोजेक्ट रिपोर्ट (DPR) तैयार करने में सहयोग।",
                     "हेल्पलाइन व संचार: SMS, व्हाट्सएप या ईमेल द्वारा महत्वपूर्ण अपडेट व सहायता सूचनाएं भेजना।",
                     "सुरक्षा व अनाधिकृत पहुंच रोकना: कॉपीराइट उल्लंघन और धोखाधड़ी गतिविधियों को रोकने हेतु।",
                   ].map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-2.5 p-3 rounded-lg bg-slate-50 border border-slate-100 text-xs text-slate-700">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                    <li key={idx} className="flex items-start gap-3 leading-relaxed sm:leading-loose">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-1" />
                       <span>{item}</span>
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </section>
 
               {/* Section 4 */}
-              <section id="data-security" className="scroll-mt-24">
-                <Separator className="bg-slate-100/80 my-5" />
+              <section id="data-security" className="scroll-mt-24 space-y-3">
+                <Separator className="bg-slate-100/80 my-6" />
 
                 <div>
-                  <h2 className="text-lg mb-1.5 sm:text-xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2">
+                  <h2 className="text-xl sm:text-2xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2.5">
                     <Lock className="w-7 h-7 p-1.5 rounded-md bg-amber-600/15 text-amber-600 shrink-0" />
                     <span>4. डेटा सुरक्षा व एन्क्रिप्शन (Data Security)</span>
                   </h2>
-                  <p className="text-xs text-slate-500 font-normal mt-0.5">
+                  <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1">
                     सर्वर सुरक्षा, एन्क्रिप्शन मानक और तृतीय-पक्ष गोपनीयता
                   </p>
                 </div>
 
                 <Separator className="bg-slate-100/80 my-3" />
 
-                <p className="text-slate-600 text-xs sm:text-sm pt-1">
+                <p className="text-slate-700 leading-relaxed sm:leading-loose pt-1">
                   हमारी वेबसाइट SSL एन्क्रिप्शन (HTTPS) द्वारा पूर्णतः सुरक्षित है। आपका डेटा उद्योग-मानक डेटाबेस और सुरक्षित क्लाउड सर्वर पर संग्रहीत किया जाता है।
                 </p>
 
-                <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-100 text-blue-900 text-xs flex items-center gap-2 mt-3">
-                  <ShieldCheck className="w-4 h-4 text-[#0056d2] shrink-0" />
+                <div className="p-4 rounded-xl bg-blue-50/70 border-l-4 border-[#0056d2] text-blue-950 text-xs sm:text-sm flex items-center gap-3 mt-3 leading-relaxed">
+                  <ShieldCheck className="w-5 h-5 text-[#0056d2] shrink-0" />
                   <span>हम कभी भी आपकी व्यक्तिगत जानकारी को किसी तीसरे पक्ष को वाणिज्यिक विज्ञापनों हेतु नहीं बेचते हैं।</span>
                 </div>
               </section>
 
               {/* Section 5 */}
-              <section id="cookies" className="scroll-mt-24">
-                <Separator className="bg-slate-100/80 my-5" />
+              <section id="cookies" className="scroll-mt-24 space-y-3">
+                <Separator className="bg-slate-100/80 my-6" />
 
                 <div>
-                  <h2 className="text-lg mb-1.5 sm:text-xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2">
+                  <h2 className="text-xl sm:text-2xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2.5">
                     <Eye className="w-7 h-7 p-1.5 rounded-md bg-blue-600/15 text-[#0056d2] shrink-0" />
                     <span>5. कुकीज़ व ट्रैकिंग नीति (Cookies & Analytics)</span>
                   </h2>
-                  <p className="text-xs text-slate-500 font-normal mt-0.5">
+                  <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1">
                     कुकी प्रकार, उपयोग सत्र प्रबंधन और एनालिटिक्स प्राथमिकताएं
                   </p>
                 </div>
 
                 <Separator className="bg-slate-100/80 my-3" />
 
-                <p className="text-slate-600 text-xs sm:text-sm pt-1">
+                <p className="text-slate-700 leading-relaxed sm:leading-loose pt-1">
                   हमारी वेबसाइट लॉगिन सत्र बनाए रखने, यूजर नेविगेशन और एनालिटिक्स के लिए 'कुकीज़' का उपयोग करती है। आप अपने ब्राउज़र सेटिंग्स से कुकीज़ को बंद कर सकते हैं।
                 </p>
               </section>
 
               {/* Section 6 */}
-              <section id="third-party" className="scroll-mt-24">
-                <Separator className="bg-slate-100/80 my-5" />
+              <section id="third-party" className="scroll-mt-24 space-y-3">
+                <Separator className="bg-slate-100/80 my-6" />
 
                 <div>
-                  <h2 className="text-lg mb-1.5 sm:text-xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2">
+                  <h2 className="text-xl sm:text-2xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2.5">
                     <Globe className="w-7 h-7 p-1.5 rounded-md bg-indigo-600/15 text-indigo-600 shrink-0" />
                     <span>6. तृतीय-पक्ष सेवाएं व साझाकरण (Third Parties)</span>
                   </h2>
-                  <p className="text-xs text-slate-500 font-normal mt-0.5">
+                  <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1">
                     सुरक्षित पेमेंट्स, प्रमाण पत्र सत्यापन व एसएमएस एपीआई प्रदाता
                   </p>
                 </div>
 
                 <Separator className="bg-slate-100/80 my-3" />
 
-                <p className="text-slate-600 text-xs sm:text-sm pt-1">
+                <p className="text-slate-700 leading-relaxed sm:leading-loose pt-1">
                   हम ऑनलाइन भुगतान (Razorpay/PhonePe), एसएमएस सत्यापन (OTP) और डिजिटल प्रमाण पत्र जारी करने हेतु केवल प्रमाणित प्रदाताओं के साथ डेटा साझा करते हैं।
                 </p>
               </section>
 
               {/* Section 7 */}
-              <section id="user-rights" className="scroll-mt-24">
-                <Separator className="bg-slate-100/80 my-5" />
+              <section id="user-rights" className="scroll-mt-24 space-y-3">
+                <Separator className="bg-slate-100/80 my-6" />
 
                 <div>
-                  <h2 className="text-lg mb-1.5 sm:text-xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2">
+                  <h2 className="text-xl sm:text-2xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2.5">
                     <Shield className="w-7 h-7 p-1.5 rounded-md bg-emerald-600/15 text-emerald-600 shrink-0" />
                     <span>7. उपयोगकर्ता के अधिकार (Your Privacy Rights)</span>
                   </h2>
-                  <p className="text-xs text-slate-500 font-normal mt-0.5">
+                  <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1">
                     डेटा तक पहुंच, प्रोफाइल संशोधन और सहमति वापस लेने का अधिकार
                   </p>
                 </div>
 
                 <Separator className="bg-slate-100/80 my-3" />
 
-                <p className="text-slate-600 text-xs sm:text-sm pt-1">
+                <p className="text-slate-700 leading-relaxed sm:leading-loose pt-1">
                   भारतीय DPDP अधिनियम के तहत आपके पास अपनी प्रोफ़ाइल जानकारी की समीक्षा करने, सुधार करने और डेटा प्रोसेसिंग सहमति वापस लेने का अधिकार है।
                 </p>
               </section>
 
               {/* Section 8 */}
-              <section id="retention" className="scroll-mt-24">
-                <Separator className="bg-slate-100/80 my-5" />
+              <section id="retention" className="scroll-mt-24 space-y-3">
+                <Separator className="bg-slate-100/80 my-6" />
 
                 <div>
-                  <h2 className="text-lg mb-1.5 sm:text-xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2">
+                  <h2 className="text-xl sm:text-2xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2.5">
                     <FileDigit className="w-7 h-7 p-1.5 rounded-md bg-amber-600/15 text-amber-600 shrink-0" />
                     <span>8. डेटा प्रतिधारण व विलोपन (Data Retention & Deletion)</span>
                   </h2>
-                  <p className="text-xs text-slate-500 font-normal mt-0.5">
+                  <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1">
                     डेटा संग्रहण अवधि और खाता स्थायी रूप से हटाने की प्रक्रिया
                   </p>
                 </div>
 
                 <Separator className="bg-slate-100/80 my-3" />
 
-                <p className="text-slate-600 text-xs sm:text-sm pt-1">
-                  हम आपका डेटा केवल तब तक रखते हैं जब तक यह सेवाएं देने और वित्तीय ऑडिट रिकॉर्ड के लिए आवश्यक हो। खाते के विलोपन के लिए <code className="text-xs bg-blue-50 text-[#0056d2] px-1.5 py-0.5 rounded font-medium">privacy@chhaigaonudyami.in</code> पर ईमेल करें।
+                <p className="text-slate-700 leading-relaxed sm:leading-loose pt-1">
+                  हम आपका डेटा केवल तब तक रखते हैं जब तक यह सेवाएं देने और वित्तीय ऑडिट रिकॉर्ड के लिए आवश्यक हो। खाते के विलोपन के लिए <code className="text-xs sm:text-sm bg-blue-50 text-[#0056d2] px-2 py-0.5 rounded font-medium">privacy@chhaigaonudyami.in</code> पर ईमेल करें।
                 </p>
               </section>
 
               {/* Section 9 */}
-              <section id="grievance" className="scroll-mt-24">
-                <Separator className="bg-slate-100/80 my-5" />
+              <section id="grievance" className="scroll-mt-24 space-y-3">
+                <Separator className="bg-slate-100/80 my-6" />
 
                 <div>
-                  <h2 className="text-lg mb-1.5 sm:text-xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2">
+                  <h2 className="text-xl sm:text-2xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2.5">
                     <Mail className="w-7 h-7 p-1.5 rounded-md bg-slate-900/15 text-slate-900 shrink-0" />
                     <span>9. शिकायत निवारण अधिकारी व संपर्क (Grievance Officer)</span>
                   </h2>
-                  <p className="text-xs text-slate-500 font-normal mt-0.5">
+                  <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1">
                     डेटा गोपनीयता संबंधी प्रश्नों व शिकायतों हेतु अधिकृत संपर्क
                   </p>
                 </div>
 
                 <Separator className="bg-slate-100/80 my-3" />
 
-                <div className="p-5 rounded-xl bg-gradient-to-br from-slate-900 to-blue-950 text-white space-y-2 text-xs pt-1">
-                  <p className="font-bold text-blue-300 font-headline text-sm">
+                <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-blue-950 text-white space-y-3 text-xs sm:text-sm pt-4 leading-relaxed">
+                  <p className="font-bold text-blue-300 font-headline text-base">
                     शिकायत निवारण अधिकारी (Grievance Redressal Officer)
                   </p>
-                  <p className="text-slate-300">छैगांव उद्यमी मंच (Chhaigaon Udyami Ecosystem)</p>
-                  <p className="text-slate-300">जनपद पंचायत मार्ग, छैगांव माखन, ज़िला खंडवा (म.प्र.) - 450771</p>
-                  <div className="pt-2 border-t border-slate-800 flex flex-wrap gap-4 text-slate-300">
+                  <p className="text-slate-200">छैगांव उद्यमी मंच (Chhaigaon Udyami Ecosystem)</p>
+                  <p className="text-slate-200">जनपद पंचायत मार्ग, छैगांव माखन, ज़िला खंडवा (म.प्र.) - 450771</p>
+                  <div className="pt-3 border-t border-slate-800/80 flex flex-wrap gap-4 text-slate-300">
                     <span>ईमेल: <a href="mailto:privacy@chhaigaonudyami.in" className="text-blue-400 underline font-semibold">privacy@chhaigaonudyami.in</a></span>
                     <span>हेल्पलाइन: <strong className="text-white">+91 98765 43210</strong></span>
                   </div>

@@ -58,7 +58,7 @@ export function AdminProfileAvatar({ user }: AdminProfileAvatarProps) {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="relative flex items-center gap-2.5 h-10 px-2 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer focus-visible:ring-1 focus-visible:ring-blue-600"
+          className="relative flex items-center gap-2.5 h-10 px-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer focus-visible:ring-1 focus-visible:ring-blue-600"
         >
           <div className="relative">
             <UserAvatar
@@ -84,7 +84,7 @@ export function AdminProfileAvatar({ user }: AdminProfileAvatarProps) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        className="w-64 p-1.5 rounded-2xl border-slate-200 shadow-xl bg-white"
+        className="w-64 p-1.5 rounded-lg border-slate-200 shadow-xl bg-white"
         align="end"
         sideOffset={6}
       >

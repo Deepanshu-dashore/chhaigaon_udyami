@@ -31,9 +31,15 @@ export async function GET(req: Request) {
       ];
     }
 
-    const [orders, totalRevenueAggregate, paidCount, pendingCount] = await Promise.all([
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "10", 10);
+    const skip = (page - 1) * limit;
+
+    const [orders, total, totalRevenueAggregate, paidCount, pendingCount] = await Promise.all([
       prisma.order.findMany({
         where: whereClause,
+        skip,
+        take: limit,
         include: {
           user: {
             select: {
@@ -54,6 +60,7 @@ export async function GET(req: Request) {
         },
         orderBy: { createdAt: "desc" },
       }),
+      prisma.order.count({ where: whereClause }),
       prisma.order.aggregate({
         _sum: { amount: true },
         where: { status: "PAID" },
@@ -69,7 +76,13 @@ export async function GET(req: Request) {
         totalRevenue: totalRevenueAggregate._sum.amount ? Number(totalRevenueAggregate._sum.amount) : 0,
         paidCount,
         pendingCount,
-        totalOrders: orders.length,
+        totalOrders: total,
+      },
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       },
     });
   } catch (error: any) {

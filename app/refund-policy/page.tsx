@@ -65,119 +65,143 @@ export default function RefundPolicyPage() {
 
         {/* Content Section */}
         <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="bg-white p-5 sm:p-8 rounded-2xl border border-slate-200/80 shadow-2xs space-y-6 text-slate-700 leading-relaxed text-xs sm:text-sm">
+          <div className="bg-white p-6 sm:p-10 rounded-2xl border border-slate-200/80 shadow-2xs space-y-8 text-slate-700 text-sm sm:text-base leading-relaxed sm:leading-loose">
             
             {/* Highlight Banner: 7 Day Money Back Guarantee */}
-            <div className="p-4 sm:p-5 rounded-xl bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-200/80 flex items-center gap-3.5 text-emerald-950">
-              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-2xs">
+            <div className="p-4 sm:p-5 rounded-r-xl border-l-4 border-emerald-500 bg-emerald-50/60 flex items-start gap-4 text-emerald-950">
+              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
                 <RotateCcw className="w-5 h-5" />
               </div>
-              <div>
-                <h3 className="font-bold text-sm font-headline text-emerald-900">7-दिन की मनी-बैक गारंटी (7-Day Money Back Guarantee)</h3>
-                <p className="text-xs text-slate-600 mt-0.5 leading-normal">
+              <div className="space-y-1">
+                <h3 className="font-bold text-sm sm:text-base font-headline text-emerald-900">7-दिन की मनी-बैक गारंटी (7-Day Money Back Guarantee)</h3>
+                <p className="text-xs sm:text-sm text-emerald-950 leading-relaxed sm:leading-loose">
                   यदि आप खरीदे गए ऑनलाइन पाठ्यक्रम से संतुष्ट नहीं हैं, तो नामांकन के 7 दिनों के भीतर 100% रिफंड का दावा कर सकते हैं।
                 </p>
               </div>
             </div>
 
             {/* Section 1: Refund Eligibility */}
-            <div className="space-y-1.5">
+            <section id="eligibility" className="space-y-3">
               <div>
-                <h2 className="text-base sm:text-lg font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2">
-                  <CheckCircle2 className="w-7 h-7 p-1 rounded-md bg-emerald-600/15 text-emerald-600 shrink-0" />
+                <h2 className="text-xl sm:text-2xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2.5">
+                  <CheckCircle2 className="w-7 h-7 p-1.5 rounded-md bg-emerald-600/15 text-emerald-600 shrink-0" />
                   <span>1. रिफंड हेतु पात्रता (Refund Eligibility)</span>
                 </h2>
-                <p className="text-xs text-slate-500 font-normal mt-0.5">
+                <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1">
                   स्वीकृत रिफंड दावे हेतु आवश्यक शर्तें व समय सीमा
                 </p>
               </div>
 
               <Separator className="bg-slate-100/80 my-3" />
 
-              <div className="space-y-1.5 pt-1 text-xs text-slate-600">
-                <p className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">• खरीद के 7 दिनों के भीतर अनुरोध किया गया हो और 30% से कम पाठ्यक्रम देखा गया हो।</p>
-                <p className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">• खाते से गलती से एक ही कोर्स हेतु दोहरा भुगतान (Duplicate Charge) हुआ हो।</p>
-                <p className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">• तकनीकी खराबी के कारण कोर्स कंटेंट सक्रिय (Activate) न होने पर।</p>
-              </div>
-            </div>
+              <ul className="space-y-3 pt-2 text-slate-700">
+                <li className="flex items-start gap-3 leading-relaxed sm:leading-loose">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-1" />
+                  <span>खरीद के 7 दिनों के भीतर अनुरोध किया गया हो और 30% से कम पाठ्यक्रम देखा गया हो।</span>
+                </li>
+                <li className="flex items-start gap-3 leading-relaxed sm:leading-loose">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-1" />
+                  <span>खाते से गलती से एक ही कोर्स हेतु दोहरा भुगतान (Duplicate Charge) हुआ हो।</span>
+                </li>
+                <li className="flex items-start gap-3 leading-relaxed sm:leading-loose">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-1" />
+                  <span>तकनीकी खराबी के कारण कोर्स कंटेंट सक्रिय (Activate) न होने पर।</span>
+                </li>
+              </ul>
+            </section>
 
             {/* Section 2: Non-Refundable */}
-            <div className="space-y-1.5">
-              <Separator className="bg-slate-100/80 my-5" />
+            <section id="non-refundable" className="space-y-3">
+              <Separator className="bg-slate-100/80 my-6" />
 
               <div>
-                <h2 className="text-base sm:text-lg font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2">
-                  <XCircle className="w-7 h-7 p-1 rounded-md bg-rose-600/15 text-rose-600 shrink-0" />
+                <h2 className="text-xl sm:text-2xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2.5">
+                  <XCircle className="w-7 h-7 p-1.5 rounded-md bg-rose-600/15 text-rose-600 shrink-0" />
                   <span>2. गैर-वापसी योग्य स्थितियां (Non-Refundable Scenarios)</span>
                 </h2>
-                <p className="text-xs text-slate-500 font-normal mt-0.5">
+                <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1">
                   अपवाद जहां रिफंड का दावा अमान्य माना जाएगा
                 </p>
               </div>
 
               <Separator className="bg-slate-100/80 my-3" />
 
-              <div className="space-y-1.5 pt-1 text-xs text-rose-950">
-                <p className="p-2.5 rounded-lg bg-rose-50/50 border border-rose-100">• 7 दिन से अधिक समय बीत जाने के बाद।</p>
-                <p className="p-2.5 rounded-lg bg-rose-50/50 border border-rose-100">• यदि 50% से अधिक कोर्स पूर्ण हो चुका हो या प्रमाण पत्र जारी हो गया हो।</p>
-                <p className="p-2.5 rounded-lg bg-rose-50/50 border border-rose-100">• कस्टमाइज्ड प्रोजेक्ट रिपोर्ट (DPR) डिलीवरी पूर्ण होने के बाद।</p>
-              </div>
-            </div>
+              <ul className="space-y-3 pt-2 text-slate-700">
+                <li className="flex items-start gap-3 leading-relaxed sm:leading-loose">
+                  <XCircle className="w-5 h-5 text-rose-600 shrink-0 mt-1" />
+                  <span>7 दिन से अधिक समय बीत जाने के बाद किया गया अनुरोध।</span>
+                </li>
+                <li className="flex items-start gap-3 leading-relaxed sm:leading-loose">
+                  <XCircle className="w-5 h-5 text-rose-600 shrink-0 mt-1" />
+                  <span>यदि 50% से अधिक कोर्स सामग्री पूर्ण देखी जा चुकी हो अथवा डिजिटल प्रमाण पत्र जारी हो गया हो।</span>
+                </li>
+                <li className="flex items-start gap-3 leading-relaxed sm:leading-loose">
+                  <XCircle className="w-5 h-5 text-rose-600 shrink-0 mt-1" />
+                  <span>कस्टमाइज्ड प्रोजेक्ट रिपोर्ट (DPR) तैयार करके डिलीवरी पूर्ण होने के बाद।</span>
+                </li>
+              </ul>
+            </section>
 
             {/* Section 3: Processing Time */}
-            <div className="space-y-1.5">
-              <Separator className="bg-slate-100/80 my-5" />
+            <section id="timeline" className="space-y-3">
+              <Separator className="bg-slate-100/80 my-6" />
 
               <div>
-                <h2 className="text-base sm:text-lg font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2">
-                  <Clock className="w-7 h-7 p-1 rounded-md bg-[#0056d2]/15 text-[#0056d2] shrink-0" />
+                <h2 className="text-xl sm:text-2xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2.5">
+                  <Clock className="w-7 h-7 p-1.5 rounded-md bg-[#0056d2]/15 text-[#0056d2] shrink-0" />
                   <span>3. रिफंड प्रोसेसिंग समय (Timeline)</span>
                 </h2>
-                <p className="text-xs text-slate-500 font-normal mt-0.5">
+                <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1">
                   बैंक ट्रांसफर और मूल भुगतान स्रोत में रिफंड क्रेडिट का समय
                 </p>
               </div>
 
               <Separator className="bg-slate-100/80 my-3" />
 
-              <p className="text-slate-600 text-xs sm:text-sm pt-1">
-                अनुरोध स्वीकृत होने के बाद, आपका रिफंड <strong>5 से 7 कार्य दिवसों (5-7 Business Days)</strong> में आपके मूल भुगतान खाते में क्रेडिट कर दिया जाएगा।
+              <p className="text-slate-700 leading-relaxed sm:leading-loose pt-1">
+                अनुरोध स्वीकृत होने के बाद, आपका रिफंड <strong className="font-semibold text-slate-900">5 से 7 कार्य दिवसों (5-7 Business Days)</strong> में आपके मूल भुगतान खाते (Bank Account / UPI / Card) में स्वतः क्रेडिट कर दिया जाएगा।
               </p>
-            </div>
+            </section>
 
             {/* Section 4: How to Request */}
-            <div className="space-y-1.5">
-              <Separator className="bg-slate-100/80 my-5" />
+            <section id="how-to-request" className="space-y-3">
+              <Separator className="bg-slate-100/80 my-6" />
 
               <div>
-                <h2 className="text-base sm:text-lg font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2">
-                  <CreditCard className="w-7 h-7 p-1 rounded-md bg-purple-600/15 text-purple-600 shrink-0" />
+                <h2 className="text-xl sm:text-2xl font-bold font-headline text-slate-900 tracking-tight flex items-center gap-2.5">
+                  <CreditCard className="w-7 h-7 p-1.5 rounded-md bg-purple-600/15 text-purple-600 shrink-0" />
                   <span>4. रिफंड अनुरोध कैसे करें? (How to Request)</span>
                 </h2>
-                <p className="text-xs text-slate-500 font-normal mt-0.5">
+                <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1">
                   हेल्पडेस्क ईमेल पर रिफंड टिकट जमा करने की विधि
                 </p>
               </div>
 
               <Separator className="bg-slate-100/80 my-3" />
 
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1 text-xs text-slate-700">
-                <p>1. पंजीकृत ईमेल से <code className="text-xs bg-blue-50 text-[#0056d2] px-1.5 py-0.5 rounded font-semibold">support@chhaigaonudyami.in</code> पर ईमेल भेजें।</p>
-                <p>2. विषय (Subject): <strong>"Refund Request - [ट्रांजैक्शन आईडी]"</strong></p>
-                <p>3. नाम, मोबाइल नंबर और कारण स्पष्ट लिखें।</p>
-              </div>
-            </div>
+              <ol className="space-y-3.5 pt-2 text-slate-700 list-decimal list-inside">
+                <li className="leading-relaxed sm:leading-loose pl-1">
+                  पंजीकृत ईमेल से <code className="text-xs sm:text-sm bg-blue-50 text-[#0056d2] px-2 py-0.5 rounded font-semibold">support@chhaigaonudyami.in</code> पर ईमेल भेजें।
+                </li>
+                <li className="leading-relaxed sm:leading-loose pl-1">
+                  विषय (Subject) में स्पष्ट लिखें: <strong className="font-semibold text-slate-900">"Refund Request - [ट्रांजैक्शन आईडी]"</strong>
+                </li>
+                <li className="leading-relaxed sm:leading-loose pl-1">
+                  ईमेल में अपना पंजीकृत नाम, मोबाइल नंबर और रिफंड अनुरोध का कारण स्पष्ट साझा करें।
+                </li>
+              </ol>
+            </section>
 
             {/* Bottom Support Banner */}
-            <div className="pt-2">
-              <div className="p-4 sm:p-5 rounded-xl bg-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="pt-4 border-t border-slate-100">
+              <div className="p-5 sm:p-6 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <p className="font-bold text-white text-xs sm:text-sm font-headline">भुगतान या रिफंड संबंधी समस्या है?</p>
-                  <p className="text-slate-400 text-xs mt-0.5">हमारी सहायता टीम से संपर्क करें: +91 98765 43210</p>
+                  <p className="font-bold text-white text-sm sm:text-base font-headline">भुगतान या रिफंड संबंधी समस्या है?</p>
+                  <p className="text-slate-300 text-xs sm:text-sm mt-0.5">हमारी सहायता टीम से संपर्क करें: +91 98765 43210</p>
                 </div>
                 <Link
                   href="/contact"
-                  className="px-3.5 py-2 bg-[#0056d2] hover:bg-blue-600 text-white font-bold text-xs rounded-lg shadow-2xs transition-all whitespace-nowrap"
+                  className="px-4 py-2.5 bg-[#0056d2] hover:bg-blue-600 text-white font-bold text-xs sm:text-sm rounded-xl shadow-2xs transition-all whitespace-nowrap"
                 >
                   हेल्पडेस्क
                 </Link>

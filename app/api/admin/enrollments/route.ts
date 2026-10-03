@@ -14,8 +14,11 @@ export async function GET(req: Request) {
     }
 
     const { searchParams } = new URL(req.url);
-    const search = searchParams.get("search") || "";
+    const search = searchParams.get("search")?.trim() || "";
     const status = searchParams.get("status") || "ALL";
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
+    const limit = Math.max(1, parseInt(searchParams.get("limit") || "10", 10));
+    const skip = (page - 1) * limit;
 
     const whereClause: any = {};
     if (status !== "ALL") {
@@ -30,31 +33,45 @@ export async function GET(req: Request) {
       ];
     }
 
-    const enrollments = await prisma.enrollment.findMany({
-      where: whereClause,
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            mobile: true,
-            role: true,
+    const [enrollments, total] = await Promise.all([
+      prisma.enrollment.findMany({
+        where: whereClause,
+        skip,
+        take: limit,
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              mobile: true,
+              role: true,
+            },
+          },
+          course: {
+            select: {
+              id: true,
+              title: true,
+              slug: true,
+              price: true,
+            },
           },
         },
-        course: {
-          select: {
-            id: true,
-            title: true,
-            slug: true,
-            price: true,
-          },
-        },
-      },
-      orderBy: { enrolledAt: "desc" },
-    });
+        orderBy: { enrolledAt: "desc" },
+      }),
+      prisma.enrollment.count({ where: whereClause }),
+    ]);
 
-    return NextResponse.json({ success: true, data: enrollments });
+    return NextResponse.json({
+      success: true,
+      data: enrollments,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error: any) {
     console.error("GET /api/admin/enrollments error:", error);
     return NextResponse.json(

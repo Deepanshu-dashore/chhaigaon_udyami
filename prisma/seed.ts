@@ -3,14 +3,41 @@ import prisma from "../lib/prisma";
 async function main() {
   console.log("🌱 Seeding Chhaigaon Udyami database...");
 
-  // 1. Super Admin User
+  // 1. Super Admin User (Deepanshu Dashore & Default Admin)
   const adminUser = await prisma.user.upsert({
+    where: { email: "dipanshu.dashore.dev@gmail.com" },
+    update: {
+      role: "SUPER_ADMIN",
+      status: "ACTIVE",
+      isVerified: true,
+    },
+    create: {
+      email: "dipanshu.dashore.dev@gmail.com",
+      name: "Deepanshu Dashore",
+      mobile: "+919876543210",
+      role: "SUPER_ADMIN",
+      status: "ACTIVE",
+      isVerified: true,
+      profile: {
+        create: {
+          bio: "Super Administrator for Chhaigaon Udyami platform.",
+          district: "Khandwa",
+          state: "Madhya Pradesh",
+        },
+      },
+    },
+  });
+
+  await prisma.user.upsert({
     where: { email: "admin@chhaigaonudyami.in" },
-    update: {},
+    update: {
+      role: "SUPER_ADMIN",
+      status: "ACTIVE",
+    },
     create: {
       email: "admin@chhaigaonudyami.in",
       name: "Chhaigaon Udyami Admin",
-      mobile: "+919876543210",
+      mobile: "+919876543211",
       role: "SUPER_ADMIN",
       status: "ACTIVE",
       isVerified: true,
