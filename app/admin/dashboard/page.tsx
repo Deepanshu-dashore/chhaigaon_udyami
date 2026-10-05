@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -73,45 +74,63 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-6">
-      {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-linear-to-r from-purple-900 via-indigo-900 to-slate-900 text-white p-6 sm:p-8 rounded-2xl shadow-md">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <Badge className="bg-purple-500 hover:bg-purple-600 text-white font-bold text-xs uppercase tracking-wider">
-              Console
-            </Badge>
-            <span className="text-purple-200 text-xs font-semibold">
-              सिस्टम प्रबंधन एवं नियंत्रण
-            </span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight font-headline">
-            Chhaigaon Udyami Administrative Hub
-          </h1>
-          <p className="text-purple-200/80 text-xs sm:text-sm max-w-2xl font-body">
-            उपयोगकर्ता डेटा, कोर्सेस, वीडियो लेक्चर्स, योजनाएं और सुरक्षा ऑडिट को वास्तविक समय में नियंत्रित करें।
-          </p>
+      {/* Top Banner with Custom Futuristic Admin Console Illustration Background */}
+      <div className="relative overflow-hidden rounded-2xl border border-indigo-950/40 shadow-xl bg-slate-950 text-white">
+        {/* Background Illustration */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/assets/admin-console-banner-bg.jpg"
+            alt="Admin Console Background Illustration"
+            fill
+            priority
+            className="object-cover object-right sm:object-center opacity-85"
+          />
+          {/* Subtle gradient overlay to ensure crystal clear contrast for text */}
+          <div className="absolute inset-0 bg-linear-to-r from-slate-950 via-slate-950/75 to-transparent sm:via-slate-950/60" />
+          <div className="absolute inset-0 bg-radial-[at_top_left] from-purple-900/30 via-transparent to-transparent pointer-events-none" />
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
-          <Button
-            asChild
-            className="rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-xs cursor-pointer gap-1.5"
-          >
-            <Link href="/admin/courses">
-              <Plus className="size-4" />
-              <span>नया कोर्स जोड़ें</span>
-            </Link>
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            className="rounded-xl bg-white/10 hover:bg-white/20 border-white/30 text-white font-medium cursor-pointer gap-1.5"
-          >
-            <Link href="/admin/users">
-              <Users className="size-4" />
-              <span>उपयोगकर्ता सूची</span>
-            </Link>
-          </Button>
+        {/* Banner Content */}
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6 p-6 sm:p-8 backdrop-blur-[1px]">
+          <div className="space-y-2 max-w-2xl">
+            <div className="flex items-center gap-2">
+              <Badge className="bg-purple-600/90 hover:bg-purple-600 text-white font-bold text-xs uppercase tracking-wider shadow-xs border border-purple-400/30">
+                Console
+              </Badge>
+              <span className="text-purple-200 text-xs font-semibold flex items-center gap-1.5">
+                <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                सिस्टम प्रबंधन एवं नियंत्रण
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-headline text-white drop-shadow-sm">
+              Chhaigaon Udyami Administrative Hub
+            </h1>
+            <p className="text-slate-200/90 text-xs sm:text-sm font-body leading-relaxed">
+              उपयोगकर्ता डेटा, कोर्सेस, वीडियो लेक्चर्स, योजनाएं और सुरक्षा ऑडिट को वास्तविक समय में नियंत्रित करें।
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <Button
+              asChild
+              className="rounded-xl bg-[#0056d2] hover:bg-[#0046a8] text-white font-bold shadow-md cursor-pointer gap-2 h-10 px-4 transition-all hover:scale-[1.02]"
+            >
+              <Link href="/admin/courses">
+                <Plus className="size-4" />
+                <span>नया कोर्स जोड़ें</span>
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="rounded-xl bg-white/10 hover:bg-white/20 border-white/20 text-white font-semibold cursor-pointer gap-2 h-10 px-4 backdrop-blur-md transition-all hover:scale-[1.02]"
+            >
+              <Link href="/admin/users">
+                <Users className="size-4" />
+                <span>उपयोगकर्ता</span>
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
 
