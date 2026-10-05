@@ -10,6 +10,14 @@ import { Button } from "@/components/ui/button";
 import { ButtonGroup, ButtonGroupItem } from "@/components/ui/button-group";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -647,16 +655,22 @@ export default function AdminUsersPage() {
                 <label className="text-xs font-bold text-slate-800 block mb-1.5">
                   भूमिका (Role)
                 </label>
-                <select
+                <Select
                   value={createForm.role}
-                  onChange={(e: any) => setCreateForm({ ...createForm, role: e.target.value })}
-                  className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800 focus:bg-white"
+                  onValueChange={(val: any) => setCreateForm({ ...createForm, role: val })}
                 >
-                  <option value="STUDENT">उद्यमी / छात्र (STUDENT)</option>
-                  <option value="TRAINER">प्रशिक्षक (TRAINER)</option>
-                  <option value="MARKET_PARTNER">मार्केट पार्टनर (MARKET_PARTNER)</option>
-                  <option value="ADMIN">प्रशासक (ADMIN)</option>
-                </select>
+                  <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-semibold text-slate-800 focus:bg-white">
+                    <SelectValue placeholder="भूमिका चुनें" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="STUDENT">उद्यमी / छात्र (STUDENT)</SelectItem>
+                      <SelectItem value="TRAINER">प्रशिक्षक (TRAINER)</SelectItem>
+                      <SelectItem value="MARKET_PARTNER">मार्केट पार्टनर (MARKET_PARTNER)</SelectItem>
+                      <SelectItem value="ADMIN">प्रशासक (ADMIN)</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
@@ -730,29 +744,41 @@ export default function AdminUsersPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-bold text-slate-800 block mb-1">भूमिका (Role)</label>
-                  <select
+                  <Select
                     value={editingUser.role}
-                    onChange={(e: any) => setEditingUser({ ...editingUser, role: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800"
+                    onValueChange={(val: any) => setEditingUser({ ...editingUser, role: val })}
                   >
-                    <option value="STUDENT">STUDENT</option>
-                    <option value="TRAINER">TRAINER</option>
-                    <option value="MARKET_PARTNER">MARKET_PARTNER</option>
-                    <option value="ADMIN">ADMIN</option>
-                  </select>
+                    <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-semibold text-slate-800">
+                      <SelectValue placeholder="Role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="STUDENT">STUDENT</SelectItem>
+                        <SelectItem value="TRAINER">TRAINER</SelectItem>
+                        <SelectItem value="MARKET_PARTNER">MARKET_PARTNER</SelectItem>
+                        <SelectItem value="ADMIN">ADMIN</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
                   <label className="text-xs font-bold text-slate-800 block mb-1">स्थिति (Status)</label>
-                  <select
+                  <Select
                     value={editingUser.status}
-                    onChange={(e: any) => setEditingUser({ ...editingUser, status: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800"
+                    onValueChange={(val: any) => setEditingUser({ ...editingUser, status: val })}
                   >
-                    <option value="ACTIVE">ACTIVE (सक्रिय)</option>
-                    <option value="INACTIVE">INACTIVE</option>
-                    <option value="BLOCKED">BLOCKED (अवरुद्ध)</option>
-                  </select>
+                    <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-semibold text-slate-800">
+                      <SelectValue placeholder="Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="ACTIVE">ACTIVE (सक्रिय)</SelectItem>
+                        <SelectItem value="INACTIVE">INACTIVE</SelectItem>
+                        <SelectItem value="BLOCKED">BLOCKED (अवरुद्ध)</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 

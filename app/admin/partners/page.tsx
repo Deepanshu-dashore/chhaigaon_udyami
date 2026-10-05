@@ -8,6 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -259,16 +267,22 @@ export default function AdminPartnersPage() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="text-xs font-bold text-slate-800 block mb-1">व्यापार श्रेणी</label>
-                <select
+                <Select
                   value={form.businessType}
-                  onChange={(e) => setForm({ ...form, businessType: e.target.value })}
-                  className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800"
+                  onValueChange={(val) => setForm({ ...form, businessType: val })}
                 >
-                  <option value="MACHINERY_SUPPLIER">मशीनरी एवं प्लांट सप्लाई</option>
-                  <option value="PACKAGING_VENDOR">पैकेजिंग व ब्रांडिंग मटेरियल</option>
-                  <option value="RAW_MATERIAL">कच्चा माल (Raw Material)</option>
-                  <option value="COLD_STORAGE">कोल्ड स्टोरेज व लॉजिस्टिक्स</option>
-                </select>
+                  <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-semibold text-slate-800">
+                    <SelectValue placeholder="श्रेणी चुनें" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="MACHINERY_SUPPLIER">मशीनरी एवं प्लांट सप्लाई</SelectItem>
+                      <SelectItem value="PACKAGING_VENDOR">पैकेजिंग व ब्रांडिंग मटेरियल</SelectItem>
+                      <SelectItem value="RAW_MATERIAL">कच्चा माल (Raw Material)</SelectItem>
+                      <SelectItem value="COLD_STORAGE">कोल्ड स्टोरेज व लॉजिस्टिक्स</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div>

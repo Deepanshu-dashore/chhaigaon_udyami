@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { InputGroup, InputGroupAddon } from "@/components/ui/input-group";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Search, X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -63,36 +64,36 @@ export function AdminSearchInput({
   const showLoading = isDebouncing || isLoading;
 
   return (
-    <InputGroup className={cn("max-w-md h-9", className)}>
-      <InputGroupAddon>
-        <Search className="size-4 text-slate-400" />
-      </InputGroupAddon>
+    <div className={cn("relative flex items-center max-w-md w-full", className)}>
+      <Search className="absolute left-3 size-4 text-slate-400 pointer-events-none z-10" />
 
-      <input
+      <Input
         type="text"
         placeholder={placeholder}
         value={internalValue}
         onChange={(e) => setInternalValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="flex-1 min-w-0 bg-transparent py-1 text-xs text-slate-900 placeholder:text-slate-400 outline-none border-0 focus:ring-0"
+        className="h-9 pl-9 pr-9 text-xs bg-slate-50/90 rounded-lg border-slate-200 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-1 focus-visible:ring-[#0056d2]/20"
       />
 
-      <div className="flex items-center gap-1.5 pr-2.5 shrink-0">
+      <div className="absolute right-2 flex items-center gap-1 z-10">
         {showLoading && (
           <Loader2 className="size-3.5 text-[#0056d2] animate-spin" />
         )}
         {internalValue && (
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon-xs"
             onClick={handleClear}
-            className="p-0.5 rounded-md hover:bg-slate-200/80 text-slate-400 hover:text-slate-700 transition cursor-pointer"
+            className="size-5 rounded-md hover:bg-slate-200/80 text-slate-400 hover:text-slate-700 transition cursor-pointer"
             title="Clear search (Esc)"
           >
             <X className="size-3.5" />
             <span className="sr-only">Clear search</span>
-          </button>
+          </Button>
         )}
       </div>
-    </InputGroup>
+    </div>
   );
 }

@@ -7,6 +7,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -336,38 +344,46 @@ export default function AdminCertificatesPage() {
               <label className="text-xs font-bold text-slate-800 block mb-1.5">
                 छात्र चुनें (Student) *
               </label>
-              <select
+              <Select
                 value={selectedUser}
-                onChange={(e) => setSelectedUser(e.target.value)}
-                required
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800"
+                onValueChange={(val) => setSelectedUser(val)}
               >
-                <option value="">-- छात्र का चयन करें --</option>
-                {users.map((u) => (
-                  <option key={u.id} value={u.id}>
-                    {u.name || u.email} ({u.email || u.mobile})
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger className="w-full h-10 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800">
+                  <SelectValue placeholder="-- छात्र का चयन करें --" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {users.map((u) => (
+                      <SelectItem key={u.id} value={u.id}>
+                        {u.name || u.email} ({u.email || u.mobile})
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
               <label className="text-xs font-bold text-slate-800 block mb-1.5">
                 कोर्स चुनें (Course) *
               </label>
-              <select
+              <Select
                 value={selectedCourse}
-                onChange={(e) => setSelectedCourse(e.target.value)}
-                required
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800"
+                onValueChange={(val) => setSelectedCourse(val)}
               >
-                <option value="">-- कोर्स का चयन करें --</option>
-                {courses.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.title}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger className="w-full h-10 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800">
+                  <SelectValue placeholder="-- कोर्स का चयन करें --" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {courses.map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.title}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
 
             <DialogFooter className="pt-3 border-t border-slate-100 flex gap-2">

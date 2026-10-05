@@ -11,6 +11,14 @@ import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   ArrowLeft,
   BookOpen,
   PlusCircle,
@@ -159,15 +167,21 @@ export default function AddCoursePage() {
                 <Label className="text-xs font-bold text-slate-800">
                   Course Level
                 </Label>
-                <select
+                <Select
                   value={form.level}
-                  onChange={(e) => setForm({ ...form, level: e.target.value })}
-                  className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800"
+                  onValueChange={(val) => setForm({ ...form, level: val })}
                 >
-                  <option value="BEGINNER">Beginner (प्रारंभिक)</option>
-                  <option value="INTERMEDIATE">Intermediate (मध्यम)</option>
-                  <option value="ADVANCED">Advanced (उन्नत)</option>
-                </select>
+                  <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-semibold text-slate-800">
+                    <SelectValue placeholder="Select level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="BEGINNER">Beginner (प्रारंभिक)</SelectItem>
+                      <SelectItem value="INTERMEDIATE">Intermediate (मध्यम)</SelectItem>
+                      <SelectItem value="ADVANCED">Advanced (उन्नत)</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-1.5">
@@ -228,15 +242,21 @@ export default function AddCoursePage() {
                 <Label className="text-xs font-bold text-slate-800">
                   Publication Status
                 </Label>
-                <select
+                <Select
                   value={form.status}
-                  onChange={(e) => setForm({ ...form, status: e.target.value })}
-                  className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800"
+                  onValueChange={(val) => setForm({ ...form, status: val })}
                 >
-                  <option value="DRAFT">DRAFT (ड्राफ्ट)</option>
-                  <option value="PUBLISHED">PUBLISHED (प्रकाशित)</option>
-                  <option value="ARCHIVED">ARCHIVED (संग्रहीत)</option>
-                </select>
+                  <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-bold text-slate-800">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="DRAFT">DRAFT (ड्राफ्ट)</SelectItem>
+                      <SelectItem value="PUBLISHED">PUBLISHED (प्रकाशित)</SelectItem>
+                      <SelectItem value="ARCHIVED">ARCHIVED (संग्रहीत)</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </CardContent>

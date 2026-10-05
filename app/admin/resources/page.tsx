@@ -7,6 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -263,16 +271,22 @@ export default function AdminResourcesPage() {
 
             <div>
               <label className="text-xs font-bold text-slate-800 block mb-1">श्रेणी (Category)</label>
-              <select
+              <Select
                 value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800"
+                onValueChange={(val) => setForm({ ...form, category: val })}
               >
-                <option value="BUSINESS_PLAN">बिजनेस प्लान (DPR / Pitch)</option>
-                <option value="GOVT_GUIDELINE">सरकारी निर्देश व नीतियां</option>
-                <option value="FINANCIAL_TOOL">वित्तीय कैलकुलेटर व टूल</option>
-                <option value="MARKETING_GUIDE">मार्केटिंग एवं पैकेजिंग गाइड</option>
-              </select>
+                <SelectTrigger className="w-full h-10 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800">
+                  <SelectValue placeholder="श्रेणी चुनें" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="BUSINESS_PLAN">बिजनेस प्लान (DPR / Pitch)</SelectItem>
+                    <SelectItem value="GOVT_GUIDELINE">सरकारी निर्देश व नीतियां</SelectItem>
+                    <SelectItem value="FINANCIAL_TOOL">वित्तीय कैलकुलेटर व टूल</SelectItem>
+                    <SelectItem value="MARKETING_GUIDE">मार्केटिंग एवं पैकेजिंग गाइड</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
 
             <div>

@@ -18,6 +18,21 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   ArrowLeft,
   BookOpen,
@@ -431,36 +446,29 @@ export default function EditCourseBuilderPage({
         </div>
       </div>
 
-      {/* Tabs Row */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-0.5">
-        <button
-          type="button"
-          onClick={() => setActiveTab("builder")}
-          className={`px-4 py-2 text-xs font-bold border-b-2 cursor-pointer transition-colors ${
-            activeTab === "builder"
-              ? "border-[#0056d2] text-[#0056d2]"
-              : "border-transparent text-slate-500 hover:text-slate-900"
-          }`}
-        >
-          Curriculum Builder (Modules & Lessons)
-        </button>
+      {/* Tabs */}
+      <Tabs
+        value={activeTab}
+        onValueChange={(val) => setActiveTab(val as "builder" | "settings")}
+        className="w-full"
+      >
+        <TabsList variant="line" className="w-full justify-start border-b border-slate-200 p-0 h-10 gap-4 bg-transparent rounded-none">
+          <TabsTrigger
+            value="builder"
+            className="text-xs font-bold py-2.5 px-3 data-[state=active]:text-[#0056d2] data-[state=active]:border-b-2 data-[state=active]:border-[#0056d2] rounded-none bg-transparent hover:text-slate-900 cursor-pointer shadow-none!"
+          >
+            Curriculum Builder (Modules & Lessons)
+          </TabsTrigger>
+          <TabsTrigger
+            value="settings"
+            className="text-xs font-bold py-2.5 px-3 data-[state=active]:text-[#0056d2] data-[state=active]:border-b-2 data-[state=active]:border-[#0056d2] rounded-none bg-transparent hover:text-slate-900 cursor-pointer shadow-none!"
+          >
+            General Settings & Details
+          </TabsTrigger>
+        </TabsList>
 
-        <button
-          type="button"
-          onClick={() => setActiveTab("settings")}
-          className={`px-4 py-2 text-xs font-bold border-b-2 cursor-pointer transition-colors ${
-            activeTab === "settings"
-              ? "border-[#0056d2] text-[#0056d2]"
-              : "border-transparent text-slate-500 hover:text-slate-900"
-          }`}
-        >
-          General Settings & Details
-        </button>
-      </div>
-
-      {/* TAB 1: CURRICULUM BUILDER */}
-      {activeTab === "builder" && (
-        <div className="space-y-6">
+        {/* TAB 1: CURRICULUM BUILDER */}
+        <TabsContent value="builder" className="pt-6 space-y-6">
           <div className="flex items-center justify-between gap-4">
             <div>
               <h2 className="text-base font-bold text-slate-900 font-headline">
@@ -668,12 +676,11 @@ export default function EditCourseBuilderPage({
               })}
             </div>
           )}
-        </div>
-      )}
+        </TabsContent>
 
-      {/* TAB 2: GENERAL SETTINGS */}
-      {activeTab === "settings" && (
-        <form onSubmit={handleUpdateCourseDetails} className="space-y-6">
+        {/* TAB 2: GENERAL SETTINGS */}
+        <TabsContent value="settings" className="pt-6">
+          <form onSubmit={handleUpdateCourseDetails} className="space-y-6">
           <Card className="bg-white border-slate-200 shadow-xs">
             <CardHeader className="border-b border-slate-100 bg-slate-50/50 pb-4">
               <CardTitle className="text-base font-bold text-slate-900 font-headline">
@@ -706,15 +713,21 @@ export default function EditCourseBuilderPage({
 
                 <div className="space-y-1.5">
                   <Label className="text-xs font-bold text-slate-800">Level</Label>
-                  <select
+                  <Select
                     value={course.level || "BEGINNER"}
-                    onChange={(e) => setCourse({ ...course, level: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold"
+                    onValueChange={(val) => setCourse({ ...course, level: val })}
                   >
-                    <option value="BEGINNER">BEGINNER</option>
-                    <option value="INTERMEDIATE">INTERMEDIATE</option>
-                    <option value="ADVANCED">ADVANCED</option>
-                  </select>
+                    <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-semibold">
+                      <SelectValue placeholder="Select level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="BEGINNER">BEGINNER</SelectItem>
+                        <SelectItem value="INTERMEDIATE">INTERMEDIATE</SelectItem>
+                        <SelectItem value="ADVANCED">ADVANCED</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="space-y-1.5">
@@ -729,20 +742,26 @@ export default function EditCourseBuilderPage({
 
                 <div className="space-y-1.5">
                   <Label className="text-xs font-bold text-slate-800">Status</Label>
-                  <select
+                  <Select
                     value={course.status}
-                    onChange={(e) =>
+                    onValueChange={(val) =>
                       setCourse({
                         ...course,
-                        status: e.target.value as "DRAFT" | "PUBLISHED" | "ARCHIVED",
+                        status: val as "DRAFT" | "PUBLISHED" | "ARCHIVED",
                       })
                     }
-                    className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800"
                   >
-                    <option value="DRAFT">DRAFT</option>
-                    <option value="PUBLISHED">PUBLISHED</option>
-                    <option value="ARCHIVED">ARCHIVED</option>
-                  </select>
+                    <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-bold text-slate-800">
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="DRAFT">DRAFT</SelectItem>
+                        <SelectItem value="PUBLISHED">PUBLISHED</SelectItem>
+                        <SelectItem value="ARCHIVED">ARCHIVED</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="space-y-1.5 col-span-1 sm:col-span-2">
@@ -779,7 +798,8 @@ export default function EditCourseBuilderPage({
             </Button>
           </div>
         </form>
-      )}
+        </TabsContent>
+      </Tabs>
 
       {/* MODULE MODAL */}
       <Dialog open={moduleModalOpen} onOpenChange={setModuleModalOpen}>
@@ -869,20 +889,26 @@ export default function EditCourseBuilderPage({
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label className="text-xs font-bold text-slate-800">Lesson Type</Label>
-                <select
+                <Select
                   value={lessonForm.type}
-                  onChange={(e) =>
+                  onValueChange={(val) =>
                     setLessonForm({
                       ...lessonForm,
-                      type: e.target.value as "VIDEO" | "READING" | "QUIZ",
+                      type: val as "VIDEO" | "READING" | "QUIZ",
                     })
                   }
-                  className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800"
                 >
-                  <option value="VIDEO">Video Lesson</option>
-                  <option value="READING">Reading Material</option>
-                  <option value="QUIZ">Quiz / Assessment</option>
-                </select>
+                  <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-bold text-slate-800">
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="VIDEO">Video Lesson</SelectItem>
+                      <SelectItem value="READING">Reading Material</SelectItem>
+                      <SelectItem value="QUIZ">Quiz / Assessment</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-1.5">
@@ -923,23 +949,21 @@ export default function EditCourseBuilderPage({
 
             <div className="flex items-center gap-6 pt-1">
               <label className="flex items-center gap-2 cursor-pointer select-none text-xs font-semibold text-slate-700">
-                <input
-                  type="checkbox"
+                <Checkbox
                   checked={lessonForm.isPreview}
-                  onChange={(e) => setLessonForm({ ...lessonForm, isPreview: e.target.checked })}
-                  className="size-4 rounded border-slate-300 text-[#0056d2] focus:ring-[#0056d2]"
+                  onCheckedChange={(checked) =>
+                    setLessonForm({ ...lessonForm, isPreview: Boolean(checked) })
+                  }
                 />
                 <span>Allow Free Preview</span>
               </label>
 
               <label className="flex items-center gap-2 cursor-pointer select-none text-xs font-semibold text-slate-700">
-                <input
-                  type="checkbox"
+                <Checkbox
                   checked={lessonForm.isPublished}
-                  onChange={(e) =>
-                    setLessonForm({ ...lessonForm, isPublished: e.target.checked })
+                  onCheckedChange={(checked) =>
+                    setLessonForm({ ...lessonForm, isPublished: Boolean(checked) })
                   }
-                  className="size-4 rounded border-slate-300 text-[#0056d2] focus:ring-[#0056d2]"
                 />
                 <span>Is Published</span>
               </label>
