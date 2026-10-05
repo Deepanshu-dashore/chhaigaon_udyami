@@ -2,26 +2,34 @@
 
 import React, { useState } from "react";
 import {
+  Video,
+  FileText,
+  HelpCircle,
+  Download,
+  Award,
   ChevronDown,
   ChevronUp,
   PlayCircle,
-  FileText,
-  HelpCircle,
-  CheckCircle,
-  Lock,
+  CheckCircle2,
   Clock,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
-interface LessonItem {
+export interface LessonItem {
   id: string;
   title: string;
+  description?: string;
   duration?: string;
-  type?: "video" | "reading" | "quiz";
+  type?: "video" | "reading" | "quiz" | "resource";
   isPreview?: boolean;
+  resourceType?: string;
+  resourceSize?: string;
+  downloadUrl?: string;
+  questionsCount?: number;
 }
 
-interface ModuleItem {
+export interface ModuleItem {
   id: string;
   order: number;
   title: string;
@@ -35,108 +43,272 @@ interface CourseModulesAccordionProps {
 }
 
 export function CourseModulesAccordion({ modules }: CourseModulesAccordionProps) {
-  const [openModuleId, setOpenModuleId] = useState<string | null>(
-    modules[0]?.id || null
-  );
+  // Store expanded module state
+  const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>(() => {
+    return modules[0] ? { [modules[0].id]: true } : {};
+  });
+
+  // Store expanded lesson details state
+  const [expandedLessons, setExpandedLessons] = useState<Record<string, boolean>>({});
+
+  // Quiz Modal State
+  const [activeQuiz, setActiveQuiz] = useState<{
+    title: string;
+    questionsCount: number;
+  } | null>(null);
 
   const toggleModule = (id: string) => {
-    setOpenModuleId((prev) => (prev === id ? null : id));
+    setExpandedModules((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
   };
 
+  const toggleLesson = (id: string) => {
+    setExpandedLessons((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  const isAllExpanded = modules.every((m) => expandedModules[m.id]);
+
+  const toggleAll = () => {
+    if (isAllExpanded) {
+      setExpandedModules({});
+    } else {
+      const allState: Record<string, boolean> = {};
+      modules.forEach((m) => {
+        allState[m.id] = true;
+      });
+      setExpandedModules(allState);
+    }
+  };
+
+  // Calculate totals
+  let totalLectures = 0;
+  modules.forEach((m) => {
+    totalLectures += m.lessons.length;
+  });
+
   return (
-    <div className="space-y-3 font-sans">
-      {modules.map((mod, index) => {
-        const isOpen = openModuleId === mod.id;
-        return (
-          <div
-            key={mod.id}
-            className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-2xs transition-all duration-200"
-          >
-            {/* Module Accordion Header */}
-            <button
-              onClick={() => toggleModule(mod.id)}
-              className="w-[#100%] text-left p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-slate-50/80 transition-colors cursor-pointer"
-            >
-              <div className="flex items-start gap-3.5 flex-1">
-                <div className="size-8 rounded-xl bg-blue-50 text-[#0056d2] font-black text-xs flex items-center justify-center shrink-0 border border-blue-100">
-                  {index + 1}
-                </div>
+    <div className="space-y-4 font-sans text-slate-900">
+      
+      {/* Course Content Header Summary (Udemy Style) */}
+      <div className="flex items-center justify-between flex-wrap gap-2 text-xs sm:text-sm">
+        <div className="text-slate-600 font-medium">
+          <span>{modules.length} मॉड्यूल</span>
+          <span className="mx-1 font-bold">•</span>
+          <span>{totalLectures} व्याख्यान</span>
+          <span className="mx-1 font-bold">•</span>
+          <span>6.5 घंटे कुल अवधि</span>
+        </div>
 
-                <div className="space-y-0.5">
-                  <h4 className="font-bold text-sm sm:text-base text-slate-900 font-headline leading-snug">
-                    {mod.title}
-                  </h4>
-                  {mod.description && (
-                    <p className="text-xs text-slate-500 font-body line-clamp-1">
-                      {mod.description}
-                    </p>
-                  )}
-                </div>
-              </div>
+        <button
+          onClick={toggleAll}
+          className="text-xs font-bold text-[#0056d2] hover:text-blue-800 cursor-pointer"
+        >
+          {isAllExpanded ? "सभी मॉड्यूल समेटें (Collapse all)" : "सभी मॉड्यूल विस्तार करें (Expand all sections)"}
+        </button>
+      </div>
 
-              <div className="flex items-center gap-3 shrink-0">
-                <div className="text-right hidden sm:block">
-                  <span className="text-xs font-semibold text-slate-600 block">
-                    {mod.lessons.length} अध्याय
+      {/* Modules Accordion List */}
+      <div className="border border-slate-200 rounded-xl divide-y divide-slate-200 overflow-hidden bg-white shadow-2xs">
+        {modules.map((mod, index) => {
+          const isOpen = Boolean(expandedModules[mod.id]);
+
+          return (
+            <div key={mod.id} className="bg-white">
+              
+              {/* Module Accordion Header */}
+              <button
+                onClick={() => toggleModule(mod.id)}
+                className="w-full text-left p-4 bg-slate-50/70 hover:bg-slate-100/70 flex items-center justify-between gap-4 transition-colors cursor-pointer select-none"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="text-slate-500 shrink-0">
+                    {isOpen ? <ChevronUp className="size-4 text-slate-700" /> : <ChevronDown className="size-4 text-slate-700" />}
                   </span>
-                  {mod.duration && (
-                    <span className="text-[11px] text-slate-400 font-medium">
-                      {mod.duration}
-                    </span>
-                  )}
+                  <h4 className="font-bold text-sm text-slate-900 font-headline truncate">
+                    मॉड्यूल {index + 1}: {mod.title}
+                  </h4>
                 </div>
 
-                <div className="size-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600">
-                  {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                <div className="text-xs text-slate-500 font-medium shrink-0">
+                  <span>{mod.lessons.length} पाठ</span>
+                  <span className="mx-1 font-bold">•</span>
+                  <span>{mod.duration || "1.5 घंटे"}</span>
                 </div>
+              </button>
+
+              {/* Expanded Lessons List */}
+              {isOpen && (
+                <div className="divide-y divide-slate-100 bg-white">
+                  {mod.lessons.map((lesson, idx) => {
+                    const isQuiz = lesson.type === "quiz";
+                    const isResource = lesson.type === "resource" || lesson.type === "reading";
+                    const isLessonExpanded = Boolean(expandedLessons[lesson.id]);
+
+                    return (
+                      <div key={lesson.id || idx} className="p-3 sm:px-5 hover:bg-slate-50/50 transition-colors">
+                        <div className="flex items-center justify-between gap-3 text-xs sm:text-sm">
+                          
+                          {/* Left: Icon & Title */}
+                          <div className="flex items-center gap-3 min-w-0 flex-1">
+                            {isQuiz ? (
+                              <HelpCircle className="size-4 text-[#0056d2] shrink-0" />
+                            ) : isResource ? (
+                              <FileText className="size-4 text-amber-600 shrink-0" />
+                            ) : (
+                              <Video className="size-4 text-slate-500 shrink-0" />
+                            )}
+
+                            <button
+                              onClick={() => lesson.description && toggleLesson(lesson.id)}
+                              className={`text-left font-medium text-slate-800 hover:text-[#0056d2] transition-colors truncate ${
+                                lesson.description ? "cursor-pointer" : "cursor-default"
+                              }`}
+                            >
+                              <span>{lesson.title}</span>
+                              {lesson.description && (
+                                <span className="ml-1 text-slate-400 text-xs">
+                                  {isLessonExpanded ? "▲" : "▼"}
+                                </span>
+                              )}
+                            </button>
+                          </div>
+
+                          {/* Right: Preview Pill, Resource Download, Duration */}
+                          <div className="flex items-center gap-3 shrink-0">
+                            {lesson.isPreview && (
+                              <button
+                                onClick={() => alert(`मुफ्त पूर्वावलोकन वीडियो: ${lesson.title}`)}
+                                className="text-xs font-bold text-[#0056d2] hover:underline flex items-center gap-1 cursor-pointer"
+                              >
+                                <PlayCircle className="size-3.5 fill-[#0056d2] text-white" />
+                                <span>पूर्वावलोकन (Preview)</span>
+                              </button>
+                            )}
+
+                            {isQuiz && (
+                              <Button
+                                size="sm"
+                                onClick={() =>
+                                  setActiveQuiz({
+                                    title: lesson.title,
+                                    questionsCount: lesson.questionsCount || 10,
+                                  })
+                                }
+                                className="h-6 px-2 text-[11px] font-bold bg-[#0056d2] hover:bg-blue-700 text-white cursor-pointer rounded"
+                              >
+                                क्विज़ दें
+                              </Button>
+                            )}
+
+                            {isResource && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                asChild
+                                className="h-6 px-2 text-[11px] font-bold border-amber-300 text-amber-800 hover:bg-amber-50 cursor-pointer rounded"
+                              >
+                                <a href={lesson.downloadUrl || "#resources"} download>
+                                  <Download className="size-3 mr-1" />
+                                  <span>DPR / PDF</span>
+                                </a>
+                              </Button>
+                            )}
+
+                            {lesson.duration && (
+                              <span className="text-xs text-slate-500 font-mono">
+                                {lesson.duration}
+                              </span>
+                            )}
+                          </div>
+
+                        </div>
+
+                        {/* Optional Lesson Description */}
+                        {isLessonExpanded && lesson.description && (
+                          <div className="mt-2 pl-7 pr-2 py-2 text-xs text-slate-600 bg-slate-50 rounded border border-slate-200/60 leading-relaxed">
+                            {lesson.description}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Interactive Quiz Modal */}
+      {activeQuiz && (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-200 text-slate-900">
+            <div className="flex items-center justify-between border-b pb-3">
+              <div>
+                <h3 className="font-bold text-slate-900 text-sm font-headline">
+                  {activeQuiz.title}
+                </h3>
+                <p className="text-xs text-slate-500">
+                  {activeQuiz.questionsCount} बहुविकल्पीय प्रश्न • 70% उत्तीर्ण अंक
+                </p>
               </div>
-            </button>
+              <button
+                onClick={() => setActiveQuiz(null)}
+                className="text-slate-400 hover:text-slate-600 p-1 cursor-pointer text-sm font-bold"
+              >
+                ✕
+              </button>
+            </div>
 
-            {/* Module Accordion Expanded Content */}
-            {isOpen && (
-              <div className="border-t border-slate-100 bg-slate-50/50 p-4 sm:p-5 divide-y divide-slate-200/60">
-                {mod.lessons.map((lesson, idx) => (
-                  <div
-                    key={lesson.id || idx}
-                    className="py-3 first:pt-0 last:pb-0 flex items-center justify-between gap-3 text-xs"
-                  >
-                    <div className="flex items-center gap-2.5 flex-1">
-                      {lesson.type === "quiz" ? (
-                        <HelpCircle className="h-4 w-4 text-purple-600 shrink-0" />
-                      ) : lesson.type === "reading" ? (
-                        <FileText className="h-4 w-4 text-amber-600 shrink-0" />
-                      ) : (
-                        <PlayCircle className="h-4 w-4 text-[#0056d2] shrink-0" />
-                      )}
-
-                      <span className="font-medium text-slate-800 leading-normal">
-                        {lesson.title}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-2.5 shrink-0">
-                      {lesson.duration && (
-                        <span className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {lesson.duration}
-                        </span>
-                      )}
-
-                      {lesson.isPreview ? (
-                        <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] font-bold">
-                          मुफ्त पूर्वावलोकन (Preview)
-                        </Badge>
-                      ) : (
-                        <Lock className="h-3.5 w-3.5 text-slate-400" />
-                      )}
-                    </div>
-                  </div>
-                ))}
+            <div className="space-y-3">
+              <div className="p-3 rounded-lg border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800">
+                प्रश्न 1: Dairy Farm में वैज्ञानिक पशु शेड का वेंटीलेशन लेआउट कैसा होना चाहिए?
               </div>
-            )}
+              <div className="space-y-2 text-xs">
+                {["14 से 16 फीट ऊंचा (उत्तर व दक्षिण खुला)", "बंद कमरा", "8 फीट छत", "केवल टीन शेड"].map(
+                  (opt, i) => (
+                    <label
+                      key={i}
+                      className="flex items-center gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer font-medium text-slate-800"
+                    >
+                      <input type="radio" name="q1" className="text-[#0056d2]" />
+                      <span>{opt}</span>
+                    </label>
+                  )
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-2 border-t">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setActiveQuiz(null)}
+                className="text-xs font-bold text-slate-600 cursor-pointer"
+              >
+                रद्द करें
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => {
+                  alert("🎉 क्विज़ उत्तीर्ण! आपका स्कोर: 90%");
+                  setActiveQuiz(null);
+                }}
+                className="bg-[#0056d2] hover:bg-blue-700 text-white text-xs font-bold cursor-pointer"
+              >
+                उत्तर सबमिट करें
+              </Button>
+            </div>
           </div>
-        );
-      })}
+        </div>
+      )}
+
     </div>
   );
 }

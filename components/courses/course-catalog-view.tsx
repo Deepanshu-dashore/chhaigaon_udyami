@@ -19,15 +19,18 @@ interface CourseCatalogViewProps {
   initialCourses: CourseItem[];
 }
 
-// Categories corresponding to the tab bar in Image 3
+// Categories corresponding to the tab bar
 const SKILL_TABS = [
   { id: "all", label: "सभी विषय (All Courses)" },
-  { id: "dairy", label: "डेयरी एवं पशुपालन (Dairy)" },
-  { id: "food-processing", label: "खाद्य प्रसंस्करण (Food Processing)" },
-  { id: "organic-farming", label: "जैविक खेती (Organic Agri)" },
-  { id: "schemes", label: "PMEGP व बैंक सब्सिडी (Subsidies)" },
+  { id: "dairy", label: "डेयरी व पशुपालन (Dairy & Livestock)" },
+  { id: "food-processing", label: "खाद्य प्रसंस्करण व FSSAI" },
+  { id: "organic-farming", label: "जैविक खेती व पॉलीहाउस" },
+  { id: "schemes", label: "PMEGP व बैंक सब्सिडी" },
   { id: "digital-marketing", label: "डिजिटल व्यवसाय व ONDC" },
-  { id: "solar", label: "सौर ऊर्जा उद्यम (Solar Tech)" },
+  { id: "solar", label: "सौर ऊर्जा उद्यम" },
+  { id: "fisheries", label: "मत्स्य पालन (Fish Farming)" },
+  { id: "poultry", label: "पोल्ट्री व कड़कनाथ" },
+  { id: "agro-machinery", label: "कृषि यंत्र व हायरिंग" },
 ];
 
 export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
@@ -100,12 +103,15 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
         // Category Filter
         if (selectedCategories.length > 0) {
           const categorySlugMap: Record<string, string[]> = {
-            dairy: ["dairy", "डेयरी", "पशुपालन"],
-            "food-processing": ["food-processing", "फूड", "प्रसंस्करण", "fssai"],
-            "organic-farming": ["organic-farming", "जैविक", "कृषि", "farming"],
+            dairy: ["dairy", "डेयरी", "पशुपालन", "बकरी", "goat"],
+            "food-processing": ["food-processing", "फूड", "प्रसंस्करण", "fssai", "मशरुम", "mushroom"],
+            "organic-farming": ["organic-farming", "जैविक", "कृषि", "farming", "पॉलीहाउस", "polyhouse"],
             schemes: ["schemes", "योजना", "pmegp", "सब्सिडी", "loan"],
             "digital-marketing": ["digital-marketing", "डिजिटल", "मार्केटिंग", "ondc"],
             solar: ["solar", "सौर", "ऊर्जा", "solar-energy"],
+            fisheries: ["fish", "मत्स्य", "मछली", "biofloc", "aquaculture"],
+            poultry: ["poultry", "पोल्ट्री", "मुर्गी", "कड़कनाथ", "kadaknath"],
+            "agro-machinery": ["machinery", "यंत्र", "हाइरिंग", "hiring", "ट्रैक्टर"],
           };
 
           const matchesAnyCategory = selectedCategories.some((cat) => {

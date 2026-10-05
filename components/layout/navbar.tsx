@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -25,15 +25,24 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [showAnnouncement, setShowAnnouncement] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const isAuthPage = pathname === "/login" || pathname === "/register";
 
   return (
     <div className="sticky top-0 z-50 w-full">
-      {/* Top Announcement Bar (Coursera Style) */}
-      {showAnnouncement && (
-        <div className="bg-[#0056d2] text-white text-xs py-2 px-4 flex items-center justify-between font-medium shadow-xs">
+      {/* Top Announcement Bar (Coursera Style) - Hides when scrolled */}
+      {showAnnouncement && !isScrolled && (
+        <div className="bg-[#0056d2] text-white text-xs py-2 px-4 flex items-center justify-between font-medium shadow-xs transition-all">
           <div className="max-w-[90dvw] mx-auto w-full flex items-center justify-center gap-2 text-center">
             <span className="inline-flex items-center gap-1.5 font-bold text-amber-300">
               <Sparkles className="h-3.5 w-3.5" />
@@ -61,7 +70,7 @@ export function Navbar() {
       )}
 
       {/* Main Navigation Header */}
-      <header className="w-full border-b border-slate-200 bg-white/95 backdrop-blur-md transition-all shadow-xs">
+      <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/95 backdrop-blur-md transition-all shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between gap-4">
             
