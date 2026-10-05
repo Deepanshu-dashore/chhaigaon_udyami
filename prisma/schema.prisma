@@ -95,8 +95,9 @@ model User {
   enrollments    Enrollment[]
   orders         Order[]
   payments       Payment[]
-  progress       LessonProgress[]
-  quizAttempts   QuizAttempt[]
+  progress         LessonProgress[]
+  moduleProgress   CourseModuleProgress[]
+  quizAttempts     QuizAttempt[]
   certificates   Certificate[]
   notifications  Notification[]
   marketLeads    MarketLead[]
@@ -169,7 +170,7 @@ model Course {
   status   CourseStatus @default(DRAFT)
 
   createdById String
-  createdBy   User   @relation("CourseCreator", fields: [createdById], references: [id])
+  createdBy   User   @relation("CourseCreator", fields: [createdById], references: [id], onDelete: Cascade)
 
   publishedAt DateTime?
 
@@ -193,8 +194,10 @@ model CourseModule {
   description String?
   order       Int
 
-  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  lessons Lesson[]
+  course         Course                @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons        Lesson[]
+  quizzes        Quiz[]                // Module-level quizzes (attempted after all lessons)
+  moduleProgress CourseModuleProgress[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -284,8 +287,11 @@ model Enrollment {
   completedAt DateTime?
   expiresAt   DateTime?
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user           User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course         Course                @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  moduleProgress CourseModuleProgress[]
+  quizAttempts   QuizAttempt[]
+  certificate    Certificate?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -318,6 +324,28 @@ model LessonProgress {
   @@index([lessonId])
 }
 
+// Tracks whether a user has completed an entire module (all lessons done)
+model CourseModuleProgress {
+  id           String @id @default(cuid())
+  userId       String
+  moduleId     String
+  enrollmentId String
+
+  isCompleted Boolean   @default(false)
+  completedAt DateTime?
+
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  module     CourseModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  enrollment Enrollment   @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, moduleId])
+  @@index([enrollmentId])
+  @@index([userId])
+}
+
 // ----------------------------------------------------
 // ORDERS & PAYMENTS (Razorpay)
 // ----------------------------------------------------
@@ -334,8 +362,8 @@ model Order {
 
   razorpayOrderId String @unique
 
-  user    User     @relation(fields: [userId], references: [id])
-  course  Course   @relation(fields: [courseId], references: [id])
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   payment Payment?
 
   createdAt DateTime @default(now())
@@ -361,7 +389,7 @@ model Payment {
   paidAt DateTime?
 
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  user  User  @relation(fields: [userId], references: [id])
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -374,9 +402,12 @@ model Payment {
 // QUIZ & ASSESSMENTS
 // ----------------------------------------------------
 
+// Quiz can belong to EITHER a Lesson (inline quiz) OR a CourseModule (end-of-module assessment)
+// One of lessonId or moduleId must be set; enforced at application level
 model Quiz {
-  id       String @id @default(cuid())
-  lessonId String @unique
+  id       String  @id @default(cuid())
+  lessonId String? @unique // Inline lesson quiz (1:1 with Lesson)
+  moduleId String? // Module-level assessment (many quizzes could exist, but typically one)
 
   title             String
   description       String?
@@ -384,12 +415,15 @@ model Quiz {
   timeLimit         Int? // in minutes
   attemptLimit      Int? // null for unlimited
 
-  lesson    Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  lesson    Lesson?       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  module    CourseModule? @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   questions Question[]
   attempts  QuizAttempt[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([moduleId])
 }
 
 model Question {
@@ -424,23 +458,26 @@ model QuestionOption {
 }
 
 model QuizAttempt {
-  id     String @id @default(cuid())
-  quizId String
-  userId String
+  id           String  @id @default(cuid())
+  quizId       String
+  userId       String
+  enrollmentId String? // Links attempt to the enrollment context
 
   score    Float
   isPassed Boolean @default(false)
 
   answers QuizAnswer[]
 
-  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz       Quiz        @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enrollment Enrollment? @relation(fields: [enrollmentId], references: [id], onDelete: SetNull)
 
   startedAt   DateTime  @default(now())
   completedAt DateTime?
 
   @@index([userId])
   @@index([quizId])
+  @@index([enrollmentId])
 }
 
 model QuizAnswer {
@@ -462,9 +499,10 @@ model QuizAnswer {
 // ----------------------------------------------------
 
 model Certificate {
-  id       String @id @default(cuid())
-  userId   String
-  courseId String
+  id           String  @id @default(cuid())
+  userId       String
+  courseId     String
+  enrollmentId String? @unique // Links certificate to the enrollment that triggered it
 
   certificateNumber String @unique
   verificationCode  String @unique
@@ -475,8 +513,9 @@ model Certificate {
 
   status String @default("ACTIVE")
 
-  user   User   @relation(fields: [userId], references: [id])
-  course Course @relation(fields: [courseId], references: [id])
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course     Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrollment Enrollment? @relation(fields: [enrollmentId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
 
@@ -559,8 +598,8 @@ model MarketLead {
   message String? @db.Text
   status  String  @default("NEW")
 
-  user    User          @relation(fields: [userId], references: [id])
-  partner MarketPartner @relation(fields: [partnerId], references: [id])
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  partner MarketPartner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
