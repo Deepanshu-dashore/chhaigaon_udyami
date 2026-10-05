@@ -128,6 +128,29 @@ export async function getCourseBySlug(slug: string, userId?: string) {
       modules: {
         orderBy: { order: "asc" },
         include: {
+          // Module-level quiz (end-of-module assessment)
+          quizzes: {
+            select: {
+              id: true,
+              title: true,
+              passingPercentage: true,
+              timeLimit: true,
+              attemptLimit: true,
+              _count: { select: { questions: true } },
+            },
+          },
+          // Module completion progress for this user
+          ...(userId
+            ? {
+                moduleProgress: {
+                  where: { userId },
+                  select: {
+                    isCompleted: true,
+                    completedAt: true,
+                  },
+                },
+              }
+            : {}),
           lessons: {
             orderBy: { order: "asc" },
             include: {
@@ -158,6 +181,7 @@ export async function getCourseBySlug(slug: string, userId?: string) {
     },
   });
 }
+
 
 /**
  * Get Course details by ID

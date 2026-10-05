@@ -6,12 +6,12 @@ import {
   FileText,
   HelpCircle,
   Download,
-  Award,
   ChevronDown,
   ChevronUp,
   PlayCircle,
+  Lock,
+  ClipboardList,
   CheckCircle2,
-  Clock,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,21 @@ export interface LessonItem {
   questionsCount?: number;
 }
 
+export interface ModuleQuizItem {
+  id: string;
+  title: string;
+  passingPercentage: number;
+  timeLimit?: number | null;
+  _count?: { questions: number };
+  isLocked?: boolean; // true if module lessons not yet complete
+  userBestAttempt?: {
+    id: string;
+    score: number;
+    isPassed: boolean;
+    completedAt?: string | null;
+  } | null;
+}
+
 export interface ModuleItem {
   id: string;
   order: number;
@@ -36,6 +51,8 @@ export interface ModuleItem {
   description?: string;
   duration?: string;
   lessons: LessonItem[];
+  moduleQuiz?: ModuleQuizItem | null; // End-of-module assessment
+  moduleProgress?: { isCompleted: boolean; completedAt?: string | null }[] | null;
 }
 
 interface CourseModulesAccordionProps {
@@ -237,6 +254,63 @@ export function CourseModulesAccordion({ modules }: CourseModulesAccordionProps)
                       </div>
                     );
                   })}
+
+                  {/* Module-level Quiz Row (end-of-module assessment) */}
+                  {mod.moduleQuiz && (() => {
+                    const quiz = mod.moduleQuiz!;
+                    const isModuleComplete = mod.moduleProgress?.[0]?.isCompleted ?? false;
+                    const isLocked = quiz.isLocked !== undefined ? quiz.isLocked : !isModuleComplete;
+                    const hasPassed = quiz.userBestAttempt?.isPassed;
+
+                    return (
+                      <div className={`p-3 sm:px-5 border-t-2 border-dashed ${
+                        isLocked ? "border-slate-200 bg-slate-50/40" : hasPassed ? "border-emerald-200 bg-emerald-50/30" : "border-teal-200 bg-teal-50/30"
+                      }`}>
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3 min-w-0 flex-1">
+                            {isLocked ? (
+                              <Lock className="size-4 text-slate-400 shrink-0" />
+                            ) : hasPassed ? (
+                              <CheckCircle2 className="size-4 text-emerald-600 shrink-0" />
+                            ) : (
+                              <ClipboardList className="size-4 text-teal-600 shrink-0" />
+                            )}
+                            <div className="min-w-0">
+                              <p className={`text-xs font-bold truncate ${
+                                isLocked ? "text-slate-400" : hasPassed ? "text-emerald-700" : "text-teal-800"
+                              }`}>
+                                मॉड्यूल क्विज़: {quiz.title}
+                              </p>
+                              <p className="text-[10px] text-slate-500 mt-0.5">
+                                {quiz._count?.questions ?? 0} प्रश्न • {quiz.passingPercentage}% उत्तीर्ण अंक
+                                {quiz.timeLimit ? ` • ${quiz.timeLimit} मिनट` : ""}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="shrink-0">
+                            {isLocked ? (
+                              <span className="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+                                <Lock className="size-3" /> सभी पाठ पूरे करें
+                              </span>
+                            ) : hasPassed ? (
+                              <Badge className="bg-emerald-100 text-emerald-700 border-emerald-200 text-[10px]">
+                                ✓ उत्तीर्ण ({Math.round(quiz.userBestAttempt!.score)}%)
+                              </Badge>
+                            ) : (
+                              <Button
+                                size="sm"
+                                className="h-6 px-2 text-[11px] font-bold bg-teal-600 hover:bg-teal-700 text-white cursor-pointer rounded"
+                                onClick={() => setActiveQuiz({ title: quiz.title, questionsCount: quiz._count?.questions ?? 0 })}
+                              >
+                                मॉड्यूल क्विज़ दें
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
 

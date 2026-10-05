@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { resolvePrismaUserId } from "./user-profile.service";
-import { checkAndCompleteEnrollment } from "./enrollment.service";
 import { UpdateLessonProgressDTO } from "@/lib/dto";
+import { checkAndCompleteModule } from "./module-progress.service";
 
 /**
  * Get progress of a specific lesson for a user
@@ -72,9 +72,20 @@ export async function updateLessonProgress(data: UpdateLessonProgressDTO) {
     },
   });
 
-  // Check if updating this lesson completed the entire course
+  // After completing a lesson, check if the whole module is now done
   if (isCompleted && lesson.module.courseId) {
-    await checkAndCompleteEnrollment(prismaUserId, lesson.module.courseId);
+    // Find the user's enrollment for this course to pass enrollmentId
+    const enrollment = await prisma.enrollment.findUnique({
+      where: {
+        userId_courseId: {
+          userId: prismaUserId,
+          courseId: lesson.module.courseId,
+        },
+      },
+    });
+    if (enrollment) {
+      await checkAndCompleteModule(prismaUserId, lesson.moduleId, enrollment.id);
+    }
   }
 
   return progress;

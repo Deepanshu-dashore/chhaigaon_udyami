@@ -37,17 +37,26 @@ export type UpdateQuestionDTO = z.infer<typeof UpdateQuestionSchema>;
 // ==========================================
 
 export const CreateQuizSchema = z.object({
-  lessonId: z.string().min(1, "Lesson ID is required"),
+  lessonId: z.string().min(1).optional().nullable(), // Inline lesson quiz
+  moduleId: z.string().min(1).optional().nullable(), // Module-level assessment
   title: z.string().min(2, "Quiz title must be at least 2 characters").max(200),
   description: z.string().optional().nullable(),
   passingPercentage: z.coerce.number().int().min(1).max(100).default(60),
   timeLimit: z.coerce.number().int().positive().optional().nullable(), // minutes
   attemptLimit: z.coerce.number().int().positive().optional().nullable(),
   questions: z.array(CreateQuestionSchema).optional(),
+}).refine((data) => data.lessonId || data.moduleId, {
+  message: "Either lessonId or moduleId must be provided",
 });
 export type CreateQuizDTO = z.infer<typeof CreateQuizSchema>;
 
-export const UpdateQuizSchema = CreateQuizSchema.omit({ lessonId: true, questions: true }).partial();
+export const UpdateQuizSchema = z.object({
+  title: z.string().min(2).max(200).optional(),
+  description: z.string().optional().nullable(),
+  passingPercentage: z.coerce.number().int().min(1).max(100).optional(),
+  timeLimit: z.coerce.number().int().positive().optional().nullable(),
+  attemptLimit: z.coerce.number().int().positive().optional().nullable(),
+});
 export type UpdateQuizDTO = z.infer<typeof UpdateQuizSchema>;
 
 // ==========================================
@@ -63,6 +72,7 @@ export type SubmitQuizAnswerDTO = z.infer<typeof SubmitQuizAnswerSchema>;
 export const SubmitQuizAttemptSchema = z.object({
   quizId: z.string().min(1, "Quiz ID is required"),
   userId: z.string().min(1, "User ID is required"),
+  enrollmentId: z.string().optional(), // Links attempt to enrollment context
   answers: z.array(SubmitQuizAnswerSchema).min(1, "At least one answer must be submitted"),
 });
 export type SubmitQuizAttemptDTO = z.infer<typeof SubmitQuizAttemptSchema>;
