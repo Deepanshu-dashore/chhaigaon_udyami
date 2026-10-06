@@ -146,7 +146,7 @@ export default function AdminResourcesPage() {
             size="sm"
             onClick={fetchResources}
             disabled={loading}
-            className="rounded-xl border-slate-200 text-slate-700 text-xs h-9 gap-1.5"
+            className="rounded-sm border-slate-200 text-slate-700 text-xs h-9 gap-1.5"
           >
             <RefreshCw className={`size-3.5 ${loading ? "animate-spin" : ""}`} />
             <span>रिफ्रेश</span>
@@ -155,7 +155,7 @@ export default function AdminResourcesPage() {
           <Button
             onClick={() => setCreateOpen(true)}
             size="sm"
-            className="rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-9 gap-1.5 shadow-sm cursor-pointer"
+            className="rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-9 gap-1.5 shadow-sm cursor-pointer"
           >
             <Plus className="size-4" />
             <span>नया रिसोर्स जोड़ें</span>
@@ -173,7 +173,7 @@ export default function AdminResourcesPage() {
               placeholder="शीर्षक, श्रेणी या विवरण से खोजें..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-10 pl-9 pr-3 rounded-xl bg-slate-50 border-slate-200 text-xs"
+              className="h-10 pl-9 pr-3 rounded-sm bg-slate-50 border-slate-200 text-xs"
             />
           </div>
         </CardContent>
@@ -223,7 +223,7 @@ export default function AdminResourcesPage() {
                             asChild
                             variant="ghost"
                             size="sm"
-                            className="h-8 text-xs text-purple-700 hover:bg-purple-50 font-semibold cursor-pointer gap-1"
+                            className="h-8 px-2.5 rounded-sm text-xs text-purple-700 hover:bg-purple-50 font-semibold cursor-pointer gap-1"
                           >
                             <a href={resItem.resourceUrl} target="_blank" rel="noopener noreferrer">
                               <span>देखें</span>
@@ -245,7 +245,7 @@ export default function AdminResourcesPage() {
 
       {/* Create Resource Modal */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent className="sm:max-w-lg bg-white rounded-2xl p-6 border-slate-200">
+        <DialogContent className="sm:max-w-lg bg-white rounded-lg p-6 border-slate-200">
           <DialogHeader>
             <DialogTitle className="text-lg font-bold font-headline text-slate-900 flex items-center gap-2">
               <Lightbulb className="size-5 text-[#0056d2]" />
@@ -265,7 +265,7 @@ export default function AdminResourcesPage() {
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
                 required
-                className="h-10 rounded-xl bg-slate-50 text-xs"
+                className="h-10 rounded-sm bg-slate-50 text-xs"
               />
             </div>
 
@@ -275,7 +275,7 @@ export default function AdminResourcesPage() {
                 value={form.category}
                 onValueChange={(val) => setForm({ ...form, category: val })}
               >
-                <SelectTrigger className="w-full h-10 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800">
+                <SelectTrigger className="w-full h-10 rounded-sm border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800">
                   <SelectValue placeholder="श्रेणी चुनें" />
                 </SelectTrigger>
                 <SelectContent>
@@ -295,7 +295,7 @@ export default function AdminResourcesPage() {
                 placeholder="रिसोर्स की जानकारी व उपयोगिता विवरण..."
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="rounded-xl bg-slate-50 text-xs h-20"
+                className="rounded-sm bg-slate-50 text-xs h-20"
               />
             </div>
 
@@ -306,7 +306,7 @@ export default function AdminResourcesPage() {
                 placeholder="https://drive.google.com/... या पीडीएफ लिंक"
                 value={form.resourceUrl}
                 onChange={(e) => setForm({ ...form, resourceUrl: e.target.value })}
-                className="h-10 rounded-xl bg-slate-50 text-xs font-mono"
+                className="h-10 rounded-sm bg-slate-50 text-xs font-mono"
               />
             </div>
 
@@ -315,14 +315,14 @@ export default function AdminResourcesPage() {
                 type="button"
                 variant="outline"
                 onClick={() => setCreateOpen(false)}
-                className="rounded-xl text-xs h-10"
+                className="rounded-sm text-xs h-10"
               >
                 रद्द करें
               </Button>
               <Button
                 type="submit"
                 disabled={submitting}
-                className="rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-10 gap-2 cursor-pointer"
+                className="rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-10 gap-2 cursor-pointer"
               >
                 {submitting && <Spinner size="sm" variant="white" />}
                 <span>सहेजें (Save)</span>

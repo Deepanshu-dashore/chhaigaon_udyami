@@ -58,14 +58,14 @@ export function CertificateVerifier({
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="प्रमाण पत्र कोड दर्ज करें (उदा. CHU-SAMPLE-2026)"
-            className="w-full h-10 pl-9 pr-4 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600 focus:bg-white text-slate-900"
+            className="w-full h-10 pl-9 pr-4 text-xs bg-slate-50 border border-slate-300 rounded-sm focus:outline-none focus:border-blue-600 focus:bg-white text-slate-900"
           />
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
         </div>
         <Button
           type="submit"
           size="sm"
-          className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs h-10 px-4 rounded-lg cursor-pointer shadow-2xs"
+          className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs h-10 px-4 rounded-sm cursor-pointer shadow-2xs"
         >
           जांचें
         </Button>
@@ -100,14 +100,14 @@ export function CertificateVerifier({
               if (error) setError(null);
             }}
             placeholder="प्रमाण पत्र नंबर या QR कोड आईडी (उदा. CHU-SAMPLE-2026 / VRF-DEMO)"
-            className="w-full h-12 sm:h-13 pl-11 pr-32 text-xs sm:text-sm font-mono bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:border-[#0056d2] focus:bg-white transition-all text-slate-900 placeholder:text-slate-400"
+            className="w-full h-12 sm:h-13 pl-11 pr-32 text-xs sm:text-sm font-mono bg-slate-50 border border-slate-300 rounded-sm focus:outline-none focus:border-[#0056d2] focus:bg-white transition-all text-slate-900 placeholder:text-slate-400"
           />
           <Search className="w-4.5 h-4.5 text-slate-400 absolute left-3.5 top-4" />
           
           <Button
             type="submit"
             disabled={loading}
-            className="absolute right-1.5 top-1.5 h-9 sm:h-10 px-4 bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs sm:text-sm rounded-md cursor-pointer shadow-2xs transition-all"
+            className="absolute right-1.5 top-1.5 h-9 sm:h-10 px-4 bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs sm:text-sm rounded-sm cursor-pointer shadow-2xs transition-all"
           >
             {loading ? (
               <span>जांच हो रही है...</span>
@@ -121,7 +121,7 @@ export function CertificateVerifier({
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
+          <div className="flex items-center gap-2 p-3 rounded-sm bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -134,21 +134,21 @@ export function CertificateVerifier({
             <button
               type="button"
               onClick={() => handleSampleClick("CHU-FSSAI-2026")}
-              className="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-sm text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors cursor-pointer"
             >
               FSSAI खाद्य सुरक्षा
             </button>
             <button
               type="button"
               onClick={() => handleSampleClick("CHU-PMEGP-2026")}
-              className="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-sm text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors cursor-pointer"
             >
               PMEGP लोन व DPR
             </button>
             <button
               type="button"
               onClick={() => handleSampleClick("CHU-DAIRY-2026")}
-              className="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-sm text-xs font-medium bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-colors cursor-pointer"
             >
               नाबार्ड डेयरी उद्यम
             </button>

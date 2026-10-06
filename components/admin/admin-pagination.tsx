@@ -57,7 +57,7 @@ export function AdminPagination({
               value={limit.toString()}
               onValueChange={(val) => onLimitChange(parseInt(val, 10))}
             >
-              <SelectTrigger className="h-7 w-16 text-xs rounded-md border-slate-200 bg-slate-50">
+              <SelectTrigger className="h-7 w-16 text-xs rounded-sm border-slate-200 bg-slate-50">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent side="top">
@@ -77,7 +77,7 @@ export function AdminPagination({
           size="icon-xs"
           onClick={() => onPageChange(1)}
           disabled={page <= 1}
-          className="size-7 rounded-md cursor-pointer disabled:opacity-40"
+          className="size-7 rounded-sm cursor-pointer disabled:opacity-40"
           title="First Page"
         >
           <ChevronsLeft className="size-3.5" />
@@ -87,7 +87,7 @@ export function AdminPagination({
           size="icon-xs"
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1}
-          className="size-7 rounded-md cursor-pointer disabled:opacity-40"
+          className="size-7 rounded-sm cursor-pointer disabled:opacity-40"
           title="Previous Page"
         >
           <ChevronLeft className="size-3.5" />
@@ -102,7 +102,7 @@ export function AdminPagination({
           size="icon-xs"
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages || totalPages === 0}
-          className="size-7 rounded-md cursor-pointer disabled:opacity-40"
+          className="size-7 rounded-sm cursor-pointer disabled:opacity-40"
           title="Next Page"
         >
           <ChevronRight className="size-3.5" />
@@ -112,7 +112,7 @@ export function AdminPagination({
           size="icon-xs"
           onClick={() => onPageChange(totalPages)}
           disabled={page >= totalPages || totalPages === 0}
-          className="size-7 rounded-md cursor-pointer disabled:opacity-40"
+          className="size-7 rounded-sm cursor-pointer disabled:opacity-40"
           title="Last Page"
         >
           <ChevronsRight className="size-3.5" />

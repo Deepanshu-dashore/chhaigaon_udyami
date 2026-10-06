@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils";
 import { TrendingUp, ArrowRight, Play, Star, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface CourseCardProps {
   id: string;
@@ -160,13 +161,16 @@ export function CourseCard({
           )}
         </div>
 
-        <Link
-          href={`/courses/${slug}`}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#0056d2] hover:bg-blue-700 text-white text-xs font-semibold shadow-2xs hover:shadow-xs transition-all shrink-0 cursor-pointer"
+        <Button
+          asChild
+          size="sm"
+          className="rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white text-xs font-semibold shadow-2xs hover:shadow-xs transition-all shrink-0 cursor-pointer h-8 px-3 gap-1.5"
         >
-          <span>{isFree ? "निःशुल्क प्रवेश लें" : "प्रवेश लें"}</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
+          <Link href={`/courses/${slug}`}>
+            <span>{isFree ? "निःशुल्क प्रवेश लें" : "प्रवेश लें"}</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </Button>
       </div>
     </article>
   );

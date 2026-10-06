@@ -2,6 +2,8 @@ import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/auth";
+import { resolvePrismaUserId } from "@/services/user-profile.service";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Badge } from "@/components/ui/badge";
@@ -235,17 +237,73 @@ export default async function CourseDetailPage({
   const { slug } = await params;
 
   let dbCourse = null;
+  let isEnrolled = false;
+  let prismaUserId: string | null = null;
+
   try {
+    const user = await getCurrentUser();
+    if (user) {
+      prismaUserId = await resolvePrismaUserId(user.id);
+    }
+
     dbCourse = await prisma.course.findUnique({
       where: { slug },
       include: {
         createdBy: true,
         modules: {
           orderBy: { order: "asc" },
-          include: { lessons: { orderBy: { order: "asc" } } },
+          include: {
+            quizzes: {
+              select: {
+                id: true,
+                title: true,
+                passingPercentage: true,
+                timeLimit: true,
+                attemptLimit: true,
+                _count: { select: { questions: true } },
+              },
+            },
+            ...(prismaUserId
+              ? {
+                  moduleProgress: {
+                    where: { userId: prismaUserId },
+                    select: {
+                      isCompleted: true,
+                      completedAt: true,
+                    },
+                  },
+                }
+              : {}),
+            lessons: {
+              orderBy: { order: "asc" },
+              include: {
+                video: true,
+                material: true,
+                ...(prismaUserId
+                  ? {
+                      progress: {
+                        where: { userId: prismaUserId },
+                      },
+                    }
+                  : {}),
+              },
+            },
+          },
         },
       },
     });
+
+    if (prismaUserId && dbCourse) {
+      const enrollment = await prisma.enrollment.findUnique({
+        where: {
+          userId_courseId: {
+            userId: prismaUserId,
+            courseId: dbCourse.id,
+          },
+        },
+      });
+      isEnrolled = enrollment?.status === "ACTIVE" || enrollment?.status === "COMPLETED";
+    }
   } catch (err) {
     console.warn("DB query error in CourseDetailPage, using fallback mock:", err);
   }
@@ -300,7 +358,10 @@ export default async function CourseDetailPage({
             duration: l.duration ? `${Math.round(l.duration / 60)} मिनट` : "15 मिनट",
             type: (l.type.toLowerCase() as any) || "video",
             isPreview: l.isPreview,
+            isCompleted: (l as any).progress?.[0]?.isCompleted || false,
           })),
+          quizzes: m.quizzes || [],
+          moduleProgress: (m as any).moduleProgress?.[0] || null,
         }))
       : mock.modules,
   };
@@ -442,7 +503,7 @@ export default async function CourseDetailPage({
                 {/* Primary Action Button */}
                 <div className="pt-3 flex items-center gap-4 flex-wrap">
                   <Link href="/apply">
-                    <Button className="h-11 px-7 rounded-md bg-[#1261D6] hover:bg-blue-700 text-white text-sm font-bold shadow-2xs cursor-pointer inline-flex items-center gap-2">
+                    <Button className="h-11 px-7 rounded-sm bg-[#1261D6] hover:bg-blue-700 text-white text-sm font-bold shadow-2xs cursor-pointer inline-flex items-center gap-2">
                       <span>{isFree ? "निःशुल्क प्रवेश लें (Free Enroll)" : "अभी प्रवेश लें (Enroll Now)"}</span>
                       <ArrowRight className="size-4" />
                     </Button>
@@ -510,14 +571,14 @@ export default async function CourseDetailPage({
 
                       {/* Primary & Secondary Action CTAs */}
                       <div className="space-y-2 pt-1">
-                        <Button asChild className="w-full h-11 bg-[#1261D6] hover:bg-blue-700 text-white font-bold text-sm rounded-md shadow-2xs cursor-pointer">
+                        <Button asChild className="w-full h-11 bg-[#1261D6] hover:bg-blue-700 text-white font-bold text-sm rounded-sm shadow-2xs cursor-pointer">
                           <Link href="/apply">
                             <span>{isFree ? "निःशुल्क प्रवेश लें (Free Enroll)" : "कार्ट में जोड़ें (Add to Cart)"}</span>
                           </Link>
                         </Button>
 
                         {!isFree && (
-                          <Button asChild variant="outline" className="w-full h-11 border-[#E5E7EB] text-[#111827] hover:bg-slate-50 font-bold text-sm rounded-md cursor-pointer">
+                          <Button asChild variant="outline" className="w-full h-11 border-[#E5E7EB] text-[#111827] hover:bg-slate-50 font-bold text-sm rounded-sm cursor-pointer">
                             <Link href="/apply">
                               <span>अभी खरीदें (Buy Now)</span>
                             </Link>
@@ -604,7 +665,7 @@ export default async function CourseDetailPage({
 
               {/* SECTION 2: LEARNING PATH & CURRICULUM */}
               <section id="curriculum" className="scroll-mt-28">
-                <LearningPathTimeline modules={course.modules} isEnrolled={false} />
+                <LearningPathTimeline modules={course.modules} isEnrolled={isEnrolled} />
               </section>
 
               <Separator className="bg-[#E5E7EB]" />
@@ -693,7 +754,7 @@ export default async function CourseDetailPage({
                   <p className="text-xs text-[#667085] leading-relaxed">
                     कोर्स एनरोलमेंट, बैंक DPR, लोन आवेदन या सब्सिडी सहायता हेतु सीधे हमारे मेंटर्स से संपर्क करें।
                   </p>
-                  <Button asChild variant="outline" className="w-full h-9 text-xs font-semibold text-[#1261D6] border-[#1261D6]/40 hover:bg-blue-50 rounded-md">
+                  <Button asChild variant="outline" className="w-full h-9 text-xs font-semibold text-[#1261D6] border-[#1261D6]/40 hover:bg-blue-50 rounded-sm">
                     <Link href="/contact">
                       <span>सहायता केंद्र से जुड़ें</span>
                     </Link>

@@ -58,7 +58,7 @@ export interface NavGroup {
 
 export const adminNavGroups: NavGroup[] = [
   {
-    groupLabel: "मुख्य मेनू (Main Menu)",
+    groupLabel: "Main Menu",
     items: [
       {
         title: "डैशबोर्ड (Overview)",
@@ -68,7 +68,7 @@ export const adminNavGroups: NavGroup[] = [
     ],
   },
   {
-    groupLabel: "शैक्षणिक एवं उपयोगकर्ता (Academic & Users)",
+    groupLabel: "Academic & Users",
     items: [
       {
         title: "उपयोगकर्ता (User Directory)",
@@ -103,7 +103,7 @@ export const adminNavGroups: NavGroup[] = [
     ],
   },
   {
-    groupLabel: "योजनाएं एवं सेवाएं (Schemes & B2B)",
+    groupLabel: "Schemes & B2B",
     items: [
       {
         title: "सरकारी योजनाएं (Schemes)",
@@ -128,7 +128,7 @@ export const adminNavGroups: NavGroup[] = [
     ],
   },
   {
-    groupLabel: "वित्त एवं लेखा (Finance)",
+    groupLabel: "Finance",
     items: [
       {
         title: "भुगतान एवं ऑर्डर्स (Payments)",
@@ -138,7 +138,7 @@ export const adminNavGroups: NavGroup[] = [
     ],
   },
   {
-    groupLabel: "सुपर एडमिन नियंत्रण (Super Admin)",
+    groupLabel: "Super Admin",
     isSuperAdminGroup: true,
     items: [
       {
@@ -168,7 +168,7 @@ export const adminNavGroups: NavGroup[] = [
     ],
   },
   {
-    groupLabel: "त्वरित लिंक (Quick Links)",
+    groupLabel: "Quick Links",
     items: [
       {
         title: "मुख्य वेबसाइट (Website)",
@@ -248,7 +248,7 @@ export function AdminSidebar({
                   alt="Chhaigaon Udyami Logo"
                   width={40}
                   height={40}
-                  className="object-contain p-0.5"
+                  className={`object-contain p-0.5 ${isCollapsed ? "hidden" : ""}`}
                   onError={() => setLogoError(true)}
                   priority
                 />
@@ -273,15 +273,15 @@ export function AdminSidebar({
           </Link>
 
           {/* Collapse Toggle Button */}
-          {onToggleCollapse && !isCollapsed && (
+          {onToggleCollapse && (
             <Button
               variant="ghost"
               size="icon"
               onClick={onToggleCollapse}
-              className="hidden md:flex size-8 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer shrink-0 transition-colors"
+              className="hidden md:flex size-8 rounded-sm text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer shrink-0 transition-colors"
               title="साइडबार संक्षिप्त करें"
             >
-              <ChevronLeft className="size-4" />
+              <ChevronLeft className={`size-4 transition-transform duration-300 ${isCollapsed ? "rotate-180" : ""}`} />
             </Button>
           )}
         </div>
@@ -310,7 +310,7 @@ export function AdminSidebar({
             ) : (
               <Link
                 href="/dashboard"
-                className="flex items-center gap-2.5 w-full bg-blue-50 text-[#0056d2] hover:bg-blue-100/80 border border-blue-200 h-9.5 rounded-xl font-bold transition-colors shadow-2xs px-2.5"
+                className="flex items-center gap-2.5 w-full bg-blue-50 text-[#0056d2] hover:bg-blue-100/80 border border-blue-200 h-9.5 rounded-sm font-bold transition-colors shadow-2xs px-2.5"
               >
                 <GraduationCap className="size-4.5 text-[#0056d2] shrink-0" />
                 <span className="text-xs truncate">विद्यार्थी पोर्टल (Learner Dashboard)</span>
@@ -325,7 +325,7 @@ export function AdminSidebar({
               <div key={groupIdx} className="space-y-1">
                 {!isCollapsed ? (
                   <div className="px-2 pb-1">
-                    <span className="text-slate-400 font-bold uppercase text-[11px] tracking-wider">
+                    <span className="text-slate-400 font-semibold uppercase text-[11px] tracking-wide">
                       {group.groupLabel}
                     </span>
                   </div>
@@ -349,7 +349,7 @@ export function AdminSidebar({
                         target={item.isExternal ? "_blank" : undefined}
                         rel={item.isExternal ? "noopener noreferrer" : undefined}
                         className={cn(
-                          "flex items-center gap-3 h-9.5 rounded-xl font-medium transition-colors cursor-pointer",
+                          "flex items-center gap-3 h-9.5 rounded-sm font-medium transition-colors cursor-pointer",
                           isCollapsed ? "justify-center px-0 w-full" : "px-2.5 w-full",
                           isActive
                             ? "bg-blue-50 text-[#0056d2] font-bold shadow-2xs"
@@ -462,7 +462,7 @@ export function AdminSidebar({
                     variant="ghost"
                     size="icon"
                     onClick={() => signOut()}
-                    className="size-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer shrink-0 transition-colors"
+                    className="size-7 rounded-sm text-slate-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer shrink-0 transition-colors"
                   >
                     <LogOut className="size-3.5" />
                   </Button>

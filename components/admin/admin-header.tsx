@@ -78,7 +78,7 @@ export function AdminHeader({ user, onOpenMobileNav }: AdminHeaderProps) {
                 variant="ghost"
                 size="icon"
                 onClick={onOpenMobileNav}
-                className="lg:hidden size-9 rounded-xl text-slate-600 hover:bg-slate-100 cursor-pointer shrink-0"
+                className="lg:hidden size-9 rounded-sm text-slate-600 hover:bg-slate-100 cursor-pointer shrink-0"
               >
                 <PanelLeft className="size-5 text-slate-700" />
                 <span className="sr-only">Toggle Sidebar</span>
@@ -132,7 +132,7 @@ export function AdminHeader({ user, onOpenMobileNav }: AdminHeaderProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="relative size-9 rounded-lg hover:bg-slate-100 text-slate-600 cursor-pointer"
+                  className="relative size-9 rounded-sm hover:bg-slate-100 text-slate-600 cursor-pointer"
                 >
                   <Bell className="h-4 w-4" />
                   <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-rose-500 ring-2 ring-white" />

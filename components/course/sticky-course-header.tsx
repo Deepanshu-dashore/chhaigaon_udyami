@@ -74,7 +74,7 @@ export function StickyCourseHeader({
             </div>
           )}
 
-          <Button asChild size="sm" className="h-9 px-4 text-xs font-bold bg-[#1261D6] hover:bg-blue-700 text-white rounded-md shadow-2xs cursor-pointer">
+          <Button asChild size="sm" className="h-9 px-4 text-xs font-bold bg-[#1261D6] hover:bg-blue-700 text-white rounded-sm shadow-2xs cursor-pointer">
             <Link href="/apply">
               <span>{isFree ? "निःशुल्क प्रवेश लें " : "अभी प्रवेश लें (Enroll Now)"}</span>
               <ArrowRight className="size-3.5 ml-1" />

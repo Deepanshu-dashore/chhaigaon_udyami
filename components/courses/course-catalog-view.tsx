@@ -14,6 +14,7 @@ import {
   Check,
   Star,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface CourseCatalogViewProps {
   initialCourses: CourseItem[];
@@ -226,7 +227,7 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="उदा. डेयरी, FSSAI, लोन..."
-                className="w-full h-9 pl-8 pr-3 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:border-blue-600 focus:bg-white text-slate-900 placeholder:text-slate-400"
+                className="w-full h-9 pl-8 pr-3 text-xs bg-slate-50 border border-slate-300 rounded-sm focus:outline-none focus:border-blue-600 focus:bg-white text-slate-900 placeholder:text-slate-400"
               />
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-3" />
               {searchQuery && (
@@ -333,15 +334,17 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
         <div className="lg:col-span-9 space-y-6">
           
           {/* Top Control Bar: Total Count & Sort Dropdown */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-50/80 p-3.5 rounded-xl border border-slate-200">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-50/80 p-3.5 rounded-sm border border-slate-200">
             <div className="flex items-center gap-3">
-              <button
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => setMobileFilterOpen(true)}
-                className="lg:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-bold text-slate-800 shadow-2xs"
+                className="lg:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-white border border-slate-300 text-xs font-bold text-slate-800 shadow-2xs"
               >
                 <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600" />
                 <span>फ़िल्टर ({filteredCourses.length})</span>
-              </button>
+              </Button>
 
               <span className="text-xs font-bold text-slate-800">
                 कुल उपलब्ध पाठ्यक्रम: <strong className="text-blue-700 font-extrabold">{filteredCourses.length}</strong>
@@ -355,7 +358,7 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
                 aria-label="पाठ्यक्रम क्रमबद्ध करें"
-                className="h-8 pl-2.5 pr-8 text-xs font-semibold bg-white border border-slate-300 rounded-lg text-slate-800 focus:outline-none focus:border-blue-600 cursor-pointer"
+                className="h-8 pl-2.5 pr-8 text-xs font-semibold bg-white border border-slate-300 rounded-sm text-slate-800 focus:outline-none focus:border-blue-600 cursor-pointer"
               >
                 <option value="popular">सर्वाधिक लोकप्रिय (Most Popular)</option>
                 <option value="rating">उच्चतम रेटिंग (Highest Rated)</option>
@@ -419,12 +422,12 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
               <p className="text-xs text-slate-500 max-w-sm mx-auto mb-4">
                 आपके द्वारा चुने गए फ़िल्टर या खोज शब्दों के अनुसार कोई परिणाम उपलब्ध नहीं है।
               </p>
-              <button
+              <Button
                 onClick={clearAllFilters}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors shadow-xs"
+                className="px-4 py-2 bg-blue-600 text-white rounded-sm text-xs font-bold hover:bg-blue-700 transition-colors shadow-xs"
               >
                 सभी फ़िल्टर रीसेट करें
-              </button>
+              </Button>
             </div>
           )}
 
@@ -435,7 +438,7 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
       {/* MOBILE FILTER MODAL / DRAWER */}
       {mobileFilterOpen && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-xs">
-          <div className="bg-white w-full sm:max-w-md max-h-[85vh] rounded-t-3xl sm:rounded-2xl p-5 overflow-y-auto space-y-5 shadow-2xl">
+          <div className="bg-white w-full sm:max-w-md max-h-[85vh] rounded-t-xl sm:rounded-lg p-5 overflow-y-auto space-y-5 shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-2">
                 <SlidersHorizontal className="w-4 h-4 text-blue-600" />
@@ -449,8 +452,6 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
               </button>
             </div>
 
-
-
             {/* Mobile Price */}
             <div className="space-y-2 pt-2 border-t border-slate-100">
               <label className="text-xs font-bold text-slate-800 block">मूल्य</label>
@@ -463,7 +464,7 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
                   <button
                     key={p.id}
                     onClick={() => setPriceFilter(p.id as any)}
-                    className={`flex-1 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
+                    className={`flex-1 py-1.5 rounded-sm text-xs font-semibold border transition-all ${
                       priceFilter === p.id
                         ? "bg-blue-600 text-white border-blue-600"
                         : "bg-slate-50 border-slate-200 text-slate-700"
@@ -476,18 +477,19 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
             </div>
 
             <div className="pt-4 flex gap-3">
-              <button
+              <Button
+                variant="outline"
                 onClick={clearAllFilters}
-                className="flex-1 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50"
+                className="flex-1 py-2.5 rounded-sm border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50"
               >
                 रीसेट करें
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setMobileFilterOpen(false)}
-                className="flex-1 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 shadow-xs"
+                className="flex-1 py-2.5 rounded-sm bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 shadow-xs"
               >
                 परिणाम देखें ({filteredCourses.length})
-              </button>
+              </Button>
             </div>
           </div>
         </div>

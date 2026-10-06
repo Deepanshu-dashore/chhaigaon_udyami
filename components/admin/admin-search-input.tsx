@@ -73,7 +73,7 @@ export function AdminSearchInput({
         value={internalValue}
         onChange={(e) => setInternalValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="h-9 pl-9 pr-9 text-xs bg-slate-50/90 rounded-lg border-slate-200 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-1 focus-visible:ring-[#0056d2]/20"
+        className="h-9 pl-9 pr-9 text-xs bg-slate-50/90 rounded-sm border-slate-200 focus-visible:bg-white focus-visible:border-[#0056d2] focus-visible:ring-1 focus-visible:ring-[#0056d2]/20"
       />
 
       <div className="absolute right-2 flex items-center gap-1 z-10">
@@ -86,7 +86,7 @@ export function AdminSearchInput({
             variant="ghost"
             size="icon-xs"
             onClick={handleClear}
-            className="size-5 rounded-md hover:bg-slate-200/80 text-slate-400 hover:text-slate-700 transition cursor-pointer"
+            className="size-5 rounded-sm hover:bg-slate-200/80 text-slate-400 hover:text-slate-700 transition cursor-pointer"
             title="Clear search (Esc)"
           >
             <X className="size-3.5" />

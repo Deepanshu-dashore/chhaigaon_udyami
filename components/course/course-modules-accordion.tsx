@@ -216,7 +216,7 @@ export function CourseModulesAccordion({ modules }: CourseModulesAccordionProps)
                                     questionsCount: lesson.questionsCount || 10,
                                   })
                                 }
-                                className="h-6 px-2 text-[11px] font-bold bg-[#0056d2] hover:bg-blue-700 text-white cursor-pointer rounded"
+                                className="h-6 px-2 text-[11px] font-bold bg-[#0056d2] hover:bg-blue-700 text-white cursor-pointer rounded-sm"
                               >
                                 क्विज़ दें
                               </Button>
@@ -227,7 +227,7 @@ export function CourseModulesAccordion({ modules }: CourseModulesAccordionProps)
                                 size="sm"
                                 variant="outline"
                                 asChild
-                                className="h-6 px-2 text-[11px] font-bold border-amber-300 text-amber-800 hover:bg-amber-50 cursor-pointer rounded"
+                                className="h-6 px-2 text-[11px] font-bold border-amber-300 text-amber-800 hover:bg-amber-50 cursor-pointer rounded-sm"
                               >
                                 <a href={lesson.downloadUrl || "#resources"} download>
                                   <Download className="size-3 mr-1" />
@@ -247,7 +247,7 @@ export function CourseModulesAccordion({ modules }: CourseModulesAccordionProps)
 
                         {/* Optional Lesson Description */}
                         {isLessonExpanded && lesson.description && (
-                          <div className="mt-2 pl-7 pr-2 py-2 text-xs text-slate-600 bg-slate-50 rounded border border-slate-200/60 leading-relaxed">
+                          <div className="mt-2 pl-7 pr-2 py-2 text-xs text-slate-600 bg-slate-50 rounded-sm border border-slate-200/60 leading-relaxed">
                             {lesson.description}
                           </div>
                         )}
@@ -294,13 +294,13 @@ export function CourseModulesAccordion({ modules }: CourseModulesAccordionProps)
                                 <Lock className="size-3" /> सभी पाठ पूरे करें
                               </span>
                             ) : hasPassed ? (
-                              <Badge className="bg-emerald-100 text-emerald-700 border-emerald-200 text-[10px]">
+                              <Badge className="bg-emerald-100 text-emerald-700 border-emerald-200 text-[10px] rounded-sm">
                                 ✓ उत्तीर्ण ({Math.round(quiz.userBestAttempt!.score)}%)
                               </Badge>
                             ) : (
                               <Button
                                 size="sm"
-                                className="h-6 px-2 text-[11px] font-bold bg-teal-600 hover:bg-teal-700 text-white cursor-pointer rounded"
+                                className="h-6 px-2 text-[11px] font-bold bg-teal-600 hover:bg-teal-700 text-white cursor-pointer rounded-sm"
                                 onClick={() => setActiveQuiz({ title: quiz.title, questionsCount: quiz._count?.questions ?? 0 })}
                               >
                                 मॉड्यूल क्विज़ दें
@@ -322,7 +322,7 @@ export function CourseModulesAccordion({ modules }: CourseModulesAccordionProps)
       {/* Interactive Quiz Modal */}
       {activeQuiz && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-200 text-slate-900">
+          <div className="bg-white rounded-lg max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-200 text-slate-900">
             <div className="flex items-center justify-between border-b pb-3">
               <div>
                 <h3 className="font-bold text-slate-900 text-sm font-headline">
@@ -341,7 +341,7 @@ export function CourseModulesAccordion({ modules }: CourseModulesAccordionProps)
             </div>
 
             <div className="space-y-3">
-              <div className="p-3 rounded-lg border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800">
+              <div className="p-3 rounded-sm border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800">
                 प्रश्न 1: Dairy Farm में वैज्ञानिक पशु शेड का वेंटीलेशन लेआउट कैसा होना चाहिए?
               </div>
               <div className="space-y-2 text-xs">
@@ -349,7 +349,7 @@ export function CourseModulesAccordion({ modules }: CourseModulesAccordionProps)
                   (opt, i) => (
                     <label
                       key={i}
-                      className="flex items-center gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer font-medium text-slate-800"
+                      className="flex items-center gap-2.5 p-2.5 rounded-sm border border-slate-200 hover:bg-slate-50 cursor-pointer font-medium text-slate-800"
                     >
                       <input type="radio" name="q1" className="text-[#0056d2]" />
                       <span>{opt}</span>
@@ -364,7 +364,7 @@ export function CourseModulesAccordion({ modules }: CourseModulesAccordionProps)
                 variant="outline"
                 size="sm"
                 onClick={() => setActiveQuiz(null)}
-                className="text-xs font-bold text-slate-600 cursor-pointer"
+                className="text-xs font-bold text-slate-600 rounded-sm cursor-pointer"
               >
                 रद्द करें
               </Button>
@@ -374,7 +374,7 @@ export function CourseModulesAccordion({ modules }: CourseModulesAccordionProps)
                   alert("🎉 क्विज़ उत्तीर्ण! आपका स्कोर: 90%");
                   setActiveQuiz(null);
                 }}
-                className="bg-[#0056d2] hover:bg-blue-700 text-white text-xs font-bold cursor-pointer"
+                className="bg-[#0056d2] hover:bg-blue-700 text-white text-xs font-bold rounded-sm cursor-pointer"
               >
                 उत्तर सबमिट करें
               </Button>

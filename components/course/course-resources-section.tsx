@@ -40,7 +40,7 @@ export function CourseResourcesSection({
 
       {/* Lock Warning Banner when not enrolled */}
       {!isEnrolled && (
-        <div className="p-4 rounded-lg bg-[#F0F5FF] border border-[#C6DCFF] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[#0F3875]">
+        <div className="p-4 rounded-sm bg-[#F0F5FF] border border-[#C6DCFF] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[#0F3875]">
           <div className="flex items-start gap-2.5">
             <Lock className="size-4 text-[#1261D6] shrink-0 mt-0.5" />
             <div className="space-y-0.5">
@@ -52,7 +52,7 @@ export function CourseResourcesSection({
               </p>
             </div>
           </div>
-          <Button asChild size="sm" className="bg-[#1261D6] hover:bg-blue-700 text-white font-bold text-xs h-9 px-4 rounded-md shrink-0 cursor-pointer shadow-2xs">
+          <Button asChild size="sm" className="bg-[#1261D6] hover:bg-blue-700 text-white font-bold text-xs h-9 px-4 rounded-sm shrink-0 cursor-pointer shadow-2xs">
             <Link href="/apply">
               <span>अभी अनलॉक करें</span>
             </Link>
@@ -65,7 +65,7 @@ export function CourseResourcesSection({
         {resources.map((res: ResourceItem, idx: number) => (
           <div
             key={idx}
-            className={`p-3.5 rounded-lg border transition-colors flex items-center justify-between gap-4 ${
+            className={`p-3.5 rounded-sm border transition-colors flex items-center justify-between gap-4 ${
               isEnrolled
                 ? "border-[#E5E7EB] bg-white hover:border-blue-300"
                 : "border-[#E5E7EB] bg-[#F8FAFC]"
@@ -88,14 +88,14 @@ export function CourseResourcesSection({
             </div>
 
             {isEnrolled ? (
-              <Button size="sm" variant="outline" asChild className="h-8.5 px-3.5 text-xs font-bold text-[#111827] border-[#E5E7EB] hover:bg-slate-50 rounded-md shrink-0 cursor-pointer">
+              <Button size="sm" variant="outline" asChild className="h-8.5 px-3.5 text-xs font-bold text-[#111827] border-[#E5E7EB] hover:bg-slate-50 rounded-sm shrink-0 cursor-pointer">
                 <a href={res.url} download>
                   <Download className="size-3.5 mr-1 text-[#1261D6]" />
                   डाउनलोड (PDF/Excel)
                 </a>
               </Button>
             ) : (
-              <Button size="sm" variant="outline" asChild className="h-8.5 px-3.5 text-xs font-semibold text-[#1261D6] border-[#1261D6]/40 bg-white hover:bg-blue-50/80 hover:border-[#1261D6] rounded-md shrink-0 cursor-pointer shadow-2xs">
+              <Button size="sm" variant="outline" asChild className="h-8.5 px-3.5 text-xs font-semibold text-[#1261D6] border-[#1261D6]/40 bg-white hover:bg-blue-50/80 hover:border-[#1261D6] rounded-sm shrink-0 cursor-pointer shadow-2xs">
                 <Link href="/apply">
                   <Lock className="size-3.5 mr-1 text-[#1261D6]" />
                   <span>अनलॉक करने हेतु एनरोल करें</span>

@@ -105,14 +105,14 @@ export default async function DashboardCertificatesPage() {
             <Link href="/certificates">
               <Button
                 variant="outline"
-                className="bg-white/10 hover:bg-white/20 text-white border-white/30 text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer"
+                className="bg-white/10 hover:bg-white/20 text-white border-white/30 text-xs font-semibold px-4 py-2 rounded-sm cursor-pointer"
               >
                 <span>सत्यापन पोर्टल</span>
                 <ExternalLink className="w-3.5 h-3.5 ml-1" />
               </Button>
             </Link>
             <Link href="/courses">
-              <Button className="bg-[#0056d2] hover:bg-blue-600 text-white font-bold text-xs px-4 py-2 rounded-lg shadow-xs cursor-pointer">
+              <Button className="bg-[#0056d2] hover:bg-blue-600 text-white font-bold text-xs px-4 py-2 rounded-sm shadow-xs cursor-pointer">
                 <span>नया कोर्स खोजें</span>
               </Button>
             </Link>
@@ -162,7 +162,7 @@ export default async function DashboardCertificatesPage() {
             </div>
             <div className="pt-2">
               <Link href="/courses">
-                <Button className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs px-5 py-2.5 rounded-lg cursor-pointer">
+                <Button className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs px-5 py-2.5 rounded-sm cursor-pointer">
                   <span>पाठ्यक्रम शुरू करें</span>
                   <ArrowRight className="w-4 h-4 ml-1.5" />
                 </Button>
@@ -185,7 +185,7 @@ export default async function DashboardCertificatesPage() {
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
                         <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                         <span>सत्यापित प्रमाण पत्र</span>
                       </span>
@@ -212,7 +212,7 @@ export default async function DashboardCertificatesPage() {
                       <Link href={`/certificates/${cert.verificationCode}`}>
                         <Button
                           size="sm"
-                          className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs h-8 px-3 rounded-md cursor-pointer inline-flex items-center gap-1"
+                          className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs h-8 px-3 rounded-sm cursor-pointer inline-flex items-center gap-1"
                         >
                           <Printer className="w-3.5 h-3.5" />
                           <span>देखें व प्रिंट करें</span>
@@ -246,7 +246,7 @@ export default async function DashboardCertificatesPage() {
                 >
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
-                      <Badge variant="outline" className="text-[10px] text-amber-800 bg-amber-50 border-amber-200 font-bold rounded-md">
+                      <Badge variant="outline" className="text-[10px] text-amber-800 bg-amber-50 border-amber-200 font-bold rounded-sm">
                         प्रमाण पत्र लॉक है
                       </Badge>
                       <Lock className="w-3.5 h-3.5 text-slate-400" />
@@ -266,7 +266,7 @@ export default async function DashboardCertificatesPage() {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="w-full text-xs font-bold text-blue-700 hover:bg-blue-50 border-blue-200 h-8 rounded-md cursor-pointer flex items-center justify-center gap-1.5"
+                        className="w-full text-xs font-bold text-blue-700 hover:bg-blue-50 border-blue-200 h-8 rounded-sm cursor-pointer flex items-center justify-center gap-1.5"
                       >
                         <span>अध्ययन जारी रखें</span>
                         <ArrowRight className="w-3.5 h-3.5" />

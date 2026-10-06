@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { resolvePrismaUserId } from "./user-profile.service";
 import { EnrollmentStatus } from "@prisma/client";
 import { EnrollmentFilterQueryDTO } from "@/lib/dto";
+import { autoIssueCertificate } from "./certificate.service";
 
 /**
  * Enroll a user into a Course
@@ -215,13 +216,18 @@ export async function checkAndCompleteEnrollment(
     });
 
     if (enrollment && enrollment.status !== "COMPLETED") {
-      return prisma.enrollment.update({
+      const updated = await prisma.enrollment.update({
         where: { id: enrollment.id },
         data: {
           status: "COMPLETED",
           completedAt: new Date(),
         },
       });
+
+      // Auto-issue certificate only if all module quizzes are passed
+      await autoIssueCertificate(prismaUserId, courseId, enrollment.id);
+
+      return updated;
     }
   }
 

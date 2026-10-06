@@ -101,7 +101,7 @@ export function CertificateShowcaseTabs() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
+                className={`px-3.5 py-2 rounded-sm text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
                   isActive
                     ? "bg-[#0056d2] text-white border-[#0056d2] shadow-xs"
                     : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200"
@@ -115,11 +115,11 @@ export function CertificateShowcaseTabs() {
         </div>
 
         {/* View Mode Toggle (Interactive HTML vs Studio Mockup) */}
-        <div className="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200 shrink-0">
+        <div className="flex items-center bg-slate-100 p-1 rounded-sm border border-slate-200 shrink-0">
           <button
             type="button"
             onClick={() => setViewMode("interactive")}
-            className={`px-3 py-1.5 rounded-md text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-sm text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
               viewMode === "interactive"
                 ? "bg-white text-slate-900 shadow-2xs border border-slate-200/60"
                 : "text-slate-600 hover:text-slate-900"
@@ -131,7 +131,7 @@ export function CertificateShowcaseTabs() {
           <button
             type="button"
             onClick={() => setViewMode("mockup")}
-            className={`px-3 py-1.5 rounded-md text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-sm text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
               viewMode === "mockup"
                 ? "bg-white text-slate-900 shadow-2xs border border-slate-200/60"
                 : "text-slate-600 hover:text-slate-900"
@@ -198,7 +198,7 @@ export function CertificateShowcaseTabs() {
         <Link href={`/certificates/${currentCert.verificationCode}`}>
           <Button
             variant="outline"
-            className="text-xs sm:text-sm font-bold text-[#0056d2] border-blue-200 hover:bg-blue-50 px-5 py-2 rounded-lg inline-flex items-center gap-2 cursor-pointer shadow-xs"
+            className="text-xs sm:text-sm font-bold text-[#0056d2] border-blue-200 hover:bg-blue-50 px-5 py-2 rounded-sm inline-flex items-center gap-2 cursor-pointer shadow-xs"
           >
             <span>इस प्रमाण पत्र का ऑनलाइन सत्यापन रिकॉर्ड खोलें</span>
             <ExternalLink className="w-4 h-4" />

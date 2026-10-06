@@ -160,7 +160,7 @@ export default function AdminCertificatesPage() {
             size="sm"
             onClick={fetchCertificates}
             disabled={loading}
-            className="rounded-xl border-slate-200 text-slate-700 text-xs h-9 gap-1.5"
+            className="rounded-sm border-slate-200 text-slate-700 text-xs h-9 gap-1.5"
           >
             <RefreshCw className={`size-3.5 ${loading ? "animate-spin" : ""}`} />
             <span>रिफ्रेश</span>
@@ -169,7 +169,7 @@ export default function AdminCertificatesPage() {
           <Button
             onClick={handleOpenCreateModal}
             size="sm"
-            className="rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-9 gap-1.5 shadow-sm cursor-pointer"
+            className="rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-9 gap-1.5 shadow-sm cursor-pointer"
           >
             <Award className="size-4" />
             <span>नया प्रमाणपत्र जारी करें</span>
@@ -235,7 +235,7 @@ export default function AdminCertificatesPage() {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="h-10 pl-9 pr-3 rounded-xl bg-slate-50 border-slate-200 text-xs"
+              className="h-10 pl-9 pr-3 rounded-sm bg-slate-50 border-slate-200 text-xs"
             />
           </div>
         </CardContent>
@@ -294,7 +294,7 @@ export default function AdminCertificatesPage() {
                           asChild
                           variant="ghost"
                           size="sm"
-                          className="h-8 px-2.5 text-xs text-[#0056d2] hover:bg-blue-50 font-semibold cursor-pointer gap-1"
+                          className="h-8 px-2.5 rounded-sm text-xs text-[#0056d2] hover:bg-blue-50 font-semibold cursor-pointer gap-1"
                         >
                           <a
                             href={`/certificates/${cert.verificationCode}`}
@@ -328,7 +328,7 @@ export default function AdminCertificatesPage() {
 
       {/* Issue Certificate Modal */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent className="sm:max-w-md bg-white rounded-2xl p-6 border-slate-200">
+        <DialogContent className="sm:max-w-md bg-white rounded-lg p-6 border-slate-200">
           <DialogHeader>
             <DialogTitle className="text-lg font-bold font-headline text-slate-900 flex items-center gap-2">
               <Award className="size-5 text-[#0056d2]" />
@@ -348,7 +348,7 @@ export default function AdminCertificatesPage() {
                 value={selectedUser}
                 onValueChange={(val) => setSelectedUser(val)}
               >
-                <SelectTrigger className="w-full h-10 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800">
+                <SelectTrigger className="w-full h-10 rounded-sm border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800">
                   <SelectValue placeholder="-- छात्र का चयन करें --" />
                 </SelectTrigger>
                 <SelectContent>
@@ -371,7 +371,7 @@ export default function AdminCertificatesPage() {
                 value={selectedCourse}
                 onValueChange={(val) => setSelectedCourse(val)}
               >
-                <SelectTrigger className="w-full h-10 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800">
+                <SelectTrigger className="w-full h-10 rounded-sm border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800">
                   <SelectValue placeholder="-- कोर्स का चयन करें --" />
                 </SelectTrigger>
                 <SelectContent>
@@ -391,14 +391,14 @@ export default function AdminCertificatesPage() {
                 type="button"
                 variant="outline"
                 onClick={() => setCreateOpen(false)}
-                className="rounded-xl text-xs h-10"
+                className="rounded-sm text-xs h-10"
               >
                 रद्द करें
               </Button>
               <Button
                 type="submit"
                 disabled={submitting}
-                className="rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-10 gap-2 cursor-pointer"
+                className="rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white font-semibold text-xs h-10 gap-2 cursor-pointer"
               >
                 {submitting && <Spinner size="sm" variant="white" />}
                 <span>प्रमाणपत्र जारी करें</span>

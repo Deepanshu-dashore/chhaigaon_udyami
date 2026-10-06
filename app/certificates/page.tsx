@@ -98,7 +98,7 @@ export default function CertificatesPortalPage() {
               <Link href="/dashboard/certificates">
                 <Button
                   size="lg"
-                  className="px-5 py-3 h-11 text-xs sm:text-sm font-semibold rounded-[4px] bg-[#0056d2] hover:bg-blue-700 text-white shadow-xs transition-colors flex items-center gap-2 cursor-pointer font-label"
+                  className="px-5 py-3 h-11 text-xs sm:text-sm font-semibold rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white shadow-xs transition-colors flex items-center gap-2 cursor-pointer font-label"
                 >
                   <GraduationCap className="h-4 w-4" />
                   <span>मेरे प्रमाण पत्र (Student Vault)</span>
@@ -109,7 +109,7 @@ export default function CertificatesPortalPage() {
                 <Button
                   size="lg"
                   variant="ghost"
-                  className="px-5 py-3 h-11 text-xs sm:text-sm font-semibold rounded-[4px] border border-[#0056d2] text-[#0056d2] bg-white hover:bg-blue-50/60 transition-colors flex items-center gap-2 cursor-pointer font-label"
+                  className="px-5 py-3 h-11 text-xs sm:text-sm font-semibold rounded-sm border border-[#0056d2] text-[#0056d2] bg-white hover:bg-blue-50/60 transition-colors flex items-center gap-2 cursor-pointer font-label"
                 >
                   <BookOpen className="h-4 w-4 text-[#0056d2]" />
                   <span>प्रमाणित कोर्सेज देखें</span>

@@ -113,7 +113,7 @@ export default async function AdminDashboardPage() {
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <Button
               asChild
-              className="rounded-xl bg-[#0056d2] hover:bg-[#0046a8] text-white font-bold shadow-md cursor-pointer gap-2 h-10 px-4 transition-all hover:scale-[1.02]"
+              className="rounded-sm bg-[#0056d2] hover:bg-[#0046a8] text-white font-bold shadow-sm cursor-pointer gap-2 h-9 px-4 transition-all"
             >
               <Link href="/admin/courses">
                 <Plus className="size-4" />
@@ -123,7 +123,7 @@ export default async function AdminDashboardPage() {
             <Button
               asChild
               variant="outline"
-              className="rounded-xl bg-white/10 hover:bg-white/20 border-white/20 text-white font-semibold cursor-pointer gap-2 h-10 px-4 backdrop-blur-md transition-all hover:scale-[1.02]"
+              className="rounded-sm bg-white/10 hover:bg-white/20 border-white/20 text-white font-semibold cursor-pointer gap-2 h-9 px-4 backdrop-blur-md transition-all"
             >
               <Link href="/admin/users">
                 <Users className="size-4" />

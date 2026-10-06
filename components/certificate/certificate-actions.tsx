@@ -94,7 +94,7 @@ export function CertificateActions({
         {/* Print / Save as PDF */}
         <Button
           onClick={handlePrint}
-          className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-lg shadow-xs inline-flex items-center gap-2 cursor-pointer transition-all"
+          className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-sm shadow-xs inline-flex items-center gap-2 cursor-pointer transition-all"
         >
           <Printer className="w-4 h-4" />
           <span>प्रिंट या PDF सेव करें (Print Certificate)</span>
@@ -104,7 +104,7 @@ export function CertificateActions({
         <Button
           onClick={handleCopyLink}
           variant="outline"
-          className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-lg border-slate-300 hover:bg-slate-50 inline-flex items-center gap-2 cursor-pointer transition-all"
+          className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-sm border-slate-300 hover:bg-slate-50 inline-flex items-center gap-2 cursor-pointer transition-all"
         >
           {copied ? (
             <>
@@ -123,7 +123,7 @@ export function CertificateActions({
         <Button
           onClick={handleWhatsAppShare}
           variant="outline"
-          className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-lg border-emerald-300 text-emerald-700 hover:bg-emerald-50 inline-flex items-center gap-2 cursor-pointer transition-all"
+          className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-sm border-emerald-300 text-emerald-700 hover:bg-emerald-50 inline-flex items-center gap-2 cursor-pointer transition-all"
         >
           <FaWhatsapp className="w-4 h-4 text-emerald-600" />
           <span>व्हाट्सएप शेयर</span>
@@ -133,7 +133,7 @@ export function CertificateActions({
         <Button
           onClick={handleLinkedInShare}
           variant="outline"
-          className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-lg border-blue-200 text-blue-700 hover:bg-blue-50 inline-flex items-center gap-2 cursor-pointer transition-all"
+          className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-sm border-blue-200 text-blue-700 hover:bg-blue-50 inline-flex items-center gap-2 cursor-pointer transition-all"
         >
           <FaLinkedin className="w-4 h-4 text-blue-600" />
           <span>LinkedIn शेयर</span>

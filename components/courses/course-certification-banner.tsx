@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ChevronRight, ArrowRight, Sparkles, ShieldCheck, Award } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface CertificationCardProps {
   title: string;
@@ -18,12 +19,12 @@ function CertBadgeCard({
   href = "/courses",
 }: CertificationCardProps) {
   return (
-    <div className="group flex flex-col justify-between rounded-2xl bg-white p-3 sm:p-2 transition-all duration-300 shadow-md hover:shadow-2xl hover:-translate-y-1 border border-slate-200/90 hover:border-blue-400/80">
+    <div className="group flex flex-col justify-between rounded-xl bg-white p-3 sm:p-2 transition-all duration-300 shadow-md hover:shadow-2xl hover:-translate-y-1 border border-slate-200/90 hover:border-blue-400/80">
       <div>
         {/* Big Crisp Certificate Preview Image */}
         <Link
           href={href}
-          className="relative block aspect-[16/10] w-full rounded-xl overflow-hidden bg-slate-50 mb-3.5 border border-slate-100 shadow-xs"
+          className="relative block aspect-[16/10] w-full rounded-sm overflow-hidden bg-slate-50 mb-3.5 border border-slate-100 shadow-xs"
         >
           <img
             src={imageSrc}
@@ -31,7 +32,7 @@ function CertBadgeCard({
             className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-400 ease-out"
           />
           <div className="absolute top-2.5 left-2.5">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/95 text-slate-800 shadow-xs flex items-center gap-1 border border-slate-200 backdrop-blur-xs">
+            <span className="px-2.5 py-0.5 rounded-sm text-[10px] font-bold bg-white/95 text-slate-800 shadow-xs flex items-center gap-1 border border-slate-200 backdrop-blur-xs">
               <ShieldCheck className="w-3 h-3 text-emerald-600" />
               <span>प्रमाणित</span>
             </span>
@@ -53,12 +54,15 @@ function CertBadgeCard({
 
       {/* Clean Enroll Button */}
       <div className="pt-3 mt-auto border-t border-slate-100">
-        <Link href={href} className="block">
-          <button className="w-full py-2 px-3.5 rounded-lg bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98">
+        <Button
+          asChild
+          className="w-full h-8 py-2 px-3.5 rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+        >
+          <Link href={href}>
             <span>एनरोल करें (Enroll Now)</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-          </button>
-        </Link>
+          </Link>
+        </Button>
       </div>
     </div>
   );

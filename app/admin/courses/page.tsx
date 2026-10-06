@@ -210,13 +210,13 @@ export default function AdminCoursesPage() {
             size="sm"
             onClick={fetchCourses}
             disabled={loading}
-            className="h-9 rounded-lg text-xs gap-1.5 cursor-pointer"
+            className="h-9 rounded-sm text-xs gap-1.5 cursor-pointer"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
             <span>रिफ्रेश</span>
           </Button>
 
-          <Button asChild size="sm" className="h-9 rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs gap-1.5 shadow-xs cursor-pointer">
+          <Button asChild size="sm" className="h-9 rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs gap-1.5 shadow-xs cursor-pointer">
             <Link href="/admin/courses/new">
               <Plus className="h-4 w-4" />
               <span>Add New Course</span>
@@ -328,7 +328,7 @@ export default function AdminCoursesPage() {
                         asChild
                         variant="outline"
                         size="sm"
-                        className="h-8 px-2.5 text-xs text-[#0056d2] border-blue-200 hover:bg-blue-50 font-bold gap-1 cursor-pointer"
+                        className="h-8 px-2.5 rounded-sm text-xs text-[#0056d2] border-blue-200 hover:bg-blue-50 font-bold gap-1 cursor-pointer"
                       >
                         <Link href={`/admin/courses/${course.id}`}>
                           <BookOpen className="size-3.5" />
@@ -340,7 +340,7 @@ export default function AdminCoursesPage() {
                         asChild
                         variant="ghost"
                         size="icon"
-                        className="size-8 rounded-lg hover:bg-slate-100 text-slate-600"
+                        className="size-8 rounded-sm hover:bg-slate-100 text-slate-600"
                         title="View Course"
                       >
                         <a href={`/courses/${course.slug}`} target="_blank" rel="noreferrer">
@@ -352,7 +352,7 @@ export default function AdminCoursesPage() {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleDelete(course.id)}
-                        className="size-8 rounded-lg hover:bg-rose-50 text-rose-600"
+                        className="size-8 rounded-sm hover:bg-rose-50 text-rose-600"
                         title="Delete Course"
                       >
                         <Trash2 className="h-3.5 w-3.5" />

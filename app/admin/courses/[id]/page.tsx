@@ -386,7 +386,7 @@ export default function EditCourseBuilderPage({
     return (
       <div className="py-20 text-center space-y-4">
         <p className="text-sm text-rose-600 font-bold">Course not found</p>
-        <Button asChild variant="outline" size="sm" className="rounded-xl text-xs">
+        <Button asChild variant="outline" size="sm" className="rounded-sm text-xs">
           <Link href="/admin/courses">Back to Courses</Link>
         </Button>
       </div>
@@ -402,7 +402,7 @@ export default function EditCourseBuilderPage({
             asChild
             variant="outline"
             size="icon"
-            className="size-9 rounded-xl border-slate-200 text-slate-600 hover:bg-slate-100"
+            className="size-9 rounded-sm border-slate-200 text-slate-600 hover:bg-slate-100"
           >
             <Link href="/admin/courses">
               <ArrowLeft className="size-4" />
@@ -482,7 +482,7 @@ export default function EditCourseBuilderPage({
             <Button
               onClick={() => handleOpenModuleModal()}
               size="sm"
-              className="h-9 px-4 rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs gap-1.5 cursor-pointer shadow-sm"
+              className="h-9 px-4 rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs gap-1.5 cursor-pointer shadow-sm"
             >
               <FolderPlus className="size-4" />
               <span>Add Module</span>
@@ -501,7 +501,7 @@ export default function EditCourseBuilderPage({
                 <Button
                   onClick={() => handleOpenModuleModal()}
                   size="sm"
-                  className="rounded-xl bg-[#0056d2] text-white text-xs font-semibold"
+                  className="rounded-sm bg-[#0056d2] text-white text-xs font-semibold"
                 >
                   <FolderPlus className="size-3.5 mr-1" /> Add First Module
                 </Button>
@@ -523,7 +523,7 @@ export default function EditCourseBuilderPage({
                         onClick={() => toggleModuleAccordion(moduleItem.id)}
                         className="flex items-center gap-3 cursor-pointer flex-1"
                       >
-                        <div className="size-7 rounded-lg bg-blue-100 text-[#0056d2] font-bold text-xs flex items-center justify-center shrink-0">
+                        <div className="size-7 rounded-sm bg-blue-100 text-[#0056d2] font-bold text-xs flex items-center justify-center shrink-0">
                           {modIdx + 1}
                         </div>
                         <div>
@@ -549,7 +549,7 @@ export default function EditCourseBuilderPage({
                           variant="ghost"
                           size="sm"
                           onClick={() => handleOpenLessonModal(moduleItem.id)}
-                          className="h-8 px-2.5 rounded-lg text-xs font-bold text-[#0056d2] hover:bg-blue-50 gap-1 cursor-pointer"
+                          className="h-8 px-2.5 rounded-sm text-xs font-bold text-[#0056d2] hover:bg-blue-50 gap-1 cursor-pointer"
                         >
                           <PlusCircle className="size-3.5" />
                           <span>Add Lesson</span>
@@ -560,7 +560,7 @@ export default function EditCourseBuilderPage({
                           variant="ghost"
                           size="icon"
                           onClick={() => handleOpenModuleModal(moduleItem)}
-                          className="size-8 rounded-lg hover:bg-slate-200/60 text-slate-600"
+                          className="size-8 rounded-sm hover:bg-slate-200/60 text-slate-600"
                         >
                           <Edit className="size-3.5" />
                         </Button>
@@ -570,7 +570,7 @@ export default function EditCourseBuilderPage({
                           variant="ghost"
                           size="icon"
                           onClick={() => handleDeleteModule(moduleItem.id)}
-                          className="size-8 rounded-lg hover:bg-rose-50 text-rose-600"
+                          className="size-8 rounded-sm hover:bg-rose-50 text-rose-600"
                         >
                           <Trash2 className="size-3.5" />
                         </Button>
@@ -580,7 +580,7 @@ export default function EditCourseBuilderPage({
                           variant="ghost"
                           size="icon"
                           onClick={() => toggleModuleAccordion(moduleItem.id)}
-                          className="size-8 rounded-lg hover:bg-slate-200/60 text-slate-500"
+                          className="size-8 rounded-sm hover:bg-slate-200/60 text-slate-500"
                         >
                           {isOpen ? (
                             <ChevronUp className="size-4" />
@@ -687,7 +687,7 @@ export default function EditCourseBuilderPage({
                 Course Details & Meta Information
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-6 space-y-4">
+             <CardContent className="p-6 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5 col-span-1 sm:col-span-2">
                   <Label className="text-xs font-bold text-slate-800">Title</Label>
@@ -696,7 +696,7 @@ export default function EditCourseBuilderPage({
                     required
                     value={course.title}
                     onChange={(e) => setCourse({ ...course, title: e.target.value })}
-                    className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-medium"
+                    className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-medium"
                   />
                 </div>
 
@@ -707,7 +707,7 @@ export default function EditCourseBuilderPage({
                     required
                     value={course.slug}
                     onChange={(e) => setCourse({ ...course, slug: e.target.value })}
-                    className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-mono"
+                    className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-mono"
                   />
                 </div>
 
@@ -717,7 +717,7 @@ export default function EditCourseBuilderPage({
                     value={course.level || "BEGINNER"}
                     onValueChange={(val) => setCourse({ ...course, level: val })}
                   >
-                    <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-semibold">
+                    <SelectTrigger className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-semibold">
                       <SelectValue placeholder="Select level" />
                     </SelectTrigger>
                     <SelectContent>
@@ -736,7 +736,7 @@ export default function EditCourseBuilderPage({
                     type="number"
                     value={course.price}
                     onChange={(e) => setCourse({ ...course, price: e.target.value })}
-                    className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-bold"
+                    className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-bold"
                   />
                 </div>
 
@@ -751,7 +751,7 @@ export default function EditCourseBuilderPage({
                       })
                     }
                   >
-                    <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-bold text-slate-800">
+                    <SelectTrigger className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-bold text-slate-800">
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -770,7 +770,7 @@ export default function EditCourseBuilderPage({
                     type="text"
                     value={course.thumbnail || ""}
                     onChange={(e) => setCourse({ ...course, thumbnail: e.target.value })}
-                    className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-mono"
+                    className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-mono"
                   />
                 </div>
 
@@ -780,7 +780,7 @@ export default function EditCourseBuilderPage({
                     rows={4}
                     value={course.description || ""}
                     onChange={(e) => setCourse({ ...course, description: e.target.value })}
-                    className="rounded-xl bg-slate-50 border-slate-200 text-xs p-3"
+                    className="rounded-sm bg-slate-50 border-slate-200 text-xs p-3"
                   />
                 </div>
               </div>
@@ -791,7 +791,7 @@ export default function EditCourseBuilderPage({
             <Button
               type="submit"
               disabled={savingCourse}
-              className="h-10 px-6 rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs gap-2"
+              className="h-10 px-6 rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs gap-2"
             >
               {savingCourse ? <Spinner size="sm" variant="white" /> : <Save className="size-4" />}
               <span>Save Course Details</span>
@@ -803,7 +803,7 @@ export default function EditCourseBuilderPage({
 
       {/* MODULE MODAL */}
       <Dialog open={moduleModalOpen} onOpenChange={setModuleModalOpen}>
-        <DialogContent className="sm:max-w-md bg-white rounded-2xl p-6 border-slate-200">
+        <DialogContent className="sm:max-w-md bg-white rounded-lg p-6 border-slate-200">
           <DialogHeader>
             <DialogTitle className="text-base font-bold font-headline text-slate-900 flex items-center gap-2">
               <FolderPlus className="size-5 text-[#0056d2]" />
@@ -823,7 +823,7 @@ export default function EditCourseBuilderPage({
                 placeholder="e.g. Module 1: Introduction to Business Planning"
                 value={moduleTitle}
                 onChange={(e) => setModuleTitle(e.target.value)}
-                className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-medium"
+                className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-medium"
               />
             </div>
 
@@ -834,7 +834,7 @@ export default function EditCourseBuilderPage({
                 placeholder="Brief summary of what this module covers..."
                 value={moduleDesc}
                 onChange={(e) => setModuleDesc(e.target.value)}
-                className="rounded-xl bg-slate-50 border-slate-200 text-xs p-3"
+                className="rounded-sm bg-slate-50 border-slate-200 text-xs p-3"
               />
             </div>
 
@@ -843,14 +843,14 @@ export default function EditCourseBuilderPage({
                 type="button"
                 variant="outline"
                 onClick={() => setModuleModalOpen(false)}
-                className="rounded-xl text-xs h-10"
+                className="rounded-sm text-xs h-10"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={moduleSubmitting}
-                className="rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs h-10 gap-2 cursor-pointer"
+                className="rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs h-10 gap-2 cursor-pointer"
               >
                 {moduleSubmitting && <Spinner size="sm" variant="white" />}
                 <span>Save Module</span>
@@ -862,7 +862,7 @@ export default function EditCourseBuilderPage({
 
       {/* LESSON MODAL */}
       <Dialog open={lessonModalOpen} onOpenChange={setLessonModalOpen}>
-        <DialogContent className="sm:max-w-lg bg-white rounded-2xl p-6 border-slate-200">
+        <DialogContent className="sm:max-w-lg bg-white rounded-lg p-6 border-slate-200">
           <DialogHeader>
             <DialogTitle className="text-base font-bold font-headline text-slate-900 flex items-center gap-2">
               <Video className="size-5 text-[#0056d2]" />
@@ -882,7 +882,7 @@ export default function EditCourseBuilderPage({
                 placeholder="e.g. Lesson 1.1: Understanding Entrepreneurial Mindset"
                 value={lessonForm.title}
                 onChange={(e) => setLessonForm({ ...lessonForm, title: e.target.value })}
-                className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-medium"
+                className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-medium"
               />
             </div>
 
@@ -898,7 +898,7 @@ export default function EditCourseBuilderPage({
                     })
                   }
                 >
-                  <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-bold text-slate-800">
+                  <SelectTrigger className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-bold text-slate-800">
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -918,7 +918,7 @@ export default function EditCourseBuilderPage({
                   min="1"
                   value={lessonForm.duration}
                   onChange={(e) => setLessonForm({ ...lessonForm, duration: e.target.value })}
-                  className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-numeric"
+                  className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-numeric"
                 />
               </div>
             </div>
@@ -931,7 +931,7 @@ export default function EditCourseBuilderPage({
                   placeholder="e.g. https://www.youtube.com/embed/... or HLS URL"
                   value={lessonForm.videoUrl}
                   onChange={(e) => setLessonForm({ ...lessonForm, videoUrl: e.target.value })}
-                  className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-mono"
+                  className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-mono"
                 />
               </div>
             )}
@@ -943,7 +943,7 @@ export default function EditCourseBuilderPage({
                 placeholder="Optional key takeaways for students..."
                 value={lessonForm.description}
                 onChange={(e) => setLessonForm({ ...lessonForm, description: e.target.value })}
-                className="rounded-xl bg-slate-50 border-slate-200 text-xs p-3"
+                className="rounded-sm bg-slate-50 border-slate-200 text-xs p-3"
               />
             </div>
 
@@ -974,14 +974,14 @@ export default function EditCourseBuilderPage({
                 type="button"
                 variant="outline"
                 onClick={() => setLessonModalOpen(false)}
-                className="rounded-xl text-xs h-10"
+                className="rounded-sm text-xs h-10"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={lessonSubmitting}
-                className="rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs h-10 gap-2 cursor-pointer"
+                className="rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs h-10 gap-2 cursor-pointer"
               >
                 {lessonSubmitting && <Spinner size="sm" variant="white" />}
                 <span>Save Lesson</span>

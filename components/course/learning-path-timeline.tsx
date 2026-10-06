@@ -30,6 +30,16 @@ export interface LessonItem {
   downloadUrl?: string;
   questionsCount?: number;
   videoUrl?: string;
+  isCompleted?: boolean;
+}
+
+export interface QuizSummary {
+  id: string;
+  title: string;
+  passingPercentage?: number;
+  timeLimit?: number | null;
+  attemptLimit?: number | null;
+  _count?: { questions: number };
 }
 
 export interface ModuleItem {
@@ -39,6 +49,11 @@ export interface ModuleItem {
   description?: string;
   duration?: string;
   lessons: LessonItem[];
+  quizzes?: QuizSummary[];
+  moduleProgress?: {
+    isCompleted: boolean;
+    completedAt?: Date | string | null;
+  } | null;
 }
 
 interface LearningPathTimelineProps {
@@ -140,7 +155,7 @@ export function LearningPathTimeline({
                 नामांकन के पश्चात सभी वीडियो लेसन, क्विज़, सर्टिफिकेट एवं बैंक DPR टूलकिट का असीमित एक्सेस प्राप्त करें।
               </p>
             </div>
-            <Button asChild size="sm" className="bg-[#1261D6] hover:bg-blue-700 text-white font-bold text-xs rounded-md shrink-0 cursor-pointer">
+            <Button asChild size="sm" className="bg-[#1261D6] hover:bg-blue-700 text-white font-bold text-xs rounded-sm shrink-0 cursor-pointer">
               <Link href="/apply">
                 <span>अभी प्रवेश लें (Enroll Now)</span>
               </Link>
@@ -155,7 +170,7 @@ export function LearningPathTimeline({
               return (
                 <div
                   key={mod.id}
-                  className="rounded-lg border border-[#E5E7EB] bg-white text-xs overflow-hidden"
+                  className="rounded-sm border border-[#E5E7EB] bg-white text-xs overflow-hidden"
                 >
                   <button
                     onClick={() => setOpenModuleId(isOpen ? "" : mod.id)}
@@ -189,7 +204,7 @@ export function LearningPathTimeline({
                       {mod.lessons.map((lesson, lesIdx) => (
                         <div
                           key={lesson.id || lesIdx}
-                          className="p-3 rounded-md bg-white border border-[#E5E7EB] flex items-center justify-between gap-3"
+                          className="p-3 rounded-sm bg-white border border-[#E5E7EB] flex items-center justify-between gap-3"
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
                             {lesson.isPreview ? (
@@ -218,13 +233,39 @@ export function LearningPathTimeline({
                                 Free Preview
                               </Badge>
                             ) : (
-                              <Button asChild size="sm" variant="outline" className="h-7 text-[11px] font-semibold text-amber-900 border-amber-300 bg-amber-50/50 hover:bg-amber-100 rounded-md">
+                              <Button asChild size="sm" variant="outline" className="h-7 text-[11px] font-semibold text-amber-900 border-amber-300 bg-amber-50/50 hover:bg-amber-100 rounded-sm">
                                 <Link href="/apply">
                                   <Lock className="size-3 mr-1" />
                                   <span>अनलॉक करें</span>
                                 </Link>
                               </Button>
                             )}
+                          </div>
+                        </div>
+                      ))}
+
+                      {/* Module Assessment Quiz (End of Module) */}
+                      {mod.quizzes && mod.quizzes.length > 0 && mod.quizzes.map((quiz) => (
+                        <div
+                          key={quiz.id}
+                          className="p-3 rounded-sm bg-amber-50/60 border border-amber-200 flex items-center justify-between gap-3"
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <Award className="size-4 text-amber-600 shrink-0" />
+                            <div className="min-w-0">
+                              <span className="font-semibold text-xs text-[#111827] truncate block">
+                                मॉड्यूल मूल्यांकन: {quiz.title}
+                              </span>
+                              <span className="text-[10px] text-[#667085]">
+                                {quiz._count?.questions ? `${quiz._count.questions} प्रश्न • ` : ""}उत्तीर्ण अंक {quiz.passingPercentage ?? 60}%
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <Badge variant="outline" className="text-[10px] bg-white border-amber-300 text-amber-900 font-medium">
+                              <Lock className="size-3 mr-1 text-amber-600" />
+                              नामांकन आवश्यक
+                            </Badge>
                           </div>
                         </div>
                       ))}
@@ -241,7 +282,7 @@ export function LearningPathTimeline({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
           {/* Active Lesson Display Screen (7 Cols on LG) */}
-          <div className="lg:col-span-7 bg-white rounded-lg border border-[#E5E7EB] shadow-2xs overflow-hidden flex flex-col justify-between">
+          <div className="lg:col-span-7 bg-white rounded-sm border border-[#E5E7EB] shadow-2xs overflow-hidden flex flex-col justify-between">
             
             <div className="p-5 space-y-4">
               {/* Active Lesson Header Badge */}
@@ -257,7 +298,7 @@ export function LearningPathTimeline({
               </div>
 
               {/* Video Player Frame */}
-              <div className="relative aspect-video bg-slate-900 rounded-md overflow-hidden group border border-slate-800 flex items-center justify-center">
+              <div className="relative aspect-video bg-slate-900 rounded-sm overflow-hidden group border border-slate-800 flex items-center justify-center">
                 <img
                   src="/images/dairy-course.jpg"
                   alt={currentLesson?.title || "Lesson Player"}
@@ -286,7 +327,7 @@ export function LearningPathTimeline({
 
               {/* Action Buttons: Quiz / PDF Download */}
               {currentLesson?.type === "quiz" && (
-                <div className="p-3.5 rounded-md bg-blue-50/70 border border-blue-100 flex items-center justify-between">
+                <div className="p-3.5 rounded-sm bg-blue-50/70 border border-blue-100 flex items-center justify-between">
                   <div>
                     <p className="text-xs font-bold text-[#111827]">ज्ञान मूल्यांकन क्विज़</p>
                     <p className="text-[11px] text-[#667085]">70% उत्तीर्ण अंक • प्रमाण पत्र हेतु अनिवार्य</p>
@@ -299,7 +340,7 @@ export function LearningPathTimeline({
                         questionsCount: currentLesson.questionsCount || 10,
                       })
                     }
-                    className="h-8 text-xs font-bold bg-[#1261D6] hover:bg-blue-700 text-white rounded-md cursor-pointer"
+                    className="h-8 text-xs font-bold bg-[#1261D6] hover:bg-blue-700 text-white rounded-sm cursor-pointer"
                   >
                     <Award className="size-3.5 mr-1" />
                     क्विज़ शुरू करें
@@ -308,12 +349,12 @@ export function LearningPathTimeline({
               )}
 
               {currentLesson?.type === "resource" && (
-                <div className="p-3.5 rounded-md bg-amber-50/60 border border-amber-200/80 flex items-center justify-between">
+                <div className="p-3.5 rounded-sm bg-amber-50/60 border border-amber-200/80 flex items-center justify-between">
                   <div>
                     <p className="text-xs font-bold text-[#111827]">बैंक DPR व टूलकिट डाउनलोड</p>
                     <p className="text-[11px] text-[#667085]">{currentLesson.resourceType || "PDF Document"} ({currentLesson.resourceSize || "2.5 MB"})</p>
                   </div>
-                  <Button size="sm" variant="outline" asChild className="h-8 text-xs font-bold border-amber-300 text-amber-900 hover:bg-amber-100 rounded-md">
+                  <Button size="sm" variant="outline" asChild className="h-8 text-xs font-bold border-amber-300 text-amber-900 hover:bg-amber-100 rounded-sm">
                     <a href={currentLesson.downloadUrl || "#"} download>
                       <Download className="size-3.5 mr-1" />
                       डाउनलोड करें
@@ -331,7 +372,7 @@ export function LearningPathTimeline({
                 size="sm"
                 disabled={isFirstLesson}
                 onClick={handlePrevLesson}
-                className="h-8 text-xs font-medium text-[#111827] rounded-md disabled:opacity-40 cursor-pointer"
+                className="h-8 text-xs font-medium text-[#111827] rounded-sm disabled:opacity-40 cursor-pointer"
               >
                 <ChevronLeft className="size-4 mr-1" />
                 पिछला पाठ (Previous)
@@ -345,7 +386,7 @@ export function LearningPathTimeline({
                 size="sm"
                 disabled={isLastLesson}
                 onClick={handleNextLesson}
-                className="h-8 text-xs font-bold bg-[#1261D6] hover:bg-blue-700 text-white rounded-md disabled:opacity-40 cursor-pointer"
+                className="h-8 text-xs font-bold bg-[#1261D6] hover:bg-blue-700 text-white rounded-sm disabled:opacity-40 cursor-pointer"
               >
                 अगला पाठ (Next)
                 <ChevronRight className="size-4 ml-1" />
@@ -368,7 +409,7 @@ export function LearningPathTimeline({
                 return (
                   <div
                     key={mod.id}
-                    className={`rounded-lg border text-xs transition-colors ${
+                    className={`rounded-sm border text-xs transition-colors ${
                       isCurrentMod
                         ? "border-blue-300 bg-blue-50/20"
                         : "border-[#E5E7EB] bg-white"
@@ -401,9 +442,9 @@ export function LearningPathTimeline({
                             <button
                               key={lesson.id || lesIdx}
                               onClick={() => handleSelectLesson(modIdx, lesIdx)}
-                              className={`w-full text-left p-2.5 rounded-md flex items-center justify-between gap-2 transition-colors cursor-pointer ${
+                              className={`w-full text-left p-2.5 rounded-sm flex items-center justify-between gap-2 transition-colors cursor-pointer ${
                                 isSelected
-                                  ? "bg-[#1261D6] text-white font-bold"
+                                    ? "bg-[#1261D6] text-white font-bold"
                                   : "hover:bg-slate-100 text-[#111827] font-medium"
                               }`}
                             >
@@ -422,6 +463,55 @@ export function LearningPathTimeline({
                             </button>
                           );
                         })}
+
+                        {/* Module Quiz in Enrolled Playlist */}
+                        {mod.quizzes && mod.quizzes.length > 0 && mod.quizzes.map((quiz) => {
+                          const isUnlocked = mod.moduleProgress?.isCompleted === true;
+                          return (
+                            <div
+                              key={quiz.id}
+                              className={`p-2.5 rounded-sm flex items-center justify-between gap-2 border transition-colors ${
+                                isUnlocked
+                                  ? "bg-blue-50/50 border-blue-200 text-[#111827]"
+                                  : "bg-slate-100/70 border-slate-200 text-slate-400 opacity-80"
+                              }`}
+                            >
+                              <div className="flex items-center gap-2 min-w-0">
+                                <Award
+                                  className={`size-3.5 shrink-0 ${
+                                    isUnlocked ? "text-[#1261D6]" : "text-slate-400"
+                                  }`}
+                                />
+                                <div className="min-w-0">
+                                  <span className="truncate text-xs font-semibold block">
+                                    {quiz.title}
+                                  </span>
+                                  <span className="text-[10px] text-slate-500">
+                                    {isUnlocked
+                                      ? "अनलॉक — परीक्षा दें"
+                                      : "🔒 सभी पाठ पूर्ण होने पर अनलॉक"}
+                                  </span>
+                                </div>
+                              </div>
+                              {isUnlocked ? (
+                                <Button
+                                  size="sm"
+                                  onClick={() =>
+                                    setActiveQuiz({
+                                      title: quiz.title,
+                                      questionsCount: quiz._count?.questions || 10,
+                                    })
+                                  }
+                                  className="h-6 text-[10px] font-bold bg-[#1261D6] hover:bg-blue-700 text-white rounded-sm px-2 shrink-0 cursor-pointer"
+                                >
+                                  शुरू करें
+                                </Button>
+                              ) : (
+                                <Lock className="size-3.5 text-slate-400 shrink-0" />
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -437,7 +527,7 @@ export function LearningPathTimeline({
       {/* Quiz Dialog Modal */}
       {activeQuiz && (
         <div className="fixed inset-0 z-50 bg-slate-900/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg max-w-md w-full p-6 space-y-4 shadow-xl border border-[#E5E7EB] text-[#111827]">
+          <div className="bg-white rounded-sm max-w-md w-full p-6 space-y-4 shadow-xl border border-[#E5E7EB] text-[#111827]">
             <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-3">
               <div>
                 <h4 className="font-bold text-[#111827] text-sm">
@@ -456,7 +546,7 @@ export function LearningPathTimeline({
             </div>
 
             <div className="space-y-3 text-xs">
-              <div className="p-3 rounded-md border border-[#E5E7EB] bg-[#F8FAFC] font-medium text-[#111827]">
+              <div className="p-3 rounded-sm border border-[#E5E7EB] bg-[#F8FAFC] font-medium text-[#111827]">
                 प्रश्न 1: Dairy Farm में वैज्ञानिक पशु शेड का लेआउट एवं जल निकासी मानक क्या होना चाहिए?
               </div>
               <div className="space-y-1.5">
@@ -464,7 +554,7 @@ export function LearningPathTimeline({
                   (opt, i) => (
                     <label
                       key={i}
-                      className="flex items-center gap-2.5 p-2 rounded-md border border-[#E5E7EB] hover:bg-[#F8FAFC] cursor-pointer font-medium text-slate-800"
+                      className="flex items-center gap-2.5 p-2 rounded-sm border border-[#E5E7EB] hover:bg-[#F8FAFC] cursor-pointer font-medium text-slate-800"
                     >
                       <input type="radio" name="q1" className="text-[#1261D6]" />
                       <span>{opt}</span>
@@ -479,7 +569,7 @@ export function LearningPathTimeline({
                 variant="outline"
                 size="sm"
                 onClick={() => setActiveQuiz(null)}
-                className="text-xs font-semibold text-[#111827] rounded-md cursor-pointer"
+                className="text-xs font-semibold text-[#111827] rounded-sm cursor-pointer"
               >
                 रद्द करें
               </Button>
@@ -489,7 +579,7 @@ export function LearningPathTimeline({
                   alert("🎉 क्विज़ उत्तीर्ण! आपका स्कोर: 90%। प्रमाण पत्र अनलॉक हो गया है।");
                   setActiveQuiz(null);
                 }}
-                className="bg-[#1261D6] hover:bg-blue-700 text-white text-xs font-bold rounded-md cursor-pointer"
+                className="bg-[#1261D6] hover:bg-blue-700 text-white text-xs font-bold rounded-sm cursor-pointer"
               >
                 सबमिट करें
               </Button>

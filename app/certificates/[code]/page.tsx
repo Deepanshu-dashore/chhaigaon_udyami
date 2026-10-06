@@ -150,7 +150,7 @@ export default async function CertificateDetailPage({
             </p>
             <div className="pt-4 flex justify-center gap-3">
               <Link href="/certificates">
-                <Button className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs px-5 py-2.5 rounded-lg cursor-pointer">
+                <Button className="bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs px-5 py-2.5 rounded-sm cursor-pointer">
                   पुनः सत्यापन करें
                 </Button>
               </Link>

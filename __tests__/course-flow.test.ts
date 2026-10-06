@@ -3,36 +3,36 @@
  * Uses jest.mock to avoid real DB calls.
  */
 
-// Mock prisma
-jest.mock("@/lib/prisma", () => ({
-  default: {
-    course: {
-      findMany: jest.fn(),
-      findUnique: jest.fn(),
-      count: jest.fn(),
-    },
-    lesson: { count: jest.fn() },
-    lessonProgress: { count: jest.fn(), findUnique: jest.fn(), upsert: jest.fn() },
-    courseModuleProgress: {
-      findUnique: jest.fn(),
-      upsert: jest.fn(),
-      count: jest.fn(),
-    },
-    courseModule: { findUnique: jest.fn(), count: jest.fn(), findMany: jest.fn() },
-    enrollment: { findUnique: jest.fn(), update: jest.fn() },
-    certificate: { findUnique: jest.fn(), create: jest.fn() },
-    quizAttempt: { findMany: jest.fn(), count: jest.fn() },
-    $transaction: jest.fn(),
+const mockPrisma = {
+  course: {
+    findMany: jest.fn(),
+    findUnique: jest.fn(),
+    count: jest.fn(),
   },
+  lesson: { count: jest.fn(), findUnique: jest.fn() },
+  lessonProgress: { count: jest.fn(), findUnique: jest.fn(), upsert: jest.fn() },
+  courseModuleProgress: {
+    findUnique: jest.fn(),
+    upsert: jest.fn(),
+    count: jest.fn(),
+    findMany: jest.fn(),
+  },
+  courseModule: { findUnique: jest.fn(), count: jest.fn(), findMany: jest.fn() },
+  enrollment: { findUnique: jest.fn(), update: jest.fn() },
+  certificate: { findUnique: jest.fn(), create: jest.fn() },
+  quizAttempt: { findMany: jest.fn(), count: jest.fn() },
+  $transaction: jest.fn(),
+};
+
+jest.mock("@/lib/prisma", () => ({
+  __esModule: true,
+  default: mockPrisma,
+  prisma: mockPrisma,
 }));
 
 jest.mock("@/services/user-profile.service", () => ({
   resolvePrismaUserId: jest.fn().mockResolvedValue("user-prisma-id"),
 }));
-
-import prisma from "@/lib/prisma";
-
-const mockPrisma = prisma as jest.Mocked<typeof prisma>;
 
 // =====================================================================
 // 1. QUIZ SCHEMA — lessonId or moduleId must be present
@@ -237,5 +237,68 @@ describe("getCourseOverallProgress", () => {
     const result = await getCourseOverallProgress("supabase-uid", "course-1");
     expect(result.progressPercent).toBe(70);
     expect(result.completedLessons).toBe(7);
+  });
+});
+
+// =====================================================================
+// 6. enrollment.service — checkAndCompleteEnrollment
+// =====================================================================
+describe("checkAndCompleteEnrollment", () => {
+  const { checkAndCompleteEnrollment } = require("@/services/enrollment.service");
+
+  beforeEach(() => jest.clearAllMocks());
+
+  it("returns null if not all lessons are completed", async () => {
+    (mockPrisma.lesson.count as jest.Mock).mockResolvedValue(5);
+    (mockPrisma.lessonProgress.count as jest.Mock).mockResolvedValue(3);
+
+    const result = await checkAndCompleteEnrollment("user-1", "course-1");
+    expect(result).toBeNull();
+    expect(mockPrisma.enrollment.update).not.toHaveBeenCalled();
+  });
+
+  it("completes enrollment and triggers autoIssueCertificate when all lessons complete", async () => {
+    (mockPrisma.lesson.count as jest.Mock).mockResolvedValue(5);
+    (mockPrisma.lessonProgress.count as jest.Mock).mockResolvedValue(5);
+    (mockPrisma.enrollment.findUnique as jest.Mock).mockResolvedValue({
+      id: "enr-1",
+      status: "ACTIVE",
+    });
+    (mockPrisma.enrollment.update as jest.Mock).mockResolvedValue({
+      id: "enr-1",
+      status: "COMPLETED",
+    });
+    (mockPrisma.certificate.findUnique as jest.Mock).mockResolvedValue(null);
+    (mockPrisma.courseModule.findMany as jest.Mock).mockResolvedValue([{ quizzes: [] }]);
+    (mockPrisma.certificate.create as jest.Mock).mockResolvedValue({ id: "cert-1" });
+
+    const result = await checkAndCompleteEnrollment("user-1", "course-1");
+    expect(result?.status).toBe("COMPLETED");
+    expect(mockPrisma.enrollment.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "enr-1" },
+        data: expect.objectContaining({ status: "COMPLETED" }),
+      })
+    );
+  });
+});
+
+// =====================================================================
+// 7. module-progress.service — getModuleProgress
+// =====================================================================
+describe("getModuleProgress", () => {
+  const { getModuleProgress } = require("@/services/module-progress.service");
+
+  beforeEach(() => jest.clearAllMocks());
+
+  it("fetches courseModuleProgress for user and module", async () => {
+    const mockProgress = { userId: "user-1", moduleId: "mod-1", isCompleted: true };
+    (mockPrisma.courseModuleProgress.findUnique as jest.Mock).mockResolvedValue(mockProgress);
+
+    const result = await getModuleProgress("user-1", "mod-1");
+    expect(result).toEqual(mockProgress);
+    expect(mockPrisma.courseModuleProgress.findUnique).toHaveBeenCalledWith({
+      where: { userId_moduleId: { userId: "user-1", moduleId: "mod-1" } },
+    });
   });
 });

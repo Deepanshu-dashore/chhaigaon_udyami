@@ -99,7 +99,7 @@ export default function AddCoursePage() {
             asChild
             variant="outline"
             size="icon"
-            className="size-9 rounded-xl border-slate-200 text-slate-600 hover:bg-slate-100"
+            className="size-9 rounded-sm border-slate-200 text-slate-600 hover:bg-slate-100"
           >
             <Link href="/admin/courses">
               <ArrowLeft className="size-4" />
@@ -140,7 +140,7 @@ export default function AddCoursePage() {
                   placeholder="e.g. Micro-Entrepreneurship & Digital Marketing Masterclass"
                   value={form.title}
                   onChange={handleTitleChange}
-                  className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-medium"
+                  className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-medium"
                 />
               </div>
 
@@ -158,7 +158,7 @@ export default function AddCoursePage() {
                     placeholder="digital-marketing-masterclass"
                     value={form.slug}
                     onChange={(e) => setForm({ ...form, slug: e.target.value })}
-                    className="h-10 pl-20 rounded-xl bg-slate-50 border-slate-200 text-xs font-mono"
+                    className="h-10 pl-20 rounded-sm bg-slate-50 border-slate-200 text-xs font-mono"
                   />
                 </div>
               </div>
@@ -171,7 +171,7 @@ export default function AddCoursePage() {
                   value={form.level}
                   onValueChange={(val) => setForm({ ...form, level: val })}
                 >
-                  <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-semibold text-slate-800">
+                  <SelectTrigger className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-semibold text-slate-800">
                     <SelectValue placeholder="Select level" />
                   </SelectTrigger>
                   <SelectContent>
@@ -194,7 +194,7 @@ export default function AddCoursePage() {
                   placeholder="0 for Free Course"
                   value={form.price}
                   onChange={(e) => setForm({ ...form, price: e.target.value })}
-                  className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-numeric font-bold"
+                  className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-numeric font-bold"
                 />
               </div>
 
@@ -208,7 +208,7 @@ export default function AddCoursePage() {
                   placeholder="60"
                   value={form.duration}
                   onChange={(e) => setForm({ ...form, duration: e.target.value })}
-                  className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-numeric"
+                  className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-numeric"
                 />
               </div>
 
@@ -221,7 +221,7 @@ export default function AddCoursePage() {
                   placeholder="https://images.unsplash.com/photo-..."
                   value={form.thumbnail}
                   onChange={(e) => setForm({ ...form, thumbnail: e.target.value })}
-                  className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-mono"
+                  className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-mono"
                 />
               </div>
 
@@ -234,7 +234,7 @@ export default function AddCoursePage() {
                   placeholder="Write a clear course overview, what students will learn, and key highlights..."
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  className="rounded-xl bg-slate-50 border-slate-200 text-xs p-3"
+                  className="rounded-sm bg-slate-50 border-slate-200 text-xs p-3"
                 />
               </div>
 
@@ -246,7 +246,7 @@ export default function AddCoursePage() {
                   value={form.status}
                   onValueChange={(val) => setForm({ ...form, status: val })}
                 >
-                  <SelectTrigger className="h-10 rounded-xl bg-slate-50 border-slate-200 text-xs font-bold text-slate-800">
+                  <SelectTrigger className="h-10 rounded-sm bg-slate-50 border-slate-200 text-xs font-bold text-slate-800">
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
@@ -268,14 +268,14 @@ export default function AddCoursePage() {
             type="button"
             variant="outline"
             onClick={() => router.push("/admin/courses")}
-            className="h-10 px-5 rounded-xl text-xs font-semibold"
+            className="h-10 px-5 rounded-sm text-xs font-semibold"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={submitting}
-            className="h-10 px-6 rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs gap-2 shadow-sm cursor-pointer"
+            className="h-10 px-6 rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white font-bold text-xs gap-2 shadow-sm cursor-pointer"
           >
             {submitting ? (
               <Spinner size="sm" variant="white" />
