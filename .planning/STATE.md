@@ -11,7 +11,12 @@
     - Udemy right-hand floating sticky video preview card with price, CTAs, and guarantee list.
     - Reference 3 Learning Path vertical timeline stepper (`LearningPathTimeline`), 3-column checkmark skills matrix (`SkillsToolsGrid`), and 4-card experience grid (`ImmersiveLearningExperience`).
   - ✅ **Phase 4: 12 Enterprise Courses Catalog & Fallback System**:
-    - Expanded course database to 12 rural entrepreneurship courses with photorealistic AI imagery.
+  - ✅ **Government Schemes Discovery & Resource Portal**:
+    - Backend-driven API (`/api/schemes`) with debounced search, category/department filters, and 6-card pagination (`limit: 6`).
+    - Civic-tech Auto-sliding Banner Slider powered by shadcn Carousel with 3 photorealistic government initiative banners.
+    - Compact, balanced 3-column / 2-column SchemeCard grid with financial subsidies callout and eligibility tags.
+    - Quick search bar, Ctrl+K Instant Search Modal dialog, and comprehensive SchemeDetailModal checklist.
+    - Accessible shadcn Pagination component integrated with backend pagination.
 - **Active Feature Branch**: `ralph/core-features`
 - **Next Active Phase**:
   - ⏳ **Phase 5: Interactive Forms, Manage Pages (Admin Content Management) & Photo/Success Galleries**.

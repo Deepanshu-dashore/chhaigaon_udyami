@@ -116,7 +116,7 @@ async function main() {
             { title: "भारत में डेयरी उद्योग का भविष्य, मांग एवं आय क्षमता", order: 1, type: "VIDEO", duration: 900, isPreview: true },
             { title: "उन्नत नस्लों (गिर, साहिवाल, मुर्राह) का वैज्ञानिक चयन", order: 2, type: "VIDEO", duration: 1500, isPreview: true },
             { title: "वैज्ञानिक पशु शेड का ब्लूप्रिंट डिज़ाइन एवं लागत अनुमान", order: 3, type: "VIDEO", duration: 2100, isPreview: false },
-            { title: "10 दुधारू पशु शेड ब्लूप्रिंट गाइड (DPR Tool)", order: 4, type: "RESOURCE", duration: 300, isPreview: false },
+            { title: "10 दुधारू पशु शेड ब्लूप्रिंट गाइड (DPR Tool)", order: 4, type: "READING", duration: 300, isPreview: false },
           ],
           quiz: { title: "मॉड्यूल 1: डेयरी स्थापना मूल्यांकन परीक्षा", passingPercentage: 70 },
         },
@@ -127,7 +127,7 @@ async function main() {
           lessons: [
             { title: "मक्का साइलेज (Silage) बनाने की वैज्ञानिक विधि व गड्ढा निर्माण", order: 1, type: "VIDEO", duration: 1800, isPreview: false },
             { title: "TMR (टोटल मिक्स्ड राशन) से दूध उत्पादन 25% बढ़ाना", order: 2, type: "VIDEO", duration: 1200, isPreview: false },
-            { title: "पशु पोषण एवं संतुलित आहार तालिका कैलकुलेटर", order: 3, type: "RESOURCE", duration: 300, isPreview: false },
+            { title: "पशु पोषण एवं संतुलित आहार तालिका कैलकुलेटर", order: 3, type: "READING", duration: 300, isPreview: false },
           ],
           quiz: { title: "मॉड्यूल 2: पशु पोषण एवं आहार परीक्षा", passingPercentage: 75 },
         },
@@ -138,7 +138,7 @@ async function main() {
           lessons: [
             { title: "BMC चिलिंग प्लांट इंस्टालेशन, फैट टेस्टिंग व कोल्ड चेन", order: 1, type: "VIDEO", duration: 1600, isPreview: false },
             { title: "पनीर, खोया एवं देशी बिलोना घी वैल्यू एडिशन यूनिट", order: 2, type: "VIDEO", duration: 1400, isPreview: false },
-            { title: "FSSAI खाद्य सुरक्षा डेयरिंग रजिस्ट्रेशन गाइडलाइन", order: 3, type: "RESOURCE", duration: 300, isPreview: false },
+            { title: "FSSAI खाद्य सुरक्षा डेयरिंग रजिस्ट्रेशन गाइडलाइन", order: 3, type: "READING", duration: 300, isPreview: false },
           ],
           quiz: { title: "मॉड्यूल 3: प्रसंस्करण एवं गुणवत्ता नियंत्रण परीक्षा", passingPercentage: 70 },
         },
@@ -149,7 +149,7 @@ async function main() {
           lessons: [
             { title: "PMEGP एवं MP उद्यम क्रांति पोर्टल पर 35% सब्सिडी ऑनलाइन आवेदन", order: 1, type: "VIDEO", duration: 2000, isPreview: false },
             { title: "बैंक मैनेजर इंटरव्यू के आवश्यक 15 सवाल व समाधान", order: 2, type: "VIDEO", duration: 1500, isPreview: false },
-            { title: "₹25 लाख बैंक-स्वीकृत डेयरी प्रोजेक्ट रिपोर्ट (DPR Excel/PDF)", order: 3, type: "RESOURCE", duration: 300, isPreview: false },
+            { title: "₹25 लाख बैंक-स्वीकृत डेयरी प्रोजेक्ट रिपोर्ट (DPR Excel/PDF)", order: 3, type: "READING", duration: 300, isPreview: false },
           ],
           quiz: { title: "अंतिम सर्टिफिकेशन परीक्षा: डेयरी उद्यम मास्टरक्लास", passingPercentage: 80 },
         },
@@ -704,35 +704,33 @@ async function main() {
             title: mData.quiz.title,
             moduleId: createdModule.id,
             passingPercentage: mData.quiz.passingPercentage,
-            timeLimit: 900,
+            timeLimit: 15,
             attemptLimit: 3,
             questions: {
               create: [
                 {
                   question: `${mData.title} के अंतर्गत मुख्य व्यावसायिक सिद्धांत क्या है?`,
                   order: 1,
-                  type: "SINGLE_CHOICE",
-                  points: 10,
+                  marks: 10,
                   options: {
                     create: [
-                      { optionText: "वैज्ञानिक योजना एवं समयबद्ध प्रबंधन", isCorrect: true },
-                      { optionText: "बिना योजना पूंजी लगाना", isCorrect: false },
-                      { optionText: "केवल पारंपरिक तरीकों पर निर्भर रहना", isCorrect: false },
-                      { optionText: "इनमें से कोई नहीं", isCorrect: false },
+                      { optionText: "वैज्ञानिक योजना एवं समयबद्ध प्रबंधन", isCorrect: true, order: 1 },
+                      { optionText: "बिना योजना पूंजी लगाना", isCorrect: false, order: 2 },
+                      { optionText: "केवल पारंपरिक तरीकों पर निर्भर रहना", isCorrect: false, order: 3 },
+                      { optionText: "इनमें से कोई नहीं", isCorrect: false, order: 4 },
                     ],
                   },
                 },
                 {
                   question: "सरकारी अनुदान एवं बैंक ऋण में सबसे महत्वपूर्ण दस्तावेज क्या है?",
                   order: 2,
-                  type: "SINGLE_CHOICE",
-                  points: 10,
+                  marks: 10,
                   options: {
                     create: [
-                      { optionText: "बैंक-स्वीकृत प्रोजेक्ट रिपोर्ट (DPR)", isCorrect: true },
-                      { optionText: "केवल मौखिक बातचीत", isCorrect: false },
-                      { optionText: "हस्तलिखित कच्चा पर्चा", isCorrect: false },
-                      { optionText: "कोई दस्तावेज नहीं", isCorrect: false },
+                      { optionText: "बैंक-स्वीकृत प्रोजेक्ट रिपोर्ट (DPR)", isCorrect: true, order: 1 },
+                      { optionText: "केवल मौखिक बातचीत", isCorrect: false, order: 2 },
+                      { optionText: "हस्तलिखित कच्चा पर्चा", isCorrect: false, order: 3 },
+                      { optionText: "कोई दस्तावेज नहीं", isCorrect: false, order: 4 },
                     ],
                   },
                 },

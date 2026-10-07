@@ -14,6 +14,9 @@ import {
   Oswald,
 } from "next/font/google";
 import "./globals.css";
+import { Agentation } from "agentation";
+
+
 
 // Numbers & Statistics Typography: Public Sans
 const publicSans = Public_Sans({
@@ -127,6 +130,7 @@ export default function RootLayout({
           <TooltipProvider>
             {children}
             <Toaster richColors position="top-right" />
+            {process.env.NEXT_PUBLIC_TYPE === "dev" && <Agentation />}
           </TooltipProvider>
         </AuthProvider>
       </body>

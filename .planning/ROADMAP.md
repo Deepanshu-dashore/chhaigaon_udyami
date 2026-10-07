@@ -14,9 +14,9 @@
 - [x] Quiz player & automated scoring
 - [x] Automated verifiable certificate generation & QR verification
 
-### Phase 3: Government Schemes & Resource Hub (Next)
-- [ ] Government Scheme search & multi-filter UI
-- [ ] Scheme detail modal with eligibility checklist & application links
+### Phase 3: Government Schemes & Resource Hub (In Progress)
+- [x] Government Scheme search & multi-filter UI
+- [x] Scheme detail modal with eligibility checklist & application links
 - [ ] Startup Resource repository and template download center
 
 ### Phase 4: Market Linkages & Partner Leads

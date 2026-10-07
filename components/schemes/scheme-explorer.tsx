@@ -1,437 +1,308 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { SchemeData, SchemeFilterOptions } from "@/lib/data/default-schemes";
+import { useSchemesApi } from "@/components/schemes/use-schemes-api";
+import { SchemeSearchBar } from "@/components/schemes/scheme-search-bar";
+import { SchemeSearchModal } from "@/components/schemes/scheme-search-modal";
+import { SchemeFilterDropdowns } from "@/components/schemes/scheme-filter-dropdowns";
+import { SchemeCard } from "@/components/schemes/scheme-card";
+import { SchemeDetailModal } from "@/components/schemes/scheme-detail-modal";
+import { SchemeGridSkeleton } from "@/components/schemes/scheme-skeleton";
+import { SectionBadge } from "@/components/ui/section-badge";
 import {
-  Search,
-  Building2,
-  CheckCircle2,
-  FileText,
-  ExternalLink,
-  ArrowRight,
-  Filter,
-  Sparkles,
-  HelpCircle,
-  Clock,
-  ShieldCheck,
-  Coins,
-  Landmark,
-  X,
-} from "lucide-react";
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+} from "@/components/ui/pagination";
+import { Search, RotateCcw, AlertCircle, ShieldCheck } from "lucide-react";
+import { SchemeBannerSlider } from "./scheme-banner-slider";
 
-export interface SchemeData {
-  id: string;
-  title: string;
-  slug: string;
-  department: string | null;
-  description: string | null;
-  benefits: string | null;
-  eligibility: string | null;
-  requiredDocuments: string | null;
-  applicationProcess: string | null;
-  officialUrl: string | null;
-  lastUpdated: string | null;
-}
+export type { SchemeData };
 
 interface SchemeExplorerProps {
   initialSchemes: SchemeData[];
+  initialFilterOptions?: SchemeFilterOptions;
+  initialTotal?: number;
+  initialTotalPages?: number;
 }
 
-export function SchemeExplorer({ initialSchemes }: SchemeExplorerProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDept, setSelectedDept] = useState("ALL");
-  const [selectedBenefitType, setSelectedBenefitType] = useState("ALL");
+export function SchemeExplorer({
+  initialSchemes,
+  initialFilterOptions,
+  initialTotal,
+  initialTotalPages,
+}: SchemeExplorerProps) {
+  const {
+    schemes,
+    filterOptions,
+    total,
+    page,
+    setPage,
+    limit,
+    totalPages,
+    isLoading,
+    error,
+    searchQuery,
+    setSearchQuery,
+    selectedCategory,
+    setSelectedCategory,
+    selectedDepartment,
+    setSelectedDepartment,
+    sortBy,
+    setSortBy,
+    resetFilters,
+    refetch,
+  } = useSchemesApi({
+    initialSchemes,
+    initialFilterOptions,
+    initialTotal,
+    initialTotalPages,
+  });
+
   const [activeModalScheme, setActiveModalScheme] = useState<SchemeData | null>(null);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
 
-  // Extract unique departments
-  const departments = useMemo(() => {
-    const set = new Set<string>();
-    initialSchemes.forEach((s) => {
-      if (s.department) set.add(s.department);
-    });
-    return Array.from(set);
-  }, [initialSchemes]);
-
-  // Filter schemes
-  const filteredSchemes = useMemo(() => {
-    return initialSchemes.filter((scheme) => {
-      // Department filter
-      if (selectedDept !== "ALL" && scheme.department !== selectedDept) {
-        return false;
+  // Global Ctrl+K / Cmd+K listener to open search modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setIsSearchModalOpen(true);
       }
-
-      // Benefit filter
-      if (selectedBenefitType !== "ALL") {
-        const text = `${scheme.benefits || ""} ${scheme.description || ""}`.toLowerCase();
-        if (selectedBenefitType === "SUBSIDY" && !text.includes("अनुदान") && !text.includes("subsidy") && !text.includes("%")) {
-          return false;
-        }
-        if (selectedBenefitType === "LOAN" && !text.includes("ऋण") && !text.includes("loan") && !text.includes("क्रेडिट")) {
-          return false;
-        }
-      }
-
-      // Keyword search
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase().trim();
-        const matchTitle = scheme.title.toLowerCase().includes(q);
-        const matchDesc = (scheme.description || "").toLowerCase().includes(q);
-        const matchDept = (scheme.department || "").toLowerCase().includes(q);
-        const matchBenefits = (scheme.benefits || "").toLowerCase().includes(q);
-        const matchElig = (scheme.eligibility || "").toLowerCase().includes(q);
-        return matchTitle || matchDesc || matchDept || matchBenefits || matchElig;
-      }
-
-      return true;
-    });
-  }, [initialSchemes, searchQuery, selectedDept, selectedBenefitType]);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
-    <div className="w-full">
-      {/* Search & Filter Bar */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 md:p-6 mb-8">
-        <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
-          {/* Search Input */}
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="योजना का नाम, विभाग या कीवर्ड से खोजें (उदा. PMEGP, डेयरी, 50% अनुदान)..."
-              className="w-full pl-12 pr-4 py-3 bg-slate-50 hover:bg-slate-100/70 focus:bg-white border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-sm md:text-base font-medium transition-all outline-none focus:ring-2 focus:ring-[#0056d2] focus:border-transparent"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-500 hover:text-slate-800 bg-slate-200/70 hover:bg-slate-300 px-2 py-1 rounded"
-              >
-                Clear
-              </button>
-            )}
-          </div>
+    <div className="w-full flex flex-col">
+      {/* ── 1. Full-Width Wide Announcement Banner Slider on Top ── */}
+      <SchemeBannerSlider
+        onSelectCategory={(cat) => setSelectedCategory(cat)}
+      />
 
-          {/* Benefit Quick Toggle */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
-            <button
-              onClick={() => setSelectedBenefitType("ALL")}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
-                selectedBenefitType === "ALL"
-                  ? "bg-[#0056d2] text-white shadow-sm"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-              }`}
-            >
-              सभी योजनाएं
-            </button>
-            <button
-              onClick={() => setSelectedBenefitType("SUBSIDY")}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
-                selectedBenefitType === "SUBSIDY"
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-              }`}
-            >
-              <Coins className="w-3.5 h-3.5" />
-              <span>सब्सिडी व अनुदान</span>
-            </button>
-            <button
-              onClick={() => setSelectedBenefitType("LOAN")}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
-                selectedBenefitType === "LOAN"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-blue-50 text-blue-700 hover:bg-blue-100"
-              }`}
-            >
-              <Landmark className="w-3.5 h-3.5" />
-              <span>बैंक ऋण व क्रेडिट</span>
-            </button>
-          </div>
-        </div>
+      {/* ── 2. Branded Civic Header Section with /about Background Pattern ── */}
+      <section
+        className="py-8 sm:py-12 relative overflow-hidden border-b border-blue-900 text-white"
+        style={{
+          background:
+            "url('/images/ourstd-bckgrnd.webp') no-repeat center center / cover",
+        }}
+      >
+        {/* Blue Gradient Overlay */}
+        <div className="absolute inset-0 bg-linear-to-r from-blue-900 via-[#0056d2]/90 to-blue-900 pointer-events-none" />
 
-        {/* Department Chips */}
-        <div className="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center gap-2">
-          <span className="text-xs font-bold text-slate-600 flex items-center gap-1.5 mr-1">
-            <Filter className="w-3.5 h-3.5" /> विभाग:
-          </span>
-          <button
-            onClick={() => setSelectedDept("ALL")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              selectedDept === "ALL"
-                ? "bg-slate-900 text-white font-semibold"
-                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-            }`}
+        {/* Overlapping Concentric Circles SVG Background Pattern Overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-40 mix-blend-overlay"
+          style={{
+            backgroundImage: "url('/images/bg-concentric-circles-white.svg')",
+            backgroundRepeat: "repeat",
+            backgroundSize: "140px 140px",
+          }}
+        />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Breadcrumb */}
+          <nav
+            className="flex items-center gap-2 text-xs text-blue-200 mb-3 font-medium"
+            aria-label="breadcrumb"
           >
-            सभी विभाग ({initialSchemes.length})
-          </button>
-          {departments.map((dept) => {
-            const count = initialSchemes.filter((s) => s.department === dept).length;
-            const isSelected = selectedDept === dept;
-            return (
-              <button
-                key={dept}
-                onClick={() => setSelectedDept(dept)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                  isSelected
-                    ? "bg-[#0056d2] text-white font-semibold shadow-sm"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                }`}
-              >
-                {dept} ({count})
-              </button>
-            );
-          })}
-        </div>
-      </div>
+            <Link href="/" className="hover:text-white transition-colors">
+              होम
+            </Link>
+            <span className="text-blue-300">/</span>
+            <span className="text-white font-bold">सरकारी योजनाएं एवं सब्सिडी</span>
+          </nav>
 
-      {/* Results Header */}
-      <div className="flex items-center justify-between mb-6 px-1">
-        <div className="text-sm font-semibold text-slate-600">
-          कुल <span className="text-[#0056d2] font-bold text-base">{filteredSchemes.length}</span> योजनाएं उपलब्ध हैं
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1
+                className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight tracking-tight font-headline"
+                style={{
+                  fontFamily:
+                    "var(--font-noto-sans-devanagari), var(--font-mukta), sans-serif",
+                }}
+              >
+                शासकीय स्वरोजगार एवं सब्सिडी योजनाएं 2026
+              </h1>
+              <p
+                className="text-xs sm:text-sm text-blue-100/90 mt-1.5 max-w-2xl font-body leading-relaxed"
+                style={{
+                  fontFamily:
+                    "var(--font-noto-sans-devanagari), var(--font-mukta), sans-serif",
+                }}
+              >
+                मध्य प्रदेश शासन एवं केंद्र सरकार की प्रमुख स्वरोजगार, 35% तक सब्सिडी और शून्य गारंटी बैंक ऋण योजनाएं
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+              <SectionBadge icon={ShieldCheck} variant="outline">
+                सत्यापित शासकीय पोर्टल
+              </SectionBadge>
+            </div>
+          </div>
         </div>
-        {(searchQuery || selectedDept !== "ALL" || selectedBenefitType !== "ALL") && (
-          <button
-            onClick={() => {
-              setSearchQuery("");
-              setSelectedDept("ALL");
-              setSelectedBenefitType("ALL");
-            }}
-            className="text-xs font-bold text-[#0056d2] hover:underline"
-          >
-            सभी फ़िल्टर हटाएं (Reset)
-          </button>
+      </section>
+
+      {/* ── 3. Centered Content Container: Search, Filter Tabs & Schemes Grid ── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        {/* Search Bar with Ctrl+K shortcut trigger */}
+        <SchemeSearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          onClear={() => setSearchQuery("")}
+          onOpenSearchModal={() => setIsSearchModalOpen(true)}
+          totalResults={total}
+        />
+
+        {/* Clean Filter Tabs & Dropdowns (No duplicate category dropdown) */}
+        <SchemeFilterDropdowns
+          categories={filterOptions.categories}
+          departments={filterOptions.departments}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+          selectedDepartment={selectedDepartment}
+          onSelectDepartment={setSelectedDepartment}
+          sortBy={sortBy}
+          onSelectSort={setSortBy}
+          searchQuery={searchQuery}
+          onClearSearch={() => setSearchQuery("")}
+          onResetFilters={resetFilters}
+          totalResults={total}
+        />
+
+        {/* Error Notification (if API error occurs) */}
+        {error && (
+          <div className="p-4 mb-6 rounded-lg bg-rose-50 border border-rose-200 flex items-center justify-between text-rose-800 text-sm">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+              <span>{error}</span>
+            </div>
+            <button
+              onClick={() => refetch()}
+              className="text-xs font-bold underline hover:text-rose-950 cursor-pointer"
+            >
+              पुनः प्रयास करें
+            </button>
+          </div>
+        )}
+
+        {/* Schemes Grid / Loading Skeletons / Empty State */}
+        {isLoading ? (
+          <SchemeGridSkeleton count={limit} />
+        ) : schemes.length === 0 ? (
+          <div className="bg-white border border-slate-200 rounded-xl p-12 text-center my-4 shadow-2xs">
+            <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-400">
+              <Search className="w-6 h-6" />
+            </div>
+            <h3
+              className="text-base font-bold text-slate-800 mb-1"
+              style={{
+                fontFamily:
+                  "var(--font-noto-sans-devanagari), var(--font-mukta), sans-serif",
+              }}
+            >
+              कोई योजना नहीं मिली
+            </h3>
+            <p
+              className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto mb-5"
+              style={{
+                fontFamily:
+                  "var(--font-noto-sans-devanagari), var(--font-mukta), sans-serif",
+              }}
+            >
+              आपके द्वारा चुने गए फ़िल्टर या खोज शब्द के अनुसार कोई परिणाम नहीं मिला। कृपया फ़िल्टर बदलें।
+            </p>
+            <button
+              onClick={resetFilters}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0056d2] hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold shadow-sm transition-transform active:scale-95 cursor-pointer"
+              style={{
+                fontFamily:
+                  "var(--font-noto-sans-devanagari), var(--font-mukta), sans-serif",
+              }}
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span>सभी योजनाएं देखें</span>
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {schemes.map((scheme) => (
+              <SchemeCard
+                key={scheme.id}
+                scheme={scheme}
+                onSelect={setActiveModalScheme}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Shadcn Pagination (6 cards per page, backend connected) */}
+        {!isLoading && totalPages > 1 && (
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 py-4 border-t border-slate-200">
+            <div
+              className="text-xs text-slate-500 font-medium"
+              style={{
+                fontFamily:
+                  "var(--font-noto-sans-devanagari), var(--font-mukta), sans-serif",
+              }}
+            >
+              पृष्ठ <strong className="text-slate-800">{page}</strong> / <strong>{totalPages}</strong> (कुल <strong>{total}</strong> योजनाएं, प्रति पृष्ठ <strong>{limit}</strong>)
+            </div>
+
+            <Pagination className="mx-0 w-auto justify-end">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => page > 1 && setPage(page - 1)}
+                    className={page === 1 ? "pointer-events-none opacity-40" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                  <PaginationItem key={p}>
+                    <PaginationLink
+                      isActive={p === page}
+                      onClick={() => setPage(p)}
+                    >
+                      {p}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() => page < totalPages && setPage(page + 1)}
+                    className={page === totalPages ? "pointer-events-none opacity-40" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
         )}
       </div>
 
-      {/* Schemes Card Grid */}
-      {filteredSchemes.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center">
-          <HelpCircle className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-          <h3 className="text-lg font-bold text-slate-800 mb-1">कोई योजना नहीं मिली</h3>
-          <p className="text-sm text-slate-500 max-w-md mx-auto mb-4">
-            आपके दिए गए सर्च कीवर्ड या फ़िल्टर के अनुसार कोई सरकारी योजना उपलब्ध नहीं है। कृपया दूसरे कीवर्ड आजमाएं।
-          </p>
-          <button
-            onClick={() => {
-              setSearchQuery("");
-              setSelectedDept("ALL");
-              setSelectedBenefitType("ALL");
-            }}
-            className="px-4 py-2 bg-[#0056d2] text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition"
-          >
-            सभी योजनाएं देखें
-          </button>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSchemes.map((scheme) => {
-            return (
-              <div
-                key={scheme.id}
-                className="bg-white rounded-2xl border border-slate-200/90 hover:border-[#0056d2]/50 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group overflow-hidden"
-              >
-                <div className="p-6">
-                  {/* Department & Verified Badge */}
-                  <div className="flex items-start justify-between gap-2 mb-3">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-[#0056d2] text-[11px] font-bold border border-blue-100">
-                      <Building2 className="w-3 h-3" />
-                      {scheme.department || "शासकीय योजना"}
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
-                      <ShieldCheck className="w-3 h-3 text-emerald-600" />
-                      सत्यापित
-                    </span>
-                  </div>
+      {/* Clean Minimalist Search Modal Dialog */}
+      <SchemeSearchModal
+        isOpen={isSearchModalOpen}
+        onClose={() => setIsSearchModalOpen(false)}
+        schemes={initialSchemes}
+        onSelectScheme={(scheme) => setActiveModalScheme(scheme)}
+      />
 
-                  {/* Title */}
-                  <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#0056d2] transition-colors leading-snug line-clamp-2 mb-2">
-                    {scheme.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
-                    {scheme.description || "ग्रामीण व लघु उद्यमियों के लिए वित्तीय सहायता व अनुदान योजना।"}
-                  </p>
-
-                  {/* Benefit Highlight Box */}
-                  {scheme.benefits && (
-                    <div className="bg-emerald-50/70 border border-emerald-100 rounded-xl p-3 mb-4">
-                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-900 mb-1">
-                        <Sparkles className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                        प्रमुख लाभ एवं अनुदान:
-                      </div>
-                      <p className="text-xs text-emerald-950 line-clamp-2 leading-relaxed">
-                        {scheme.benefits}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Eligibility Preview */}
-                  {scheme.eligibility && (
-                    <div className="flex items-start gap-1.5 text-xs text-slate-600 mb-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#0056d2] shrink-0 mt-0.5" />
-                      <span className="line-clamp-1">
-                        <strong className="text-slate-800 font-semibold">पात्रता: </strong>
-                        {scheme.eligibility}
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Card Footer */}
-                <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2">
-                  <button
-                    onClick={() => setActiveModalScheme(scheme)}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-[#0056d2] hover:text-blue-800 transition"
-                  >
-                    <FileText className="w-3.5 h-3.5" />
-                    विस्तृत विवरण देखें
-                  </button>
-
-                  {scheme.officialUrl ? (
-                    <a
-                      href={scheme.officialUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#0056d2] text-white text-xs font-bold hover:bg-blue-700 shadow-sm transition"
-                    >
-                      आवेदन लिंक
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  ) : (
-                    <button
-                      onClick={() => setActiveModalScheme(scheme)}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-800 text-white text-xs font-bold hover:bg-slate-900 shadow-sm transition"
-                    >
-                      पात्रता जांचें
-                      <ArrowRight className="w-3 h-3" />
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Scheme Detail Modal */}
+      {/* Full Scheme Details Modal */}
       {activeModalScheme && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 flex flex-col">
-            {/* Modal Header */}
-            <div className="p-6 md:p-8 bg-gradient-to-r from-blue-900 to-[#0056d2] text-white relative">
-              <button
-                onClick={() => setActiveModalScheme(null)}
-                className="absolute right-5 top-5 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 w-8 h-8 rounded-full flex items-center justify-center transition"
-                aria-label="Close modal"
-              >
-                <X className="w-4 h-4" />
-              </button>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-white/20 text-white text-xs font-bold mb-3">
-                <Building2 className="w-3.5 h-3.5" />
-                {activeModalScheme.department || "शासकीय योजना"}
-              </div>
-              <h2 className="text-xl md:text-2xl font-black leading-snug">
-                {activeModalScheme.title}
-              </h2>
-            </div>
-
-            {/* Modal Content */}
-            <div className="p-6 md:p-8 space-y-6">
-              {/* Description */}
-              {activeModalScheme.description && (
-                <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-                    योजना का उद्देश्य व विवरण
-                  </h4>
-                  <p className="text-sm text-slate-700 leading-relaxed">
-                    {activeModalScheme.description}
-                  </p>
-                </div>
-              )}
-
-              {/* Benefits */}
-              {activeModalScheme.benefits && (
-                <div className="bg-emerald-50 border border-emerald-200/80 rounded-2xl p-4">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-900 mb-1.5 flex items-center gap-1.5">
-                    <Sparkles className="w-4 h-4 text-emerald-600" />
-                    अनुदान एवं वित्तीय सहायता (Financial Benefits)
-                  </h4>
-                  <p className="text-sm text-emerald-950 leading-relaxed font-medium">
-                    {activeModalScheme.benefits}
-                  </p>
-                </div>
-              )}
-
-              {/* Eligibility */}
-              {activeModalScheme.eligibility && (
-                <div className="bg-blue-50/70 border border-blue-200/80 rounded-2xl p-4">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#0056d2] mb-1.5 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-[#0056d2]" />
-                    पात्रता शर्तें (Eligibility Criteria)
-                  </h4>
-                  <p className="text-sm text-slate-800 leading-relaxed">
-                    {activeModalScheme.eligibility}
-                  </p>
-                </div>
-              )}
-
-              {/* Required Documents */}
-              {activeModalScheme.requiredDocuments && (
-                <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center gap-1.5">
-                    <FileText className="w-4 h-4 text-slate-500" />
-                    आवश्यक दस्तावेज (Required Documents)
-                  </h4>
-                  <p className="text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    {activeModalScheme.requiredDocuments}
-                  </p>
-                </div>
-              )}
-
-              {/* Application Process */}
-              {activeModalScheme.applicationProcess && (
-                <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center gap-1.5">
-                    <Clock className="w-4 h-4 text-slate-500" />
-                    आवेदन की प्रक्रिया (Application Process)
-                  </h4>
-                  <p className="text-sm text-slate-700 leading-relaxed">
-                    {activeModalScheme.applicationProcess}
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Modal Actions */}
-            <div className="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-4 mt-auto">
-              <button
-                onClick={() => setActiveModalScheme(null)}
-                className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-200 transition"
-              >
-                बंद करें
-              </button>
-              {activeModalScheme.officialUrl ? (
-                <a
-                  href={activeModalScheme.officialUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#0056d2] text-white text-xs font-bold hover:bg-blue-700 shadow-md transition"
-                >
-                  आधिकारिक पोर्टल पर आवेदन करें
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              ) : (
-                <Link
-                  href="/register"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#0056d2] text-white text-xs font-bold hover:bg-blue-700 shadow-md transition"
-                >
-                  मार्गदर्शन हेतु रजिस्टर करें
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
+        <SchemeDetailModal
+          scheme={activeModalScheme}
+          onClose={() => setActiveModalScheme(null)}
+        />
       )}
     </div>
   );
