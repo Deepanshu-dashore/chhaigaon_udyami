@@ -93,6 +93,7 @@ export function Footer({ showValueBanner = false }: FooterProps) {
                   width={44}
                   height={44}
                   className="object-contain"
+                  style={{ width: "auto", height: "auto" }}
                 />
               </div>
               <div>

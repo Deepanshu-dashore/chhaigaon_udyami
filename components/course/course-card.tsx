@@ -2,12 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { formatCurrency } from "@/lib/utils";
-import { TrendingUp, ArrowRight, Play, Star, Clock } from "lucide-react";
+import { formatCurrency, cn } from "@/lib/utils";
+import { ArrowRight, Star } from "lucide-react";
+import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 interface CourseCardProps {
-  id: string;
+  id?: string;
   title: string;
   slug: string;
   shortDesc?: string | null;
@@ -26,6 +28,41 @@ interface CourseCardProps {
   isLastInRow?: boolean;
 }
 
+// Distinct styles for different skill and course levels
+function getLevelBadgeConfig(levelStr?: string) {
+  const upper = (levelStr || "").toUpperCase();
+
+  if (upper.includes("BEGINNER") || upper.includes("शुरुआती")) {
+    return {
+      label: "Beginner",
+      className:
+        "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100/80 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+    };
+  }
+
+  if (upper.includes("INTERMEDIATE") || upper.includes("मध्यम")) {
+    return {
+      label: "Intermediate",
+      className:
+        "border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100/80 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-300",
+    };
+  }
+
+  if (upper.includes("ADVANCED") || upper.includes("उन्नत")) {
+    return {
+      label: "Advanced",
+      className:
+        "border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100/80 dark:border-purple-800 dark:bg-purple-950 dark:text-purple-300",
+    };
+  }
+
+  return {
+    label: upper.includes("ALL") || upper.includes("सभी") ? "All Levels" : levelStr || "General",
+    className:
+      "border-blue-200 bg-blue-50 text-[#0056d2] hover:bg-blue-100/80 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300",
+  };
+}
+
 export function CourseCard({
   title,
   slug,
@@ -33,11 +70,11 @@ export function CourseCard({
   price,
   discountedPrice,
   level = "Beginner",
+  category,
   instructor = "छैगांव उद्यमी अकादमी",
   rating = 4.8,
   reviewsCount = 420,
   totalHours = "4.5 घंटे",
-  category,
 }: CourseCardProps) {
   const isFree = price === 0 || discountedPrice === 0;
   const DEFAULT_THUMBNAIL = "/images/dairy-course.jpg";
@@ -61,124 +98,82 @@ export function CourseCard({
       ? `${(reviewsCount / 1000).toFixed(reviewsCount >= 10000 ? 0 : 1)}K`
       : reviewsCount.toString();
 
-  const partnerLogoInitial = (instructor || "CU").charAt(0).toUpperCase();
+  const levelBadge = getLevelBadgeConfig(level);
+
+  // Short monogram for the square organization logo box (e.g. CU, डॉ, etc.)
+  const partnerLogoInitial = (instructor || "CU").trim().slice(0, 2).toUpperCase();
 
   return (
-    <article className="group flex flex-col bg-white rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-300 p-2.5 sm:p-3 h-full justify-between overflow-hidden">
+    <Card className="group flex flex-col h-full bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 p-3 sm:p-3 w-full max-w-[360px] mx-auto sm:max-w-none justify-between">
       <div>
-        {/* 1. Thumbnail Image with Play Button & Preview Course UI */}
+        {/* 1. Inset Thumbnail Image with rounded corners on all sides (Coursera style) */}
         <Link
           href={`/courses/${slug}`}
-          className="relative block aspect-[16/9] w-full rounded-lg overflow-hidden bg-slate-950 mb-2 group/thumb cursor-pointer"
+          className="relative block aspect-[16/9] w-full overflow-hidden rounded-xl bg-slate-100 cursor-pointer shrink-0 mb-3"
+          tabIndex={-1}
+          aria-hidden="true"
         >
           <img
             src={imgSrc}
             alt={title}
             onError={handleImageError}
-            className="w-full h-full object-cover object-center group-hover/thumb:scale-105 transition-transform duration-300 ease-out opacity-90"
+            loading="lazy"
+            className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-250 ease-out"
           />
-          <div className="absolute inset-0 bg-slate-950/20 group-hover/thumb:bg-slate-950/40 transition-colors flex flex-col items-center justify-center gap-1">
-            <div className="size-9 sm:size-10 rounded-full bg-white/95 text-[#0056d2] shadow-md flex items-center justify-center group-hover/thumb:scale-110 transition-transform">
-              <Play className="size-4 sm:size-4.5 ml-0.5 fill-[#0056d2] text-[#0056d2]" />
-            </div>
-            <span className="text-white text-[10px] sm:text-[11px] font-semibold drop-shadow tracking-wide">
-              Preview Course
-            </span>
-          </div>
         </Link>
 
-        {/* 2. Partner / Organization Row */}
-        <div className="flex items-center gap-1.5 mb-1.5 min-h-[22px]">
-          <div className="w-5 h-5 rounded border border-slate-200 bg-white p-0.5 flex items-center justify-center text-[11px] font-black text-[#0056d2] shadow-2xs shrink-0">
-            {partnerLogoInitial}
-          </div>
-          <span className="text-[12px] font-medium text-slate-800 line-clamp-1">
-            {instructor}
-          </span>
-        </div>
-
-        {/* 3. Course Title (Fixed height for strict grid alignment across cards) */}
-        <Link href={`/courses/${slug}`} className="block mb-1.5">
-          <h3 className="font-bold text-[14px] sm:text-[15px] text-slate-900 group-hover:text-[#0056d2] transition-colors line-clamp-2 leading-snug min-h-[40px] sm:min-h-[44px]">
-            {title}
-          </h3>
-        </Link>
-
-        {/* 4. Metadata Line (Icon-based, no raw middle dots) */}
-        <div className="flex items-center gap-2 text-[12px] text-slate-600 font-normal leading-normal mb-2.5 min-h-[26px] flex-wrap">
-          <div className="flex items-center gap-1 font-semibold text-slate-900">
-            <Star className="size-3.5 fill-amber-400 text-amber-400" />
-            <span>{rating.toFixed(1)}</span>
-            <span className="font-normal text-slate-500">({formattedReviews})</span>
-          </div>
-
-          <div className="flex items-center gap-1 text-slate-500">
-            <Clock className="size-3 text-slate-400" />
-            <span>{totalHours}</span>
-          </div>
-
-          <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600">
-            {level}
-          </span>
-        </div>
-
-        {/* 5. Dedicated Badges Row */}
-        <div className="flex items-center gap-1.5 flex-wrap mb-2 min-h-[24px]">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#fce8e6] text-[#b00020]">
-            <TrendingUp className="w-3 h-3 text-[#b00020]" />
-            Trending right now
-          </span>
-          {isFree ? (
-            <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#e8f0fe] text-[#1a73e8]">
-              Free trial
-            </span>
-          ) : (
-            <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
-              Preview
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* 6. Footer Price & Enroll CTA Row */}
-      <div className="pt-2.5 mt-auto border-t border-slate-100 flex items-center justify-between gap-2">
-        <div>
-          {isFree ? (
-            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-              निःशुल्क
-            </span>
-          ) : (
-            <div className="flex items-baseline gap-1">
-              <span className="text-sm sm:text-base font-black text-slate-950">
-                {formatCurrency(discountedPrice || price)}
-              </span>
-              {discountedPrice && (
-                <span className="text-[10px] text-slate-400 line-through">
-                  {formatCurrency(price)}
-                </span>
-              )}
+        {/* 2. Main Card Content */}
+        <CardContent className="p-0 space-y-2.5">
+          {/* Organization / Partner Row with Square Logo Avatar (SkillUp style) */}
+          <div className="flex items-center gap-2 h-8">
+            <div className="size-8 rounded-lg border border-slate-200 bg-slate-50 flex items-center justify-center font-bold text-xs text-[#0056d2] shadow-2xs shrink-0 select-none">
+              {partnerLogoInitial}
             </div>
-          )}
-        </div>
+            <span className="text-xs sm:text-[13px] font-semibold text-slate-800 line-clamp-1">
+              {instructor}
+            </span>
+          </div>
 
-        <Button
-          asChild
-          size="sm"
-          className="rounded-sm bg-[#0056d2] hover:bg-blue-700 text-white text-xs font-semibold shadow-2xs hover:shadow-xs transition-all shrink-0 cursor-pointer h-8 px-3 gap-1.5"
-        >
-          <Link href={`/courses/${slug}`}>
-            <span>{isFree ? "निःशुल्क प्रवेश लें" : "प्रवेश लें"}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+          {/* Course Title */}
+          <Link href={`/courses/${slug}`} className="block group/title">
+            <CardTitle
+              className="text-[15px] sm:text-[16px] font-semibold text-slate-9`00 group-hover/title:text-[#155EEF] transition-colors leading-snug line-clamp-2 min-h-[44px]"
+              style={{
+                fontFamily:
+                  "var(--font-noto-sans-devanagari), var(--font-mukta), sans-serif",
+              }}
+            >
+              {title}
+            </CardTitle>
           </Link>
-        </Button>
+
+          {/* Single Unified Metadata, Level Badge & Star Rating Row */}
+          <div className="flex items-center gap-1.5 text-[11px] text-slate-500 font-medium">
+            <Badge
+              variant="outline"
+              className={cn(
+                "text-[10px] font-semibold px-2 py-0.5 rounded-full tracking-wide shrink-0 transition-colors shadow-2xs",
+                levelBadge.className
+              )}
+            >
+              {levelBadge.label}
+            </Badge>
+            <span className="text-slate-300 select-none">·</span>
+            <span className="truncate">{category || "प्रशिक्षण"}</span>
+            <span className="text-slate-300 select-none">·</span>
+            <span className="shrink-0">{totalHours}</span>
+
+            <div className="flex items-center gap-1 text-xs font-semibold text-slate-700 shrink-0 ml-auto">
+              <Star className="w-3.5 h-3.5 text-[#F4B400] fill-[#F4B400]" />
+              <span>{rating.toFixed(1)}</span>
+              <span className="font-normal text-slate-400 text-[11px]">({formattedReviews})</span>
+            </div>
+          </div>
+        </CardContent>
       </div>
-    </article>
+
+      {/* 3. Footer Price & CTA */}
+     
+    </Card>
   );
 }
-
-
-
-
-
-
-

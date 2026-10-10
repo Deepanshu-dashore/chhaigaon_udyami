@@ -406,9 +406,9 @@ export function CourseCatalogView({ initialCourses }: CourseCatalogViewProps) {
             </div>
           )}
 
-          {/* Courses Grid (Matching Image 3 layout) */}
+          {/* Courses Grid (Strict 3-column responsive grid with 20px-24px gap) */}
           {filteredCourses.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 items-stretch">
               {filteredCourses.map((course) => (
                 <CourseCardGrid key={course.id} course={course} />
               ))}

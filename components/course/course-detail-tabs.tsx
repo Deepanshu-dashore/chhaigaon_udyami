@@ -29,7 +29,8 @@ export function CourseDetailTabs() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8">
             <nav className="flex space-x-6 sm:space-x-8 overflow-x-auto scrollbar-none">
-              {tabs.map((tab) => {
+              {tabs.map(
+                (tab) => {
                 const isActive = activeTab === tab.id;
                 return (
                   <button

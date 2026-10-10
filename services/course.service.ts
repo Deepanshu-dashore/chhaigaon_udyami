@@ -235,6 +235,10 @@ export async function createCourse(data: CreateCourseDTO) {
       slug,
       description: data.description ?? null,
       thumbnail: data.thumbnail ?? null,
+      about: data.about ?? null,
+      outcomes: data.outcomes ?? [],
+      skills: data.skills ?? [],
+      tools: data.tools ?? [],
       language: data.language || "hi",
       price: data.price ? Number(data.price) : 0,
       isPaid: data.isPaid ?? false,
@@ -262,6 +266,10 @@ export async function updateCourse(id: string, data: UpdateCourseDTO) {
   if (data.slug !== undefined) updateData.slug = data.slug;
   if (data.description !== undefined) updateData.description = data.description;
   if (data.thumbnail !== undefined) updateData.thumbnail = data.thumbnail;
+  if (data.about !== undefined) updateData.about = data.about;
+  if (data.outcomes !== undefined) updateData.outcomes = data.outcomes;
+  if (data.skills !== undefined) updateData.skills = data.skills;
+  if (data.tools !== undefined) updateData.tools = data.tools;
   if (data.language !== undefined) updateData.language = data.language;
   if (data.price !== undefined) updateData.price = Number(data.price);
   if (data.isPaid !== undefined) updateData.isPaid = data.isPaid;

@@ -1,27 +1,34 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { Star, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Star } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import { CourseEnrollButton } from "./course-enroll-button";
 
 interface StickyCourseHeaderProps {
+  courseId?: string;
+  courseSlug?: string;
   title: string;
   rating: number;
   reviewsCount: number;
   price: number;
   discountedPrice?: number;
   isFree?: boolean;
+  isEnrolled?: boolean;
+  isAuthenticated?: boolean;
 }
 
 export function StickyCourseHeader({
+  courseId = "",
+  courseSlug = "",
   title,
   rating,
   reviewsCount,
   price,
   discountedPrice,
   isFree = false,
+  isEnrolled = false,
+  isAuthenticated = false,
 }: StickyCourseHeaderProps) {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -74,12 +81,16 @@ export function StickyCourseHeader({
             </div>
           )}
 
-          <Button asChild size="sm" className="h-9 px-4 text-xs font-bold bg-[#1261D6] hover:bg-blue-700 text-white rounded-sm shadow-2xs cursor-pointer">
-            <Link href="/apply">
-              <span>{isFree ? "निःशुल्क प्रवेश लें " : "अभी प्रवेश लें (Enroll Now)"}</span>
-              <ArrowRight className="size-3.5 ml-1" />
-            </Link>
-          </Button>
+          <CourseEnrollButton
+            courseId={courseId}
+            courseSlug={courseSlug}
+            courseTitle={title}
+            isPaid={!isFree}
+            price={discountedPrice || price}
+            initialIsEnrolled={isEnrolled}
+            isAuthenticated={isAuthenticated}
+            variant="header"
+          />
         </div>
 
       </div>

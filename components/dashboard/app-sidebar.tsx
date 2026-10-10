@@ -56,10 +56,10 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
       icon: LayoutDashboard,
     },
     {
-      title: "मेरे कोर्सेस (Courses)",
-      url: "/courses",
+      title: "मेरे कोर्सेस (My Courses)",
+      url: "/dashboard/courses",
       icon: BookOpen,
-      badge: "नया",
+      badge: "सक्रिय",
     },
     {
       title: "सरकारी योजनाएं (Schemes)",

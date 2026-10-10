@@ -16,6 +16,7 @@ import { SkillsToolsGrid } from "@/components/course/skills-tools-grid";
 import { ImmersiveLearningExperience } from "@/components/course/immersive-learning-experience";
 import { CourseResourcesSection } from "@/components/course/course-resources-section";
 import { StickyCourseHeader } from "@/components/course/sticky-course-header";
+import { CourseEnrollButton } from "@/components/course/course-enroll-button";
 import { formatCurrency } from "@/lib/utils";
 import {
   ChevronRight,
@@ -321,6 +322,7 @@ export default async function CourseDetailPage({
   const discountPercent = originalPrice > sellingPrice ? Math.round(((originalPrice - sellingPrice) / originalPrice) * 100) : 0;
 
   const course = {
+    id: dbCourse?.id || mock.id || slug,
     title: dbCourse?.title || mock.title,
     slug: dbCourse?.slug || mock.slug,
     category: mock.category || "कृषि एवं ग्रामीण उद्यम",
@@ -337,9 +339,10 @@ export default async function CourseDetailPage({
     instructorRole: mock.instructorRole,
     authorityName: mock.authorityName,
     shortDesc: dbCourse?.description || mock.shortDesc,
-    learnings: mock.learnings,
-    skillsGained: mock.skillsGained,
-    toolsLearned: mock.toolsLearned,
+    about: dbCourse?.about || mock.about || dbCourse?.description || mock.shortDesc,
+    learnings: (dbCourse?.outcomes && dbCourse.outcomes.length > 0) ? dbCourse.outcomes : mock.learnings,
+    skillsGained: (dbCourse?.skills && dbCourse.skills.length > 0) ? dbCourse.skills : mock.skillsGained,
+    toolsLearned: (dbCourse?.tools && dbCourse.tools.length > 0) ? dbCourse.tools : mock.toolsLearned,
     downloadableResources: mock.downloadableResources || [
       { name: "बैंक-स्वीकृत प्रोजेक्ट रिपोर्ट (Bank Approved DPR)", type: "PDF & Excel", size: "3.2 MB", url: "#" },
       { name: "लागत एवं मुनाफा विश्लेषण कैलकुलेटर", type: "Excel Tool", size: "1.4 MB", url: "#" },
@@ -372,12 +375,16 @@ export default async function CourseDetailPage({
 
       {/* Floating Sticky Header on Scroll */}
       <StickyCourseHeader
+        courseId={course.id}
+        courseSlug={course.slug}
         title={course.title}
         rating={course.rating}
         reviewsCount={course.reviewsCount}
         price={course.price}
         discountedPrice={course.discountedPrice}
         isFree={isFree}
+        isEnrolled={isEnrolled}
+        isAuthenticated={Boolean(prismaUserId)}
       />
 
       <main className="flex-1">
@@ -502,12 +509,16 @@ export default async function CourseDetailPage({
 
                 {/* Primary Action Button */}
                 <div className="pt-3 flex items-center gap-4 flex-wrap">
-                  <Link href="/apply">
-                    <Button className="h-11 px-7 rounded-sm bg-[#1261D6] hover:bg-blue-700 text-white text-sm font-bold shadow-2xs cursor-pointer inline-flex items-center gap-2">
-                      <span>{isFree ? "निःशुल्क प्रवेश लें (Free Enroll)" : "अभी प्रवेश लें (Enroll Now)"}</span>
-                      <ArrowRight className="size-4" />
-                    </Button>
-                  </Link>
+                  <CourseEnrollButton
+                    courseId={course.id}
+                    courseSlug={course.slug}
+                    courseTitle={course.title}
+                    isPaid={!isFree}
+                    price={course.discountedPrice}
+                    initialIsEnrolled={isEnrolled}
+                    isAuthenticated={Boolean(prismaUserId)}
+                    variant="primary"
+                  />
                 </div>
 
               </div>
@@ -569,21 +580,18 @@ export default async function CourseDetailPage({
                         </div>
                       </div>
 
-                      {/* Primary & Secondary Action CTAs */}
+                      {/* Primary Action CTA */}
                       <div className="space-y-2 pt-1">
-                        <Button asChild className="w-full h-11 bg-[#1261D6] hover:bg-blue-700 text-white font-bold text-sm rounded-sm shadow-2xs cursor-pointer">
-                          <Link href="/apply">
-                            <span>{isFree ? "निःशुल्क प्रवेश लें (Free Enroll)" : "कार्ट में जोड़ें (Add to Cart)"}</span>
-                          </Link>
-                        </Button>
-
-                        {!isFree && (
-                          <Button asChild variant="outline" className="w-full h-11 border-[#E5E7EB] text-[#111827] hover:bg-slate-50 font-bold text-sm rounded-sm cursor-pointer">
-                            <Link href="/apply">
-                              <span>अभी खरीदें (Buy Now)</span>
-                            </Link>
-                          </Button>
-                        )}
+                        <CourseEnrollButton
+                          courseId={course.id}
+                          courseSlug={course.slug}
+                          courseTitle={course.title}
+                          isPaid={!isFree}
+                          price={course.discountedPrice}
+                          initialIsEnrolled={isEnrolled}
+                          isAuthenticated={Boolean(prismaUserId)}
+                          variant="card"
+                        />
                       </div>
                     </CardContent>
 
@@ -643,6 +651,59 @@ export default async function CourseDetailPage({
             {/* LEFT MAIN CONTENT AREA (8 COLS) */}
             <div className="lg:col-span-8 space-y-10">
               
+              {/* SECTION 0: ABOUT THIS COURSE */}
+              <section id="about" className="space-y-4 scroll-mt-28">
+                <div className="space-y-1">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#1261D6] bg-blue-50 px-2 py-0.5 rounded-[4px] border border-blue-200 inline-block">
+                    कोर्स परिचय
+                  </span>
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#111827]">
+                    कोर्स विवरण (About This Course)
+                  </h2>
+                </div>
+
+                <div className="text-xs sm:text-sm text-[#374151] leading-relaxed space-y-3">
+                  <p className="whitespace-pre-line">
+                    {course.about}
+                  </p>
+                </div>
+
+                {/* Key Institutional Features Pill Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                  <div className="p-3.5 rounded-lg border border-[#E5E7EB] bg-[#F8FAFC] space-y-1">
+                    <span className="text-xs font-bold text-[#111827] flex items-center gap-1.5">
+                      <GraduationCap className="size-4 text-[#1261D6]" />
+                      मान्यता प्राप्त प्रमाण पत्र
+                    </span>
+                    <p className="text-[11px] text-[#667085]">
+                      सफल समापन पर 24x7 ऑनलाइन सत्यापन योग्य डिजिटल प्रमाण पत्र।
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-lg border border-[#E5E7EB] bg-[#F8FAFC] space-y-1">
+                    <span className="text-xs font-bold text-[#111827] flex items-center gap-1.5">
+                      <ShieldCheck className="size-4 text-emerald-700" />
+                      35% PMEGP सब्सिडी
+                    </span>
+                    <p className="text-[11px] text-[#667085]">
+                      जिला उद्योग केंद्र (DIC) व बैंक लोन साक्षात्कार में प्रत्यक्ष सहायता।
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-lg border border-[#E5E7EB] bg-[#F8FAFC] space-y-1">
+                    <span className="text-xs font-bold text-[#111827] flex items-center gap-1.5">
+                      <BookOpen className="size-4 text-amber-700" />
+                      व्यावहारिक DPR टूलकिट
+                    </span>
+                    <p className="text-[11px] text-[#667085]">
+                      डाउनलोड करने योग्य प्रोजेक्ट रिपोर्ट व वित्तीय कैलकुलेटर शामिल।
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <Separator className="bg-[#E5E7EB]" />
+
               {/* SECTION 1: WHAT YOU'LL LEARN */}
               <section id="outcomes" className="space-y-4 scroll-mt-28">
                 <h2 className="text-xl font-bold text-[#111827]">
@@ -663,9 +724,9 @@ export default async function CourseDetailPage({
 
               <Separator className="bg-[#E5E7EB]" />
 
-              {/* SECTION 2: LEARNING PATH & CURRICULUM */}
+              {/* SECTION 2: LEARNING PATH & CURRICULUM OVERVIEW */}
               <section id="curriculum" className="scroll-mt-28">
-                <LearningPathTimeline modules={course.modules} isEnrolled={isEnrolled} />
+                <LearningPathTimeline modules={course.modules} isEnrolled={false} />
               </section>
 
               <Separator className="bg-[#E5E7EB]" />

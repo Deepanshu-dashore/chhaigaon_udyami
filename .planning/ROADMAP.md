@@ -23,3 +23,17 @@
 - [ ] Market partner showcase directory
 - [ ] Lead submission & inquiry workflow
 - [ ] Admin approval & lead status tracking
+
+### Phase 5: Course Metadata Enrichment, Enrollment Flow & Progress Tracking (Complete)
+- [x] Schema, DTOs & Seed Data sync for `about`, `outcomes`, `skills`, `tools`
+- [x] Course Detail UI dynamic binding (`#about`, `#outcomes`, `#skills` sections)
+- [x] Interactive "Enroll Now" client flow, registration routing & auto-enrollment
+- [x] Interactive lesson completion & progress sync via `/api/progress`
+
+### Phase 6: Dedicated Learning Experience, Enrolled Hub & LinkedIn-Style Quiz (Complete)
+- [x] Refactor public course details page to clean overview with "Resume" routing
+- [x] Enrolled Courses student dashboard (`/dashboard/courses`)
+- [x] Enrolled Learning Path Hub replicating Reference Images 1 & 2 (`/dashboard/courses/[slug]`)
+- [x] Fullscreen Dedicated Video Lecture Player replicating Reference Images 3 & 4 (`/courses/[slug]/learn`)
+- [x] Interactive Chapter Quiz Player with Correct/Incorrect explanations replicating Reference Image 5 (`<InteractiveQuizView />`)
+

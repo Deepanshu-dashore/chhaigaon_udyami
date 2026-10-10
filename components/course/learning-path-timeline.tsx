@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ChevronDown,
@@ -14,9 +14,13 @@ import {
   ChevronRight,
   Video,
   Lock,
+  CheckCircle2,
+  Check,
+  Loader2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export interface LessonItem {
   id: string;
@@ -65,6 +69,20 @@ export function LearningPathTimeline({
   modules,
   isEnrolled = false,
 }: LearningPathTimelineProps) {
+  const [enrolledState, setEnrolledState] = useState<boolean>(isEnrolled);
+
+  useEffect(() => {
+    setEnrolledState(isEnrolled);
+  }, [isEnrolled]);
+
+  useEffect(() => {
+    const handleEnrolledEvent = () => {
+      setEnrolledState(true);
+    };
+    window.addEventListener("course:enrolled", handleEnrolledEvent);
+    return () => window.removeEventListener("course:enrolled", handleEnrolledEvent);
+  }, []);
+
   const [openModuleId, setOpenModuleId] = useState<string>(
     modules[0]?.id || ""
   );
@@ -78,9 +96,61 @@ export function LearningPathTimeline({
     questionsCount: number;
   } | null>(null);
 
+  // Track lesson completion state
+  const [completedLessonIds, setCompletedLessonIds] = useState<Set<string>>(() => {
+    const set = new Set<string>();
+    modules.forEach((m) => {
+      m.lessons.forEach((l) => {
+        if (l.isCompleted) set.add(l.id);
+      });
+    });
+    return set;
+  });
+  const [isUpdatingProgress, setIsUpdatingProgress] = useState<boolean>(false);
+
   const currentModule = modules[activeModuleIndex] || modules[0];
   const currentLesson =
     currentModule?.lessons[activeLessonIndex] || currentModule?.lessons[0];
+
+  const handleToggleLessonCompleted = async (lessonId: string) => {
+    if (!lessonId) return;
+    const isCurrentlyDone = completedLessonIds.has(lessonId);
+    const newDone = !isCurrentlyDone;
+
+    setCompletedLessonIds((prev) => {
+      const updated = new Set(prev);
+      if (newDone) updated.add(lessonId);
+      else updated.delete(lessonId);
+      return updated;
+    });
+
+    try {
+      setIsUpdatingProgress(true);
+      const res = await fetch("/api/progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lessonId,
+          isCompleted: newDone,
+          progressPercent: newDone ? 100 : 0,
+        }),
+      });
+
+      if (!res.ok) {
+        console.warn("Progress API update skipped or failed");
+      } else {
+        if (newDone) {
+          toast.success("पाठ पूरा हुआ!", {
+            description: "आपकी प्रगति सफलतापूर्वक दर्ज कर ली गई है।",
+          });
+        }
+      }
+    } catch (err) {
+      console.warn("Failed to sync progress:", err);
+    } finally {
+      setIsUpdatingProgress(false);
+    }
+  };
 
   const handleSelectLesson = (modIdx: number, lesIdx: number) => {
     setActiveModuleIndex(modIdx);
@@ -118,31 +188,59 @@ export function LearningPathTimeline({
     (acc, m) => acc + m.lessons.length,
     0
   );
+  const totalCompleted = completedLessonIds.size;
+  const progressPercent = totalLessons > 0 ? Math.round((totalCompleted / totalLessons) * 100) : 0;
 
   return (
     <div className="space-y-6 font-sans text-[#111827]">
       
       {/* Curriculum Header */}
-      <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-4">
+      <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-4 flex-wrap gap-2">
         <div>
           <h3 className="text-xl font-bold text-[#111827] tracking-tight">
-            {isEnrolled ? "Curriculum & Interactive Player" : "Course Curriculum (पाठ्यक्रम विवरण)"}
+            {enrolledState ? "Curriculum & Interactive Player" : "Course Curriculum (पाठ्यक्रम विवरण)"}
           </h3>
           <p className="text-xs text-[#667085] mt-0.5">
             {modules.length} modules • {totalLessons} total lessons
           </p>
         </div>
 
-        {!isEnrolled && (
+        {!enrolledState ? (
           <Badge variant="outline" className="text-xs font-semibold text-amber-800 bg-amber-50 border-amber-200 inline-flex items-center gap-1.5">
             <Lock className="size-3.5 text-amber-700" />
             <span>Enrolled Members Access Only</span>
           </Badge>
+        ) : (
+          <Badge className="text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 inline-flex items-center gap-1.5">
+            <CheckCircle2 className="size-3.5 text-emerald-700" />
+            <span>सक्रिय नामांकन (Active Access)</span>
+          </Badge>
         )}
       </div>
 
+      {/* Progress Bar for Enrolled Students */}
+      {enrolledState && (
+        <div className="p-4 rounded-lg bg-[#F8FAFC] border border-[#E5E7EB] space-y-2">
+          <div className="flex items-center justify-between text-xs font-semibold">
+            <span className="text-[#111827] flex items-center gap-1.5">
+              <Award className="size-4 text-[#1261D6]" />
+              आपकी पाठ्यक्रम प्रगति (Course Progress)
+            </span>
+            <span className="text-[#1261D6] font-bold">
+              {progressPercent}% पूर्ण ({totalCompleted}/{totalLessons} पाठ)
+            </span>
+          </div>
+          <div className="w-full bg-[#E5E7EB] h-2.5 rounded-full overflow-hidden">
+            <div
+              className="bg-emerald-600 h-full rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+      )}
+
       {/* CASE 1: UNENROLLED MEMBER VIEW - Clean Curriculum Accordion Only */}
-      {!isEnrolled ? (
+      {!enrolledState ? (
         <div className="space-y-4">
           
           {/* Enrollment Prompt Banner */}
@@ -363,6 +461,34 @@ export function LearningPathTimeline({
                 </div>
               )}
 
+              {/* Mark Lesson Complete Action Button */}
+              {currentLesson && (
+                <div className="pt-2 flex items-center justify-between border-t border-[#E5E7EB]">
+                  <Button
+                    size="sm"
+                    variant={completedLessonIds.has(currentLesson.id) ? "outline" : "default"}
+                    onClick={() => handleToggleLessonCompleted(currentLesson.id)}
+                    disabled={isUpdatingProgress}
+                    className={`h-8 text-xs font-bold transition-colors cursor-pointer inline-flex items-center gap-1.5 ${
+                      completedLessonIds.has(currentLesson.id)
+                        ? "border-emerald-300 text-emerald-800 bg-emerald-50 hover:bg-emerald-100"
+                        : "bg-emerald-700 hover:bg-emerald-800 text-white"
+                    }`}
+                  >
+                    {isUpdatingProgress ? (
+                      <Loader2 className="size-3.5 animate-spin" />
+                    ) : (
+                      <CheckCircle2 className="size-3.5" />
+                    )}
+                    <span>
+                      {completedLessonIds.has(currentLesson.id)
+                        ? "पाठ पूर्ण हुआ (Completed)"
+                        : "पाठ पूरा हुआ मार्क करें (Mark as Completed)"}
+                    </span>
+                  </Button>
+                </div>
+              )}
+
             </div>
 
             {/* Navigation Controls: Previous / Next Lesson */}
@@ -437,6 +563,7 @@ export function LearningPathTimeline({
                         {mod.lessons.map((lesson, lesIdx) => {
                           const isSelected =
                             activeModuleIndex === modIdx && activeLessonIndex === lesIdx;
+                          const isDone = completedLessonIds.has(lesson.id);
 
                           return (
                             <button
@@ -460,6 +587,14 @@ export function LearningPathTimeline({
                                   {lesIdx + 1}. {lesson.title}
                                 </span>
                               </div>
+
+                              {isDone && (
+                                <CheckCircle2
+                                  className={`size-3.5 shrink-0 ${
+                                    isSelected ? "text-emerald-300" : "text-emerald-600"
+                                  }`}
+                                />
+                              )}
                             </button>
                           );
                         })}

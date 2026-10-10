@@ -91,13 +91,13 @@ model User {
   lastLogoutAt DateTime?
 
   profile        UserProfile?
-  createdCourses Course[]          @relation("CourseCreator")
+  createdCourses Course[]               @relation("CourseCreator")
   enrollments    Enrollment[]
   orders         Order[]
   payments       Payment[]
-  progress         LessonProgress[]
-  moduleProgress   CourseModuleProgress[]
-  quizAttempts     QuizAttempt[]
+  progress       LessonProgress[]
+  moduleProgress CourseModuleProgress[]
+  quizAttempts   QuizAttempt[]
   certificates   Certificate[]
   notifications  Notification[]
   marketLeads    MarketLead[]
@@ -155,11 +155,15 @@ model UserProfile {
 // ----------------------------------------------------
 
 model Course {
-  id          String  @id @default(cuid())
+  id          String   @id @default(cuid())
   title       String
-  slug        String  @unique
-  description String? @db.Text
+  slug        String   @unique
+  description String?  @db.Text
   thumbnail   String?
+  about       String?
+  outcomes    String[] @db.Text
+  skills      String[] @db.Text
+  tools       String[] @db.Text
 
   language String  @default("hi")
   price    Decimal @default(0.00) @db.Decimal(10, 2)
@@ -194,9 +198,9 @@ model CourseModule {
   description String?
   order       Int
 
-  course         Course                @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course         Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lessons        Lesson[]
-  quizzes        Quiz[]                // Module-level quizzes (attempted after all lessons)
+  quizzes        Quiz[] // Module-level quizzes (attempted after all lessons)
   moduleProgress CourseModuleProgress[]
 
   createdAt DateTime @default(now())
@@ -287,8 +291,8 @@ model Enrollment {
   completedAt DateTime?
   expiresAt   DateTime?
 
-  user           User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course         Course                @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user           User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course         Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
   moduleProgress CourseModuleProgress[]
   quizAttempts   QuizAttempt[]
   certificate    Certificate?

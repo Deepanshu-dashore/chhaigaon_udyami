@@ -58,6 +58,45 @@ function inferCategory(text: string): string {
   return "other";
 }
 
+// Circuit-breaker state to prevent 20-second connection timeouts when remote DB is unreachable
+let isDbUnreachable = false;
+let lastDbCheckTimestamp = 0;
+const DB_RETRY_COOLDOWN_MS = 60_000; // Wait 60s before retrying unreachable DB
+const DB_QUERY_TIMEOUT_MS = 2000; // 2-second strict timeout on DB fetch
+
+async function safeFetchDbSchemes() {
+  const now = Date.now();
+  if (isDbUnreachable && now - lastDbCheckTimestamp < DB_RETRY_COOLDOWN_MS) {
+    return [];
+  }
+
+  try {
+    const queryPromise = prisma.governmentScheme.findMany({
+      where: { status: true },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      const timer = setTimeout(() => {
+        reject(new Error("DB_TIMEOUT"));
+      }, DB_QUERY_TIMEOUT_MS);
+      if (typeof timer === "object" && "unref" in timer) {
+        (timer as unknown as { unref: () => void }).unref();
+      }
+    });
+
+    const result = await Promise.race([queryPromise, timeoutPromise]);
+    isDbUnreachable = false;
+    return result;
+  } catch (err: unknown) {
+    isDbUnreachable = true;
+    lastDbCheckTimestamp = Date.now();
+    const errMsg = (err as { code?: string; message?: string })?.code || "UNREACHABLE";
+    console.warn(`[SchemeService] DB lookup notice: ${errMsg}. Serving default schemes without latency.`);
+    return [];
+  }
+}
+
 export async function getSchemes(options: SchemeQueryOptions = {}): Promise<{
   schemes: SchemeData[];
   total: number;
@@ -72,10 +111,7 @@ export async function getSchemes(options: SchemeQueryOptions = {}): Promise<{
   let allSchemes: SchemeData[] = [...defaultSchemes];
 
   try {
-    const dbSchemes = await prisma.governmentScheme.findMany({
-      where: { status: true },
-      orderBy: { createdAt: "desc" },
-    });
+    const dbSchemes = await safeFetchDbSchemes();
 
     if (dbSchemes && dbSchemes.length > 0) {
       // Merge dbSchemes with defaultSchemes to ensure complete rich data
@@ -113,8 +149,7 @@ export async function getSchemes(options: SchemeQueryOptions = {}): Promise<{
 
       allSchemes = Array.from(mergedMap.values());
     }
-  } catch (error) {
-    console.warn("Using default schemes due to DB lookup notice:", error);
+  } catch {
     allSchemes = [...defaultSchemes];
   }
 
