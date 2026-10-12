@@ -13,9 +13,12 @@ interface CourseCardProps {
   title: string;
   slug: string;
   shortDesc?: string | null;
+  footerHide?: boolean;
   thumbnail?: string | null;
-  price: number;
+  price?: number;
   discountedPrice?: number | null;
+  isFree?: boolean;
+  isPaid?: boolean;
   level?: string;
   lessonsCount?: number;
   category?: string;
@@ -69,6 +72,9 @@ export function CourseCard({
   thumbnail = "/images/dairy-course.jpg",
   price,
   discountedPrice,
+  isFree: isFreeProp,
+  footerHide = false,
+  isPaid,
   level = "Beginner",
   category,
   instructor = "छैगांव उद्यमी अकादमी",
@@ -76,7 +82,16 @@ export function CourseCard({
   reviewsCount = 420,
   totalHours = "4.5 घंटे",
 }: CourseCardProps) {
-  const isFree = price === 0 || discountedPrice === 0;
+  // Determine if course is free based on explicit props or price values
+  const isFree =
+    isFreeProp !== undefined
+      ? isFreeProp
+      : isPaid === false
+      ? true
+      : isPaid === true
+      ? false
+      : price === undefined || price === 0 || discountedPrice === 0;
+
   const DEFAULT_THUMBNAIL = "/images/dairy-course.jpg";
 
   const [imgSrc, setImgSrc] = useState<string>(
@@ -120,6 +135,13 @@ export function CourseCard({
             loading="lazy"
             className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-250 ease-out"
           />
+
+          {/* Top-Right Free Badge (Solid blue, shown when footer is hidden and course is free) */}
+          {footerHide && isFree && (
+            <Badge className="absolute top-2.5 right-2.5 z-10 bg-[#0056d2] hover:bg-[#0047b3] text-white font-bold text-[11px] px-2.5 py-0.5 rounded-full shadow-sm border-0 tracking-wide">
+              Free
+            </Badge>
+          )}
         </Link>
 
         {/* 2. Main Card Content */}
@@ -137,7 +159,7 @@ export function CourseCard({
           {/* Course Title */}
           <Link href={`/courses/${slug}`} className="block group/title">
             <CardTitle
-              className="text-[15px] sm:text-[16px] font-semibold text-slate-9`00 group-hover/title:text-[#155EEF] transition-colors leading-snug line-clamp-2 min-h-[44px]"
+              className="text-[15px] sm:text-[16px] font-semibold text-slate-900 group-hover/title:text-[#155EEF] transition-colors leading-snug line-clamp-2 min-h-[44px]"
               style={{
                 fontFamily:
                   "var(--font-noto-sans-devanagari), var(--font-mukta), sans-serif",
@@ -163,17 +185,45 @@ export function CourseCard({
             <span className="text-slate-300 select-none">·</span>
             <span className="shrink-0">{totalHours}</span>
 
-            <div className="flex items-center gap-1 text-xs font-semibold text-slate-700 shrink-0 ml-auto">
+            {/* Rating and review commented out for now */}
+            {/* <div className="flex items-center gap-1 text-xs font-semibold text-slate-700 shrink-0 ml-auto">
               <Star className="w-3.5 h-3.5 text-[#F4B400] fill-[#F4B400]" />
               <span>{rating.toFixed(1)}</span>
               <span className="font-normal text-slate-400 text-[11px]">({formattedReviews})</span>
-            </div>
+            </div> */}
           </div>
         </CardContent>
       </div>
 
-      {/* 3. Footer Price & CTA */}
-     
+      {/* 3. Footer Price & Access CTA */}
+     {!footerHide && <div className="pt-2.5 mt-2.5 border-t border-slate-100 flex items-center justify-between">
+        {isFree ? (
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60">
+              निःशुल्क (Free)
+            </span>
+          </div>
+        ) : (
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-base font-bold text-slate-900">
+              {formatCurrency(discountedPrice ?? price ?? 0)}
+            </span>
+            {discountedPrice && price && price > discountedPrice ? (
+              <span className="text-xs text-slate-400 line-through font-normal">
+                {formatCurrency(price)}
+              </span>
+            ) : null}
+          </div>
+        )}
+
+        <Link
+          href={`/courses/${slug}`}
+          className="text-xs font-semibold text-[#0056d2] hover:text-[#00419e] inline-flex items-center gap-1 transition-colors"
+        >
+          <span>विवरण देखें</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+      </div>}
     </Card>
   );
 }

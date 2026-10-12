@@ -40,6 +40,7 @@ export function CourseCardGrid({ course }: CourseCardGridProps) {
       thumbnail={course.thumbnail}
       price={course.price}
       discountedPrice={course.discountedPrice}
+      isPaid={course.isPaid}
       level={course.level}
       lessonsCount={course.lessonsCount}
       category={course.category}

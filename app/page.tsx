@@ -42,6 +42,7 @@ interface CourseItem {
   thumbnail?: string | null;
   price: number;
   discountedPrice?: number | null;
+  isPaid?: boolean;
   level: string;
   lessonsCount?: number;
   category?: string;
@@ -252,6 +253,7 @@ export default async function HomePage() {
       where: {
         status: "PUBLISHED",
       },
+      orderBy: { createdAt: "desc" },
       include: {
         modules: {
           include: {
@@ -273,6 +275,7 @@ export default async function HomePage() {
           thumbnail: c.thumbnail || "/images/dairy-course.jpg",
           price: Number(c.price),
           discountedPrice: c.isPaid ? Number(c.price) : 0,
+          isPaid: c.isPaid,
           level: c.level || "Beginner",
           lessonsCount: totalLessons || 12,
           category: "उद्यम कौशल",
@@ -686,11 +689,13 @@ export default async function HomePage() {
                   key={course.id}
                   id={course.id}
                   title={course.title}
+                  footerHide={true}
                   slug={course.slug}
                   shortDesc={course.shortDesc}
                   thumbnail={course.thumbnail}
                   price={course.price}
                   discountedPrice={course.discountedPrice}
+                  isPaid={course.isPaid}
                   level={course.level}
                   lessonsCount={course.lessonsCount}
                   category={course.category}
