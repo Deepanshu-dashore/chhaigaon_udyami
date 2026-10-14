@@ -182,7 +182,7 @@
   --font-noto: var(--font-noto-sans-devanagari), sans-serif;
   --font-poppins: var(--font-poppins), sans-serif;
   --font-mukta: var(--font-mukta), sans-serif;
-  --font-nunito: var(--font-nunito), sans-serif;
+  --font-nunito: var(--font-inter), system-ui, sans-serif;
   --font-baloo: var(--font-baloo2), cursive, sans-serif;
   --font-modak: var(--font-modak), cursive, display;
   --font-teko: var(--font-teko), sans-serif;
@@ -289,7 +289,7 @@ button, input, select, textarea, label, nav, [data-label] {
 }
 
 .font-pair-reading {
-  font-family: var(--font-mukta), var(--font-nunito), Georgia, serif;
+  font-family: var(--font-mukta), var(--font-inter), Georgia, serif;
 }
 
 .font-pair-playful {

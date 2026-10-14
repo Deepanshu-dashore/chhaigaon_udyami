@@ -7,7 +7,6 @@ import {
   Noto_Sans_Devanagari,
   Poppins,
   Mukta,
-  Nunito,
   Baloo_2,
   Modak,
   Teko,
@@ -70,13 +69,6 @@ const mukta = Mukta({
   display: "swap",
 });
 
-const nunito = Nunito({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-nunito",
-  display: "swap",
-});
-
 const baloo2 = Baloo_2({
   subsets: ["devanagari", "latin"],
   weight: ["400", "500", "600", "700", "800"],
@@ -123,7 +115,7 @@ export default function RootLayout({
   return (
     <html
       lang="hi"
-      className={`${publicSans.variable} ${ibmPlexSans.variable} ${ibmPlexSerif.variable} ${inter.variable} ${baloo2.variable} ${notoSansDevanagari.variable} ${poppins.variable} ${mukta.variable} ${nunito.variable} ${modak.variable} ${teko.variable} ${oswald.variable} h-full antialiased`}
+      className={`${publicSans.variable} ${ibmPlexSans.variable} ${ibmPlexSerif.variable} ${inter.variable} ${baloo2.variable} ${notoSansDevanagari.variable} ${poppins.variable} ${mukta.variable} ${modak.variable} ${teko.variable} ${oswald.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-surface text-on-surface">
         <AuthProvider>
