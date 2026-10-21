@@ -33,14 +33,30 @@ export async function proxy(request: NextRequest) {
     },
   });
 
-  // IMPORTANT: supabase.auth.getUser() refreshes expired tokens
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   const { pathname } = request.nextUrl;
   const isDashboardRoute = pathname.startsWith("/dashboard");
   const isAdminRoute = pathname.startsWith("/admin");
+
+  // Check if any supabase auth cookie exists
+  const hasAuthCookie = request.cookies
+    .getAll()
+    .some((c) => c.name.startsWith("sb-") && c.name.includes("auth-token"));
+
+  let user = null;
+
+  // Only attempt to refresh/fetch user if auth cookies exist or accessing protected routes
+  if (hasAuthCookie || isDashboardRoute || isAdminRoute) {
+    try {
+      // IMPORTANT: supabase.auth.getUser() refreshes expired tokens
+      const { data, error } = await supabase.auth.getUser();
+      if (!error && data?.user) {
+        user = data.user;
+      }
+    } catch {
+      // Supabase is unreachable or paused; treat as unauthenticated
+      user = null;
+    }
+  }
 
   // If user is trying to access protected route without being authenticated
   if ((isDashboardRoute || isAdminRoute) && !user) {

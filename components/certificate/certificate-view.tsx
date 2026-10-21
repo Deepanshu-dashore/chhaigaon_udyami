@@ -59,6 +59,7 @@ export function CertificateView({
             width={300}
             height={300}
             className="object-contain"
+            style={{ width: "auto", height: "auto" }}
           />
         </div>
 
@@ -73,6 +74,7 @@ export function CertificateView({
                 width={56}
                 height={56}
                 className="object-contain w-full h-full"
+                style={{ width: "auto", height: "auto" }}
               />
             </div>
             <div>
