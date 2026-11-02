@@ -16,6 +16,8 @@ CREATE OR REPLACE FUNCTION public.handle_new_supabase_user()
 RETURNS TRIGGER AS $$
 DECLARE
   new_user_id TEXT;
+  existing_id TEXT;
+  target_user_id TEXT;
   extracted_name TEXT;
   extracted_avatar TEXT;
   extracted_mobile TEXT;
@@ -54,58 +56,71 @@ BEGIN
     assigned_role := 'STUDENT'::"UserRole";
   END;
 
-  -- Insert into public."User" if not already present
-  INSERT INTO public."User" (
-    "id",
-    "supabaseUserId",
-    "name",
-    "email",
-    "mobile",
-    "role",
-    "status",
-    "isVerified",
-    "createdAt",
-    "updatedAt"
-  )
-  VALUES (
-    new_user_id,
-    NEW.id::text,
-    extracted_name,
-    NEW.email,
-    extracted_mobile,
-    assigned_role,
-    'ACTIVE'::"UserStatus",
-    true,
-    NOW(),
-    NOW()
-  )
-  ON CONFLICT ("supabaseUserId") DO UPDATE
-  SET
-    "email" = EXCLUDED."email",
-    "name" = COALESCE(public."User"."name", EXCLUDED."name"),
-    "updatedAt" = NOW();
+  -- 1. Check if user already exists by supabaseUserId or email
+  SELECT "id" INTO existing_id FROM public."User"
+  WHERE "supabaseUserId" = NEW.id::text OR "email" = NEW.email
+  LIMIT 1;
 
-  -- Insert initial public."UserProfile"
-  INSERT INTO public."UserProfile" (
-    "id",
-    "userId",
-    "profilePhoto",
-    "state",
-    "createdAt",
-    "updatedAt"
-  )
-  VALUES (
-    generate_cuid_id(),
-    (SELECT "id" FROM public."User" WHERE "supabaseUserId" = NEW.id::text LIMIT 1),
-    extracted_avatar,
-    'Madhya Pradesh',
-    NOW(),
-    NOW()
-  )
-  ON CONFLICT ("userId") DO UPDATE
-  SET
-    "profilePhoto" = COALESCE(public."UserProfile"."profilePhoto", EXCLUDED."profilePhoto"),
-    "updatedAt" = NOW();
+  IF existing_id IS NOT NULL THEN
+    UPDATE public."User"
+    SET
+      "supabaseUserId" = NEW.id::text,
+      "name" = COALESCE(public."User"."name", extracted_name),
+      "isVerified" = true,
+      "updatedAt" = NOW()
+    WHERE "id" = existing_id;
+    target_user_id := existing_id;
+  ELSE
+    INSERT INTO public."User" (
+      "id",
+      "supabaseUserId",
+      "name",
+      "email",
+      "mobile",
+      "role",
+      "status",
+      "isVerified",
+      "createdAt",
+      "updatedAt"
+    )
+    VALUES (
+      new_user_id,
+      NEW.id::text,
+      extracted_name,
+      NEW.email,
+      extracted_mobile,
+      assigned_role,
+      'ACTIVE'::"UserStatus",
+      true,
+      NOW(),
+      NOW()
+    );
+    target_user_id := new_user_id;
+  END IF;
+
+  -- 2. Insert or update UserProfile
+  IF target_user_id IS NOT NULL THEN
+    INSERT INTO public."UserProfile" (
+      "id",
+      "userId",
+      "profilePhoto",
+      "state",
+      "createdAt",
+      "updatedAt"
+    )
+    VALUES (
+      generate_cuid_id(),
+      target_user_id,
+      extracted_avatar,
+      'Madhya Pradesh',
+      NOW(),
+      NOW()
+    )
+    ON CONFLICT ("userId") DO UPDATE
+    SET
+      "profilePhoto" = COALESCE(public."UserProfile"."profilePhoto", EXCLUDED."profilePhoto"),
+      "updatedAt" = NOW();
+  END IF;
 
   RETURN NEW;
 END;

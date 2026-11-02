@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import prisma from "@/lib/prisma";
+import { getHomeFeaturedCourses } from "@/services/course.service";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { CourseCard } from "@/components/course/course-card";
@@ -231,60 +231,22 @@ const plansList = [
   },
 ];
 
-interface DbCourseWithModules {
-  id: string;
-  title: string;
-  slug: string;
-  description: string | null;
-  thumbnail: string | null;
-  price: unknown;
-  isPaid: boolean;
-  level: string | null;
-  modules: {
-    lessons: { id: string }[];
-  }[];
+// Server function to fetch course data for frontend rendering
+async function fetchCourseData(): Promise<CourseItem[]> {
+  try {
+    const dbCourses = await getHomeFeaturedCourses(8);
+    if (dbCourses && dbCourses.length > 0) {
+      return dbCourses;
+    }
+  } catch (error) {
+    console.error("Failed to fetch featured courses:", error);
+  }
+  return defaultCourses;
 }
 
 export default async function HomePage() {
-  let coursesToDisplay: CourseItem[] = defaultCourses;
+  const coursesToDisplay = await fetchCourseData();
 
-  try {
-    const dbCourses = (await prisma.course.findMany({
-      where: {
-        status: "PUBLISHED",
-      },
-      orderBy: { createdAt: "desc" },
-      include: {
-        modules: {
-          include: {
-            lessons: true,
-          },
-        },
-      },
-      take: 8,
-    })) as unknown as DbCourseWithModules[];
-
-    if (dbCourses && dbCourses.length > 0) {
-      coursesToDisplay = dbCourses.map((c) => {
-        const totalLessons = (c.modules || []).reduce((acc, m) => acc + (m.lessons?.length || 0), 0);
-        return {
-          id: c.id,
-          title: c.title,
-          slug: c.slug,
-          shortDesc: c.description,
-          thumbnail: c.thumbnail || "/images/dairy-course.jpg",
-          price: Number(c.price),
-          discountedPrice: c.isPaid ? Number(c.price) : 0,
-          isPaid: c.isPaid,
-          level: c.level || "Beginner",
-          lessonsCount: totalLessons || 12,
-          category: "उद्यम कौशल",
-        };
-      });
-    }
-  } catch {
-    // Database fallback
-  }
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-900 font-sans selection:bg-blue-600 selection:text-white">

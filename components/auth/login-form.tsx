@@ -91,7 +91,7 @@ export function LoginForm() {
         err instanceof Error ? err.message : "लॉग इन करने में त्रुटि हुई।";
       setErrorMessage(
         errMsg === "Invalid login credentials"
-          ? "ईमेल या पासवर्ड गलत है। कृपया पुनः प्रयास करें।"
+          ? "ईमेल या पासवर्ड गलत है, या आपका खाता मौजूद नहीं है। यदि आप नए उपयोगकर्ता हैं तो कृपया पहले पंजीकरण (Register) करें।"
           : errMsg
       );
     } finally {
@@ -149,6 +149,7 @@ export function LoginForm() {
           {/* Shadcn Google Login Button */}
           <GoogleLoginButton
             redirectPath={redirectTo}
+            mode="login"
             label="Google खाते से लॉग इन करें"
           />
 

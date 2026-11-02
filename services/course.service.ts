@@ -353,3 +353,67 @@ export async function reorderModules(dto: ReorderModulesDTO) {
   );
   return prisma.$transaction(transactions);
 }
+
+export interface HomeCourseItem {
+  id: string;
+  title: string;
+  slug: string;
+  shortDesc?: string | null;
+  thumbnail?: string | null;
+  price: number;
+  discountedPrice?: number | null;
+  isPaid?: boolean;
+  level: string;
+  lessonsCount?: number;
+  category?: string;
+}
+
+/**
+ * Get featured courses for homepage (Server Function)
+ */
+export async function getHomeFeaturedCourses(limit: number = 8): Promise<HomeCourseItem[]> {
+  try {
+    const dbCourses = await prisma.course.findMany({
+      where: {
+        status: "PUBLISHED",
+      },
+      orderBy: { createdAt: "desc" },
+      include: {
+        modules: {
+          include: {
+            lessons: {
+              select: { id: true },
+            },
+          },
+        },
+      },
+      take: limit,
+    });
+
+    if (dbCourses && dbCourses.length > 0) {
+      return dbCourses.map((c) => {
+        const totalLessons = (c.modules || []).reduce(
+          (acc, m) => acc + (m.lessons?.length || 0),
+          0
+        );
+        return {
+          id: c.id,
+          title: c.title,
+          slug: c.slug,
+          shortDesc: c.description,
+          thumbnail: c.thumbnail || "/images/dairy-course.jpg",
+          price: Number(c.price),
+          discountedPrice: c.isPaid ? Number(c.price) : 0,
+          isPaid: c.isPaid,
+          level: c.level || "Beginner",
+          lessonsCount: totalLessons || 12,
+          category: "उद्यम कौशल",
+        };
+      });
+    }
+  } catch (error) {
+    console.error("Error in getHomeFeaturedCourses:", error);
+  }
+
+  return [];
+}

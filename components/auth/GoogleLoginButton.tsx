@@ -11,6 +11,7 @@ interface GoogleLoginButtonProps {
   label?: string;
   role?: "STUDENT" | "TRAINER" | "MARKET_PARTNER";
   className?: string;
+  mode?: "login" | "register";
 }
 
 export default function GoogleLoginButton({
@@ -18,6 +19,7 @@ export default function GoogleLoginButton({
   label = "Google के साथ जारी रखें (Continue with Google)",
   role,
   className = "",
+  mode = "login",
 }: GoogleLoginButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,6 +34,7 @@ export default function GoogleLoginButton({
         window.location.origin
       );
       redirectUrl.searchParams.set("next", redirectPath);
+      redirectUrl.searchParams.set("mode", mode);
       if (role) {
         redirectUrl.searchParams.set("role", role);
       }

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -47,6 +47,7 @@ import {
 
 export function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -61,6 +62,17 @@ export function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const err = searchParams?.get("error");
+    const prefillEmail = searchParams?.get("email");
+    if (err === "not_registered") {
+      setErrorMessage("कृपया पहले पंजीकरण (Register) करें। आपका कोई मौजूदा खाता नहीं मिला।");
+    }
+    if (prefillEmail) {
+      setEmail(prefillEmail);
+    }
+  }, [searchParams]);
 
   const roleOptions = [
     {
@@ -186,6 +198,7 @@ export function RegisterForm() {
           <GoogleLoginButton
             redirectPath="/dashboard"
             role={role}
+            mode="register"
             label="Google खाते से तुरंत पंजीकरण करें"
           />
         </div>

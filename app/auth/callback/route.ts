@@ -41,6 +41,8 @@ export async function GET(request: Request) {
       "Student";
 
     try {
+      const mode = searchParams.get("mode") || "login";
+
       // 1. Check if user already exists by supabaseUserId or email
       const existingUser = await prisma.user.findFirst({
         where: {
@@ -48,6 +50,14 @@ export async function GET(request: Request) {
         },
         include: { profile: true },
       });
+
+      // If user came from login page and doesn't exist, redirect to register
+      if (mode === "login" && !existingUser) {
+        await supabase.auth.signOut();
+        return NextResponse.redirect(
+          `${origin}/register?error=not_registered&email=${encodeURIComponent(userEmail)}`
+        );
+      }
 
       let targetUserId = existingUser?.id;
 
