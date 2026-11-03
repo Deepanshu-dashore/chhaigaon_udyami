@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { cn } from "@/lib/utils";
+import { cn, getURL } from "@/lib/utils";
 
 interface GoogleLoginButtonProps {
   redirectPath?: string;
@@ -29,10 +29,7 @@ export default function GoogleLoginButton({
     setError(null);
     try {
       const supabase = createClient();
-      const redirectUrl = new URL(
-        "/auth/callback",
-        window.location.origin
-      );
+      const redirectUrl = new URL(getURL("auth/callback"));
       redirectUrl.searchParams.set("next", redirectPath);
       redirectUrl.searchParams.set("mode", mode);
       if (role) {

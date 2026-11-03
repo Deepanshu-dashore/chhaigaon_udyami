@@ -2,9 +2,17 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { recordAuthActivity, extractClientMetadata } from "@/lib/auth-tracker";
+import { getURL } from "@/lib/utils";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
+  const forwardedHost = request.headers.get("x-forwarded-host");
+  const forwardedProto = request.headers.get("x-forwarded-proto") || "https";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") ||
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/+$/, "") ||
+    (forwardedHost ? `${forwardedProto}://${forwardedHost}` : getURL().replace(/\/+$/, ""));
+
   const code = searchParams.get("code");
 
   // If "next" is in param, use it as the redirect URL
@@ -14,7 +22,7 @@ export async function GET(request: Request) {
   }
 
   if (!code) {
-    return NextResponse.redirect(`${origin}/login?error=oauth_missing_code`);
+    return NextResponse.redirect(`${baseUrl}/login?error=oauth_missing_code`);
   }
 
   const supabase = await createClient();
@@ -22,7 +30,7 @@ export async function GET(request: Request) {
 
   if (error || !data?.user) {
     console.error("Supabase Auth callback exchange error:", error);
-    return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+    return NextResponse.redirect(`${baseUrl}/auth/auth-code-error`);
   }
 
   const authUser = data.user;
@@ -55,7 +63,7 @@ export async function GET(request: Request) {
       if (mode === "login" && !existingUser) {
         await supabase.auth.signOut();
         return NextResponse.redirect(
-          `${origin}/register?error=not_registered&email=${encodeURIComponent(userEmail)}`
+          `${baseUrl}/register?error=not_registered&email=${encodeURIComponent(userEmail)}`
         );
       }
 
@@ -144,14 +152,5 @@ export async function GET(request: Request) {
     }
   }
 
-  const forwardedHost = request.headers.get("x-forwarded-host");
-  const isLocalEnv = process.env.NODE_ENV === "development";
-
-  if (isLocalEnv) {
-    return NextResponse.redirect(`${origin}${next}`);
-  } else if (forwardedHost) {
-    return NextResponse.redirect(`https://${forwardedHost}${next}`);
-  } else {
-    return NextResponse.redirect(`${origin}${next}`);
-  }
+  return NextResponse.redirect(`${baseUrl}${next}`);
 }
