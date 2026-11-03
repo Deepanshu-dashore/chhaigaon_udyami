@@ -1,20 +1,36 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { withErrorHandler, ApiResponse, ApiError } from "@/lib/api-response";
 
 // POST /api/admin/courses/[id]/lessons - Add lesson to a module
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+export const POST = withErrorHandler(
+  async (
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+  ) => {
     const body = await req.json();
     const { moduleId, title, description, type, duration, isPreview, isPublished, videoUrl } = body;
 
-    if (!moduleId || !title) {
-      return NextResponse.json(
-        { error: "Module ID and Lesson title are required" },
-        { status: 400 }
-      );
+    if (!moduleId || !title?.trim()) {
+      throw ApiError.badRequest("Module ID और पाठ (Lesson) का शीर्षक अनिवार्य है।");
+    }
+
+    const cleanVideoId = videoUrl ? String(videoUrl).trim() : "";
+
+    // Proactively check if the video ID is already assigned to another lesson
+    if (cleanVideoId) {
+      const existingVideo = await prisma.video.findUnique({
+        where: { vdoVideoId: cleanVideoId },
+        include: { lesson: true },
+      });
+
+      if (existingVideo) {
+        throw ApiError.conflict(
+          `Video ID "${cleanVideoId}" पहले से पाठ "${existingVideo.lesson.title}" में उपयोग की जा चुकी है। कृपया एक अलग Video ID दर्ज करें।`,
+          "DUPLICATE_VIDEO_ID",
+          { existingLessonId: existingVideo.lessonId, videoId: cleanVideoId }
+        );
+      }
     }
 
     const existingCount = await prisma.lesson.count({
@@ -24,18 +40,18 @@ export async function POST(
     const lesson = await prisma.lesson.create({
       data: {
         moduleId,
-        title,
+        title: title.trim(),
         description: description || null,
         type: type || "VIDEO",
         duration: duration ? parseInt(duration) : 300,
         isPreview: Boolean(isPreview),
         isPublished: isPublished !== undefined ? Boolean(isPublished) : true,
         order: existingCount + 1,
-        ...(videoUrl && {
+        ...(cleanVideoId && {
           video: {
             create: {
-              title,
-              vdoVideoId: videoUrl,
+              title: title.trim(),
+              vdoVideoId: cleanVideoId,
               status: "READY",
             },
           },
@@ -46,12 +62,6 @@ export async function POST(
       },
     });
 
-    return NextResponse.json({ success: true, lesson }, { status: 201 });
-  } catch (error: any) {
-    console.error("Error creating lesson:", error);
-    return NextResponse.json(
-      { error: error?.message || "Failed to create lesson" },
-      { status: 500 }
-    );
+    return ApiResponse.created({ lesson }, "Lesson added successfully");
   }
-}
+);

@@ -19,6 +19,7 @@ import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Spinner } from "@/components/ui/spinner";
 import GoogleLoginButton from "@/components/auth/GoogleLoginButton";
+import { getURL } from "@/lib/get-url";
 import {
   Select,
   SelectContent,
@@ -118,12 +119,13 @@ export function RegisterForm() {
       const browserSupabase = createClient();
 
       const { data, error } = await browserSupabase.auth.signUp({
-        email,
+        email: email.trim(),
         password,
         options: {
+          emailRedirectTo: getURL("auth/callback"),
           data: {
-            name,
-            mobile,
+            name: name.trim(),
+            mobile: mobile.trim(),
             role,
           },
         },
@@ -133,23 +135,30 @@ export function RegisterForm() {
         throw error;
       }
 
-      if (data.session) {
-        setSuccessMessage("खाता सफलतापूर्वक तैयार हुआ! रीडायरेक्ट किया जा रहा है...");
-        router.push("/dashboard");
-        router.refresh();
-      } else {
-        setSuccessMessage(
-          "पंजीकरण सफल रहा! कृपया अपना ईमेल चेक करें और सत्यापन लिंक पर क्लिक करके लॉगिन करें।"
-        );
+      // Supabase returns user with empty identities if already registered under email confirmation
+      if (data.user && data.user.identities && data.user.identities.length === 0) {
+        setErrorMessage("यह ईमेल पहले से पंजीकृत है। कृपया लॉगिन करें।");
+        return;
       }
+
+      const cleanEmail = email.trim();
+      setSuccessMessage("खाता सफलतापूर्वक तैयार हुआ! लॉगिन पेज पर रीडायरेक्ट किया जा रहा है...");
+      setTimeout(() => {
+        window.location.href = `/login?registered=true&email=${encodeURIComponent(cleanEmail)}`;
+      }, 1200);
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "पंजीकरण में त्रुटि हुई।";
-      setErrorMessage(
-        message === "User already registered"
-          ? "यह ईमेल पहले से पंजीकृत है। कृपया लॉगिन करें।"
-          : message
-      );
+      const lower = message.toLowerCase();
+      if (lower.includes("user already registered")) {
+        setErrorMessage("यह ईमेल पहले से पंजीकृत है। कृपया लॉगिन करें।");
+      } else if (lower.includes("database error saving new user")) {
+        setErrorMessage(
+          "डेटाबेस में नया खाता सहेजने में त्रुटि आई (Supabase auth.users Trigger Failure)। कृपया Supabase SQL Editor में 'auth.users' ट्रिगर की जांच करें।"
+        );
+      } else {
+        setErrorMessage(message);
+      }
     } finally {
       setLoading(false);
     }

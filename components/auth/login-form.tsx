@@ -44,13 +44,29 @@ import {
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams?.get("redirectedFrom") || "/dashboard";
+  const redirectTo =
+    searchParams?.get("redirectedFrom") ||
+    searchParams?.get("next") ||
+    "/dashboard";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  // Auto-fill email and show success alert if redirected from registration
+  useEffect(() => {
+    const emailParam = searchParams?.get("email");
+    const isRegistered = searchParams?.get("registered") === "true";
+    if (emailParam) {
+      setEmail(emailParam);
+    }
+    if (isRegistered) {
+      setSuccessMessage("पंजीकरण सफल रहा! कृपया अपना पासवर्ड दर्ज करके लॉग इन करें।");
+    }
+  }, [searchParams]);
 
   // Login Confirmation Modal Dialog State
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -59,6 +75,7 @@ export function LoginForm() {
     name?: string;
   } | null>(null);
   const [countdown, setCountdown] = useState(3);
+  const [finalRedirectUrl, setFinalRedirectUrl] = useState(redirectTo);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,13 +85,20 @@ export function LoginForm() {
     try {
       const browserSupabase = createClient();
       const { data, error } = await browserSupabase.auth.signInWithPassword({
-        email,
+        email: email.trim(),
         password,
       });
 
       if (error) {
         throw error;
       }
+
+      const userRole = data.user.user_metadata?.role;
+      let dest = redirectTo;
+      if (dest === "/dashboard" && (userRole === "ADMIN" || userRole === "SUPER_ADMIN")) {
+        dest = "/admin/dashboard";
+      }
+      setFinalRedirectUrl(dest);
 
       // Successful login - Open Shadcn Confirmation Modal
       setAuthenticatedUser({
@@ -89,11 +113,18 @@ export function LoginForm() {
     } catch (err: unknown) {
       const errMsg =
         err instanceof Error ? err.message : "लॉग इन करने में त्रुटि हुई।";
-      setErrorMessage(
-        errMsg === "Invalid login credentials"
-          ? "ईमेल या पासवर्ड गलत है, या आपका खाता मौजूद नहीं है। यदि आप नए उपयोगकर्ता हैं तो कृपया पहले पंजीकरण (Register) करें।"
-          : errMsg
-      );
+      const lower = errMsg.toLowerCase();
+      if (lower.includes("invalid login credentials")) {
+        setErrorMessage(
+          "ईमेल या पासवर्ड गलत है, या आपका खाता मौजूद नहीं है। यदि आप नए हैं तो कृपया पहले पंजीकरण (Register) करें।"
+        );
+      } else if (lower.includes("email not confirmed")) {
+        setErrorMessage(
+          "आपका ईमेल अभी तक सत्यापित नहीं हुआ है। कृपया अपने इनबॉक्स में आए Supabase सत्यापन लिंक पर क्लिक करें (या Supabase Dashboard > Authentication > Providers > Email में 'Confirm email' बंद करें)।"
+        );
+      } else {
+        setErrorMessage(errMsg);
+      }
     } finally {
       setLoading(false);
     }
@@ -101,8 +132,7 @@ export function LoginForm() {
 
   const handleProceed = () => {
     setShowConfirmModal(false);
-    router.push(redirectTo);
-    router.refresh();
+    window.location.href = finalRedirectUrl;
   };
 
   // Auto redirect after countdown when modal opens
@@ -137,6 +167,15 @@ export function LoginForm() {
         </CardHeader>
 
         <CardContent className="p-6 sm:p-8 pt-4 space-y-4">
+          {successMessage && (
+            <Alert className="bg-emerald-50/90 border-emerald-200 text-emerald-800 rounded-xl py-2.5 px-3.5 animate-in fade-in duration-200">
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+              <AlertDescription className="text-xs sm:text-sm font-medium text-emerald-700 ml-1.5">
+                {successMessage}
+              </AlertDescription>
+            </Alert>
+          )}
+
           {errorMessage && (
             <Alert variant="destructive" className="bg-rose-50/90 border-rose-200 text-rose-800 rounded-xl py-2.5 px-3.5 animate-in fade-in duration-200">
               <AlertCircle className="h-4 w-4 text-rose-600 shrink-0" />

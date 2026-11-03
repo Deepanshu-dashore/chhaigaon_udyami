@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { cn, getURL } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { getURL } from "@/lib/get-url";
 
 interface GoogleLoginButtonProps {
   redirectPath?: string;

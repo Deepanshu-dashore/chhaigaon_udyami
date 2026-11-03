@@ -21,23 +21,4 @@ export function formatDate(date: string | Date): string {
   }).format(new Date(date));
 }
 
-export const getURL = (path: string = "") => {
-  let url =
-    process?.env?.NEXT_PUBLIC_SITE_URL ??
-    process?.env?.NEXT_PUBLIC_APP_URL ??
-    process?.env?.NEXT_PUBLIC_VERCEL_URL ??
-    (typeof window !== "undefined" ? window.location.origin : "http://localhost:3000");
-
-  // Make sure to include `https://` when not localhost.
-  url = url.startsWith("http") ? url : `https://${url}`;
-
-  // Make sure to include a trailing `/`.
-  url = url.endsWith("/") ? url : `${url}/`;
-
-  if (path) {
-    const cleanPath = path.replace(/^\/+/, "");
-    return `${url}${cleanPath}`;
-  }
-
-  return url;
-};
+export { getURL } from "./get-url";

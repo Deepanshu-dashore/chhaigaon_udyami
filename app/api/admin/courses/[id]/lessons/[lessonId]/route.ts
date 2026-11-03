@@ -1,19 +1,41 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { withErrorHandler, ApiResponse, ApiError } from "@/lib/api-response";
 
 // PATCH /api/admin/courses/[id]/lessons/[lessonId] - Update lesson
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string; lessonId: string }> }
-) {
-  try {
+export const PATCH = withErrorHandler(
+  async (
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string; lessonId: string }> }
+  ) => {
     const { lessonId } = await params;
     const body = await req.json();
+
+    const cleanVideoId = body.videoUrl ? String(body.videoUrl).trim() : "";
+
+    // Check if video ID is already used by another lesson
+    if (cleanVideoId) {
+      const existingVideo = await prisma.video.findFirst({
+        where: {
+          vdoVideoId: cleanVideoId,
+          lessonId: { not: lessonId },
+        },
+        include: { lesson: true },
+      });
+
+      if (existingVideo) {
+        throw ApiError.conflict(
+          `Video ID "${cleanVideoId}" पहले से पाठ "${existingVideo.lesson.title}" में उपयोग की जा चुकी है। कृपया एक अलग Video ID दर्ज करें।`,
+          "DUPLICATE_VIDEO_ID",
+          { existingLessonId: existingVideo.lessonId, videoId: cleanVideoId }
+        );
+      }
+    }
 
     const lesson = await prisma.lesson.update({
       where: { id: lessonId },
       data: {
-        ...(body.title !== undefined && { title: body.title }),
+        ...(body.title !== undefined && { title: body.title.trim() }),
         ...(body.description !== undefined && { description: body.description }),
         ...(body.type !== undefined && { type: body.type }),
         ...(body.duration !== undefined && { duration: parseInt(body.duration) || 0 }),
@@ -26,49 +48,37 @@ export async function PATCH(
       },
     });
 
-    if (body.videoUrl) {
+    if (cleanVideoId) {
       await prisma.video.upsert({
         where: { lessonId },
         create: {
           lessonId,
           title: lesson.title,
-          vdoVideoId: body.videoUrl,
+          vdoVideoId: cleanVideoId,
           status: "READY",
         },
         update: {
-          vdoVideoId: body.videoUrl,
+          vdoVideoId: cleanVideoId,
         },
       });
     }
 
-    return NextResponse.json({ success: true, lesson });
-  } catch (error: any) {
-    console.error("Error updating lesson:", error);
-    return NextResponse.json(
-      { error: error?.message || "Failed to update lesson" },
-      { status: 500 }
-    );
+    return ApiResponse.success({ lesson }, "Lesson updated successfully");
   }
-}
+);
 
 // DELETE /api/admin/courses/[id]/lessons/[lessonId] - Delete lesson
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string; lessonId: string }> }
-) {
-  try {
+export const DELETE = withErrorHandler(
+  async (
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string; lessonId: string }> }
+  ) => {
     const { lessonId } = await params;
 
     await prisma.lesson.delete({
       where: { id: lessonId },
     });
 
-    return NextResponse.json({ success: true, message: "Lesson deleted" });
-  } catch (error: any) {
-    console.error("Error deleting lesson:", error);
-    return NextResponse.json(
-      { error: error?.message || "Failed to delete lesson" },
-      { status: 500 }
-    );
+    return ApiResponse.success({ lessonId }, "Lesson deleted successfully");
   }
-}
+);

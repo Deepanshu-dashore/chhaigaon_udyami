@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { recordAuthActivity, extractClientMetadata } from "@/lib/auth-tracker";
-import { getURL } from "@/lib/utils";
+import { getURL } from "@/lib/get-url";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);

@@ -63,8 +63,67 @@ export default async function DashboardPage() {
         },
       },
     });
+
+    // Auto-provision if user exists in Supabase Auth but not yet in PostgreSQL/Prisma
+    if (!dbUser && authUser) {
+      const allowedRoles = [
+        "STUDENT",
+        "TRAINER",
+        "MARKET_PARTNER",
+        "ADMIN",
+        "SUPER_ADMIN",
+        "MENTOR",
+        "CONTENT_MANAGER",
+      ];
+      const rawRole = (authUser.user_metadata?.role as string)?.toUpperCase();
+      const roleToAssign = allowedRoles.includes(rawRole)
+        ? (rawRole as "STUDENT" | "TRAINER" | "MARKET_PARTNER" | "ADMIN" | "SUPER_ADMIN" | "MENTOR" | "CONTENT_MANAGER")
+        : "STUDENT";
+      const fullName =
+        authUser.user_metadata?.name ||
+        authUser.user_metadata?.full_name ||
+        authUser.email?.split("@")[0] ||
+        "उद्यमी";
+
+      dbUser = await prisma.user.create({
+        data: {
+          supabaseUserId: authUser.id,
+          email: authUser.email,
+          name: fullName,
+          mobile: authUser.user_metadata?.mobile || null,
+          role: roleToAssign,
+          status: "ACTIVE",
+          isVerified: true,
+          isOnline: true,
+          lastLoginAt: new Date(),
+        },
+        include: {
+          profile: true,
+          activityLogs: {
+            orderBy: { timestamp: "desc" },
+            take: 6,
+          },
+        },
+      });
+    } else if (dbUser && !dbUser.supabaseUserId && authUser.id) {
+      dbUser = await prisma.user.update({
+        where: { id: dbUser.id },
+        data: {
+          supabaseUserId: authUser.id,
+          isOnline: true,
+          lastLoginAt: new Date(),
+        },
+        include: {
+          profile: true,
+          activityLogs: {
+            orderBy: { timestamp: "desc" },
+            take: 6,
+          },
+        },
+      });
+    }
   } catch (err) {
-    console.error("Failed to load user from database in dashboard:", err);
+    console.error("Failed to load/sync user in dashboard:", err);
   }
 
   const avatarUrl =
