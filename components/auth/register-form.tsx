@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Input } from "@/components/ui/input";
@@ -18,6 +19,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Spinner } from "@/components/ui/spinner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import GoogleLoginButton from "@/components/auth/GoogleLoginButton";
 import { getURL } from "@/lib/get-url";
 import {
@@ -63,6 +72,10 @@ export function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  // Success Confirmation Popup State
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState("");
 
   useEffect(() => {
     const err = searchParams?.get("error");
@@ -142,10 +155,8 @@ export function RegisterForm() {
       }
 
       const cleanEmail = email.trim();
-      setSuccessMessage("खाता सफलतापूर्वक तैयार हुआ! लॉगिन पेज पर रीडायरेक्ट किया जा रहा है...");
-      setTimeout(() => {
-        window.location.href = `/login?registered=true&email=${encodeURIComponent(cleanEmail)}`;
-      }, 1200);
+      setRegisteredEmail(cleanEmail);
+      setShowSuccessModal(true);
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "पंजीकरण में त्रुटि हुई।";
@@ -168,7 +179,8 @@ export function RegisterForm() {
   const isPasswordMatch = confirmPassword.length > 0 && password === confirmPassword;
 
   return (
-    <Card className="w-full bg-white/95 backdrop-blur-xl border border-slate-200/80 shadow-2xl shadow-blue-950/20 rounded-2xl sm:rounded-3xl font-sans ring-1 ring-slate-900/5 overflow-hidden">
+    <>
+      <Card className="w-full bg-white/95 backdrop-blur-xl border border-slate-200/80 shadow-2xl shadow-blue-950/20 rounded-2xl sm:rounded-3xl font-sans ring-1 ring-slate-900/5 overflow-hidden">
       {/* Card Header */}
       <CardHeader className="text-center pb-2 pt-7 sm:pt-8 px-5 sm:px-8 space-y-1.5">
         <div className="mx-auto h-11 w-11 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#0056d2] shadow-xs ring-4 ring-blue-50/60">
@@ -457,6 +469,59 @@ export function RegisterForm() {
         </div>
       </CardContent>
     </Card>
+
+    {/* Post-Registration Email Verification Notice Modal */}
+    <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+      <DialogContent className="sm:max-w-md bg-white p-6 rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+        <div className="relative w-full h-48 rounded-xl overflow-hidden bg-amber-50/50 mb-3 border border-amber-100 flex items-center justify-center">
+          <Image
+            src="/images/illustrations/rural-entrepreneur-cycle.jpg"
+            alt="छैगांव ग्रामीण उद्यमी"
+            fill
+            className="object-contain p-2"
+            priority
+          />
+        </div>
+
+        <DialogHeader className="text-center space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200 mx-auto">
+            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+            <span>पंजीकरण सफल रहा</span>
+          </div>
+          <DialogTitle className="text-xl sm:text-2xl font-bold text-slate-950 font-headline">
+            छैगांव उद्यमी में आपका स्वागत है! 🎉
+          </DialogTitle>
+          <DialogDescription className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            आपके ईमेल <strong className="text-slate-900 font-semibold">{registeredEmail}</strong> पर एक सत्यापन लिंक (Verification Link) भेजा गया है।
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="my-2 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1.5">
+          <p className="font-semibold text-slate-800 flex items-center gap-1.5">
+            <Mail className="h-4 w-4 text-[#0056d2]" />
+            <span>ईमेल इनबॉक्स चेक करें:</span>
+          </p>
+          <p>
+            कृपया अपने इनबॉक्स या स्पैम फ़ोल्डर में जाकर <strong>&quot;Confirm your email&quot;</strong> लिंक पर क्लिक करें। लिंक पर क्लिक करते ही आपका खाता सक्रिय हो जाएगा और आप लॉगिन कर सकेंगे।
+          </p>
+        </div>
+
+        <DialogFooter className="flex flex-col sm:flex-row gap-2 mt-2">
+          <Button
+            type="button"
+            onClick={() => {
+              setShowSuccessModal(false);
+              window.location.href = `/login?registered=true&email=${encodeURIComponent(registeredEmail)}`;
+            }}
+            className="w-full h-11 text-xs sm:text-sm font-bold rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white shadow-md cursor-pointer flex items-center justify-center gap-2"
+          >
+            <span>लॉगिन पेज पर जाएँ</span>
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  </>
   );
 }
 

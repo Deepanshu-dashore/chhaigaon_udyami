@@ -49,8 +49,6 @@ export async function GET(request: Request) {
       "Student";
 
     try {
-      const mode = searchParams.get("mode") || "login";
-
       // 1. Check if user already exists by supabaseUserId or email
       const existingUser = await prisma.user.findFirst({
         where: {
@@ -58,14 +56,6 @@ export async function GET(request: Request) {
         },
         include: { profile: true },
       });
-
-      // If user came from login page and doesn't exist, redirect to register
-      if (mode === "login" && !existingUser) {
-        await supabase.auth.signOut();
-        return NextResponse.redirect(
-          `${baseUrl}/register?error=not_registered&email=${encodeURIComponent(userEmail)}`
-        );
-      }
 
       let targetUserId = existingUser?.id;
 
@@ -93,25 +83,31 @@ export async function GET(request: Request) {
         });
         targetUserId = updated.id;
       } else {
-        // 2. Application-user provisioning: Assign role from registration or default to STUDENT
+        // 2. Application-user provisioning: Assign role from metadata or default to STUDENT
         const allowedRoles = [
           "STUDENT",
           "TRAINER",
           "MARKET_PARTNER",
           "MENTOR",
           "CONTENT_MANAGER",
+          "ADMIN",
+          "SUPER_ADMIN",
         ];
-        const roleParam = searchParams.get("role")?.toUpperCase();
-        const roleToAssign =
-          roleParam && allowedRoles.includes(roleParam)
-            ? (roleParam as "STUDENT" | "TRAINER" | "MARKET_PARTNER" | "MENTOR" | "CONTENT_MANAGER")
-            : "STUDENT";
+        const rawRole = (
+          authUser.user_metadata?.role ||
+          searchParams.get("role") ||
+          "STUDENT"
+        ).toUpperCase();
+        const roleToAssign = allowedRoles.includes(rawRole)
+          ? (rawRole as "STUDENT" | "TRAINER" | "MARKET_PARTNER" | "MENTOR" | "CONTENT_MANAGER" | "ADMIN" | "SUPER_ADMIN")
+          : "STUDENT";
 
         const newUser = await prisma.user.create({
           data: {
             supabaseUserId,
             email: userEmail,
             name: fullName,
+            mobile: authUser.user_metadata?.mobile || null,
             role: roleToAssign,
             status: "ACTIVE",
             isVerified: true,
@@ -138,10 +134,20 @@ export async function GET(request: Request) {
           ipAddress,
           userAgent,
           deviceInfo,
-          provider: authUser.app_metadata?.provider || "google",
-          metadata: { authProvider: "google" },
+          provider: authUser.app_metadata?.provider || "email",
+          metadata: { authProvider: authUser.app_metadata?.provider || "email" },
         });
       }
+
+      // If this is an email confirmation verification, redirect to login with verified flag
+      const authProvider = authUser.app_metadata?.provider || "email";
+      const isEmailSignup = authProvider === "email" || searchParams.get("type") === "signup";
+      if (isEmailSignup) {
+        return NextResponse.redirect(
+          `${baseUrl}/login?verified=true&email=${encodeURIComponent(userEmail)}`
+        );
+      }
+
       // Determine redirect path based on user role if next is default /dashboard
       const finalRole = existingUser?.role || (authUser.user_metadata?.role as string);
       if (next === "/dashboard" && (finalRole === "ADMIN" || finalRole === "SUPER_ADMIN")) {

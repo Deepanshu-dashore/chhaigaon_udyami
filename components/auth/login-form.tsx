@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { getURL } from "@/lib/get-url";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -39,6 +41,9 @@ import {
   UserCheck,
   Eye,
   EyeOff,
+  Send,
+  RefreshCw,
+  MailCheck,
 } from "lucide-react";
 
 export function LoginForm() {
@@ -56,17 +61,58 @@ export function LoginForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Auto-fill email and show success alert if redirected from registration
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+
+  // Unverified Email Modal State (when attempting to login before email verification)
+  const [showUnverifiedModal, setShowUnverifiedModal] = useState(false);
+  const [unverifiedEmail, setUnverifiedEmail] = useState("");
+  const [resendingEmail, setResendingEmail] = useState(false);
+  const [resendStatus, setResendStatus] = useState<string | null>(null);
+
+  // Email Verified Successfully Modal State (redirected from verification link)
+  const [showVerifiedSuccessModal, setShowVerifiedSuccessModal] = useState(false);
+
+  // Auto-fill email and show success alert/modals if redirected from registration or verification
   useEffect(() => {
     const emailParam = searchParams?.get("email");
     const isRegistered = searchParams?.get("registered") === "true";
+    const isVerified = searchParams?.get("verified") === "true";
+
     if (emailParam) {
       setEmail(emailParam);
     }
     if (isRegistered) {
       setSuccessMessage("पंजीकरण सफल रहा! कृपया अपना पासवर्ड दर्ज करके लॉग इन करें।");
     }
+    if (isVerified) {
+      setShowVerifiedSuccessModal(true);
+      setSuccessMessage("ईमेल सफलतापूर्वक सत्यापित हुआ! कृपया अपना पासवर्ड दर्ज करके लॉग इन करें।");
+    }
   }, [searchParams]);
+
+  // Resend verification email function
+  const handleResendVerification = async () => {
+    if (!unverifiedEmail) return;
+    setResendingEmail(true);
+    setResendStatus(null);
+    try {
+      const browserSupabase = createClient();
+      const { error } = await browserSupabase.auth.resend({
+        type: "signup",
+        email: unverifiedEmail,
+        options: {
+          emailRedirectTo: getURL("auth/callback"),
+        },
+      });
+      if (error) throw error;
+      setResendStatus("सत्यापन लिंक आपके ईमेल पर पुनः भेज दिया गया है! कृपया इनबॉक्स चेक करें।");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "ईमेल भेजने में विफल।";
+      setResendStatus(`त्रुटि: ${msg}`);
+    } finally {
+      setResendingEmail(false);
+    }
+  };
 
   // Login Confirmation Modal Dialog State
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -119,9 +165,10 @@ export function LoginForm() {
           "ईमेल या पासवर्ड गलत है, या आपका खाता मौजूद नहीं है। यदि आप नए हैं तो कृपया पहले पंजीकरण (Register) करें।"
         );
       } else if (lower.includes("email not confirmed")) {
-        setErrorMessage(
-          "आपका ईमेल अभी तक सत्यापित नहीं हुआ है। कृपया अपने इनबॉक्स में आए Supabase सत्यापन लिंक पर क्लिक करें (या Supabase Dashboard > Authentication > Providers > Email में 'Confirm email' बंद करें)।"
-        );
+        setUnverifiedEmail(email.trim());
+        setShowUnverifiedModal(true);
+        setResendStatus(null);
+        setErrorMessage(null);
       } else {
         setErrorMessage(errMsg);
       }
