@@ -91,9 +91,8 @@ export function Footer({ showValueBanner = false }: FooterProps) {
                   src="/assets/logo.png"
                   alt="छैगांव उद्यमी Logo"
                   width={44}
-                  height={44}
-                  className="object-contain"
-                  style={{ width: "auto", height: "auto" }}
+                  height={40}
+                  className="h-10 w-auto object-contain"
                 />
               </div>
               <div>

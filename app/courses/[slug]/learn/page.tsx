@@ -53,6 +53,7 @@ export default async function DedicatedLearnPage({ params, searchParams }: PageP
             include: {
               video: {
                 select: {
+                  vdoVideoId: true,
                   thumbnailUrl: true,
                   duration: true,
                 },
@@ -149,6 +150,7 @@ export default async function DedicatedLearnPage({ params, searchParams }: PageP
         type: l.type,
         duration: l.duration ?? l.video?.duration ?? 300,
         order: l.order,
+        videoUrl: l.video?.vdoVideoId || null,
         videoThumbnail: l.video?.thumbnailUrl ?? course.thumbnail,
         quiz: lessonQuiz,
       };
@@ -166,6 +168,7 @@ export default async function DedicatedLearnPage({ params, searchParams }: PageP
           type: "QUIZ",
           duration: 600,
           order: 999,
+          videoUrl: null,
           videoThumbnail: null,
           quiz: {
             id: mq.id,

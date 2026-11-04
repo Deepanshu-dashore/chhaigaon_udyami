@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   PlayCircle,
+  BookOpen,
   Bookmark,
   Share2,
   Check,
@@ -23,6 +24,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { LearningPathModulesList } from "@/components/course/learning-path-modules-list";
+import { CourseCertificateCta } from "@/components/certificate/course-certificate-cta";
 
 export const dynamic = "force-dynamic";
 
@@ -105,6 +107,31 @@ export default async function EnrolledCourseLearningPathPage({
   const remainingMinutes = Math.max(0, Math.round(totalDurationMinutes * (1 - progressPercent / 100)));
   const remainingFormatted = `${Math.floor(remainingMinutes / 60)}h ${remainingMinutes % 60}m left`;
 
+  // Auto-provision certificate if course is completed
+  let certificate = enrollment.certificate;
+  if (!certificate && (progressPercent === 100 || enrollment.status === "COMPLETED")) {
+    try {
+      const certNumber = `CHU-${Date.now().toString(36).toUpperCase()}-${prismaUserId.slice(0, 4).toUpperCase()}`;
+      const verificationCode = `VRF-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+      certificate = await prisma.certificate.upsert({
+        where: {
+          userId_courseId: { userId: prismaUserId, courseId: course.id },
+        },
+        update: { enrollmentId: enrollment.id },
+        create: {
+          userId: prismaUserId,
+          courseId: course.id,
+          enrollmentId: enrollment.id,
+          certificateNumber: certNumber,
+          verificationCode,
+          status: "ACTIVE",
+        },
+      });
+    } catch (e) {
+      console.error("Error creating certificate on dashboard page:", e);
+    }
+  }
+
   return (
     <div className="max-w-6xl mx-auto space-y-8 font-sans pb-16 text-[#111827]">
       {/* Top Breadcrumb Nav */}
@@ -175,12 +202,24 @@ export default async function EnrolledCourseLearningPathPage({
               </div>
             </div>
 
-            {/* Action Buttons: Resume Button (Image 1 Blue Pill), Bookmark, Share */}
+            {/* Action Buttons: CourseCertificateCta (Resume / Download Certificate / Copy Verifying Link) */}
             <div className="pt-2 flex items-center gap-3 flex-wrap">
-              <Link href={`/courses/${course.slug}/learn`}>
-                <Button className="h-11 px-7 rounded-full bg-[#1261D6] hover:bg-blue-700 text-white text-sm font-bold shadow-xs cursor-pointer inline-flex items-center gap-2">
-                  <PlayCircle className="size-5 fill-white text-[#1261D6]" />
-                  <span>{progressPercent > 0 ? "Resume (अध्ययन जारी रखें)" : "Start (कोर्स शुरू करें)"}</span>
+              <CourseCertificateCta
+                courseSlug={course.slug}
+                certificateCode={certificate?.verificationCode || "CHU-SAMPLE-2026"}
+                isCompleted={progressPercent === 100 || Boolean(certificate)}
+                progressPercent={progressPercent}
+              />
+
+              {/* View Public Course Details Page Button */}
+              <Link href={`/courses/${course.slug}`}>
+                <Button
+                  variant="outline"
+                  className="h-11 px-5 rounded-full border-[#D0D5DD] text-[#344054] hover:text-[#1261D6] hover:border-blue-300 hover:bg-blue-50/50 text-sm font-semibold cursor-pointer inline-flex items-center gap-2 shadow-2xs"
+                  title="कोर्स का मुख्य विवरण पृष्ठ देखें"
+                >
+                  <BookOpen className="size-4 text-[#1261D6]" />
+                  <span>कोर्स विवरण (Course Details)</span>
                 </Button>
               </Link>
 
@@ -217,15 +256,17 @@ export default async function EnrolledCourseLearningPathPage({
                 
                 {/* Center Play Icon */}
                 <div className="absolute inset-0 bg-slate-950/30 flex items-center justify-center">
-                  <div className="size-12 rounded-full bg-white/90 text-[#1261D6] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                    <PlayCircle className="size-7 ml-0.5 fill-[#1261D6] text-white" />
+                  <div className="size-12 rounded-md bg-white/60 text-[#1261D6] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    {/* <PlayCircle  /> */}
+                    <svg className="size-7 ml-0.5 text-[#1261D6]" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+	<path d="M0 0h24v24H0z" fill="none" />
+	<path fill="currentColor" d="M19.543 9.428a2.998 2.998 0 0 1 0 5.144l-10 6A2.998 2.998 0 0 1 5 18V6a3 3 0 0 1 4.543-2.572Z" />
+</svg>
+
                   </div>
                 </div>
 
-                {/* Subtitle banner on bottom of preview (Reference Image 1) */}
-                <div className="absolute bottom-2 inset-x-2 bg-black/75 backdrop-blur-xs text-white text-[11px] font-medium px-3 py-1.5 rounded text-center truncate">
-                  "व्यावसायिक प्रोजेक्ट रिपोर्ट और 35% PMEGP सब्सिडी मार्गदर्शन"
-                </div>
+               
               </div>
             </Link>
 

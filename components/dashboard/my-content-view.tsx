@@ -10,6 +10,7 @@ import {
   ArrowRight,
   MoreHorizontal,
   Share2,
+  Play,
   PlayCircle,
   CheckCircle2,
   BookOpen,
@@ -20,6 +21,8 @@ import {
   Star,
   ExternalLink,
   Check,
+  Award,
+  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -42,6 +45,7 @@ export interface CourseContentItem {
   isSaved?: boolean;
   isRolePlay?: boolean;
   category?: string;
+  certificateCode?: string | null;
 }
 
 interface MyContentViewProps {
@@ -60,6 +64,23 @@ export function MyContentView({ initialCourses, userStats }: MyContentViewProps)
   >("in_progress");
 
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [copiedVerifyId, setCopiedVerifyId] = useState<string | null>(null);
+
+  const handleCopyVerifyLink = async (item: CourseContentItem) => {
+    const code = item.certificateCode || "CHU-SAMPLE-2026";
+    const origin =
+      typeof window !== "undefined" && window.location.origin
+        ? window.location.origin
+        : "https://chhaigaonudyami.in";
+    const url = `${origin}/certificates/${code}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedVerifyId(item.id);
+      setTimeout(() => setCopiedVerifyId(null), 2500);
+    } catch {
+      prompt("सत्यापन लिंक कॉपी करें:", url);
+    }
+  };
   const [courses, setCourses] = useState<CourseContentItem[]>(initialCourses);
   const [weeklyGoal, setWeeklyGoal] = useState<number>(userStats.weeklyMinutesGoal);
   const [isEditingGoal, setIsEditingGoal] = useState<boolean>(false);
@@ -439,20 +460,11 @@ export function MyContentView({ initialCourses, userStats }: MyContentViewProps)
                         />
                       </button>
 
-                      {/* More (...) Button */}
-                      <Link
-                        href={`/dashboard/courses/${item.slug}`}
-                        className="size-8 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-100 flex items-center justify-center transition-colors cursor-pointer"
-                        title="Course overview"
-                        aria-label="Course overview"
-                      >
-                        <MoreHorizontal className="size-4" />
-                      </Link>
-
-                      {/* Outlined Pill Share Button (As in reference image) */}
+                      {/* Outlined Pill Share Button */}
                       <button
                         onClick={() => handleShare(item)}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full border border-[#0056d2] text-[#0056d2] hover:bg-blue-50/70 text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
+                        title="कोर्स साझा करें"
                       >
                         {copiedId === item.id ? (
                           <>
@@ -461,18 +473,71 @@ export function MyContentView({ initialCourses, userStats }: MyContentViewProps)
                           </>
                         ) : (
                           <>
+                            <Share2 className="size-3 text-slate-500" />
                             <span>Share</span>
                           </>
                         )}
                       </button>
 
-                      {/* Direct Learn Action Button */}
+                      {/* Course Details Button (कोर्स देखें) */}
                       <Link
-                        href={`/courses/${item.slug}/learn`}
-                        className="inline-flex items-center gap-1 bg-[#0056d2] hover:bg-blue-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-full shadow-2xs transition-colors cursor-pointer"
+                        href={`/dashboard/courses/${item.slug}`}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50/60 text-slate-700 hover:text-blue-700 text-xs font-semibold transition-all cursor-pointer shadow-2xs"
+                        title="कोर्स विवरण व मॉड्यूल रूपरेखा देखें"
                       >
-                        <span>{item.percent > 0 ? "जारी रखें" : "शुरू करें"}</span>
+                        <BookOpen className="size-3.5 text-blue-600" />
+                        <span>कोर्स देखें</span>
                       </Link>
+
+                      {/* If Course is Completed (100%): Replace Resume with Download Certificate & Copy Verifying Link */}
+                      {item.percent === 100 ? (
+                        <>
+                          {/* Copy Verifying Link Button */}
+                          <button
+                            type="button"
+                            onClick={() => handleCopyVerifyLink(item)}
+                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition-all cursor-pointer shadow-2xs ${
+                              copiedVerifyId === item.id
+                                ? "border-emerald-500 bg-emerald-50 text-emerald-800"
+                                : "border-slate-300 bg-white text-slate-700 hover:text-blue-700 hover:border-blue-400 hover:bg-blue-50/50"
+                            }`}
+                            title="प्रमाण पत्र सत्यापन लिंक कॉपी करें"
+                          >
+                            {copiedVerifyId === item.id ? (
+                              <>
+                                <Check className="size-3 text-emerald-600" />
+                                <span className="font-bold text-emerald-700">कॉपी हुआ!</span>
+                              </>
+                            ) : (
+                              <>
+                                <ShieldCheck className="size-3 text-blue-600" />
+                                <span>सत्यापन लिंक</span>
+                              </>
+                            )}
+                          </button>
+
+                          {/* Download / View Certificate Button */}
+                          <Link
+                            href={`/certificates/${item.certificateCode || "CHU-SAMPLE-2026"}`}
+                            target="_blank"
+                            className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-full shadow-2xs transition-all hover:shadow cursor-pointer"
+                            title="डिजिटल प्रमाण पत्र डाउनलोड व देखें"
+                          >
+                            <Award className="size-3.5 fill-white text-emerald-600" />
+                            <span>प्रमाण पत्र</span>
+                          </Link>
+                        </>
+                      ) : (
+                        /* Direct Learn Action Button (शुरू करें / जारी रखें) */
+                        <Link
+                          href={`/courses/${item.slug}/learn`}
+                          className="inline-flex items-center gap-1.5 bg-[#0056d2] hover:bg-blue-700 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-2xs transition-all hover:shadow cursor-pointer"
+                          title="सीखना शुरू करें"
+                        >
+                          <Play className="size-3 fill-white text-white" />
+                          <span>{item.percent > 0 ? "जारी रखें" : "शुरू करें"}</span>
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>

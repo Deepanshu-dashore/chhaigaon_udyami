@@ -1,45 +1,51 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ChevronLeft,
   ChevronRight,
   Play,
   Pause,
+  RotateCcw,
+  RotateCw,
   Volume2,
+  Volume1,
   VolumeX,
   Maximize2,
-  CheckCircle2,
-  Circle,
-  HelpCircle,
-  FileText,
-  Download,
-  Share2,
-  Menu,
-  X,
-  Award,
-  BookOpen,
-  Clock,
-  Sparkles,
+  Minimize2,
+  Tv,
   Subtitles,
+  CheckCircle2,
   Check,
+  Share2,
+  Download,
+  BookOpen,
+  Sparkles,
+  FileText,
+  Clock,
   Plus,
   Trash2,
-  User,
-  GraduationCap,
-  Building2,
-  ExternalLink,
-  RotateCcw,
+  Award,
   Video as VideoIcon,
+  ChevronDown,
+  ChevronUp,
+  Layers,
+  Menu,
+  X,
+  Copy,
+  CheckCheck,
+  ExternalLink,
+  ShieldCheck,
+  SlidersHorizontal,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ExerciseFilesModal } from "@/components/course/exercise-files-modal";
 import {
   InteractiveQuizView,
@@ -102,23 +108,18 @@ export function DedicatedLearningPlayer({
   courseSlug,
   courseCategory = "उद्यमिता एवं कौशल विकास",
   instructor = {
-    name: "डॉ. राजेश पाटिल (वरिष्ठ उद्यम सलाहकार)",
-    title: "उद्यमिता एवं एमएसएमई विशेषज्ञ, डीआईसी खंडवा एवं आरसेटी",
+    name: "डॉ. राजेश पाटिल",
+    title: "वरिष्ठ उद्यम सलाहकार, डीआईसी खंडवा एवं आरसेटी",
     bio: "कृषि-व्यवसाय, खाद्य प्रसंस्करण एवं सूक्ष्म उद्यम स्थापना में 15+ वर्षों का परामर्श अनुभव। 500+ सफल ग्रामीण उद्यमियों के मार्गदर्शक।",
+    avatarUrl: null,
   },
   modules,
   initialLessonId,
   enrollmentId,
   completedLessonIds: initialCompletedIds = [],
 }: DedicatedLearningPlayerProps) {
-  // Mobile drawer state only for small screens (sidebar is ALWAYS visible on desktop md:)
-  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
-
-  // Exercise files modal state
-  const [showExerciseModal, setShowExerciseModal] = useState(false);
-
-  // Flattened lessons list for easy sequential navigation
-  const allLessons = React.useMemo(() => {
+  // Flattened lessons list for sequential navigation
+  const allLessons = useMemo(() => {
     const list: PlayerLesson[] = [];
     modules.forEach((mod) => {
       mod.lessons.forEach((l) => list.push(l));
@@ -126,7 +127,7 @@ export function DedicatedLearningPlayer({
     return list;
   }, [modules]);
 
-  // Active Lesson selection
+  // Active Lesson
   const [activeLessonId, setActiveLessonId] = useState<string>(() => {
     if (initialLessonId && allLessons.some((l) => l.id === initialLessonId)) {
       return initialLessonId;
@@ -137,48 +138,80 @@ export function DedicatedLearningPlayer({
   const activeLesson = allLessons.find((l) => l.id === activeLessonId) || allLessons[0];
   const activeModule = modules.find((m) => m.id === activeLesson?.moduleId) || modules[0];
 
+  // Active lesson is a Quiz (Video is completely hidden and Quiz takes its place)
+  const isQuizActive = Boolean(
+    activeLesson?.type === "QUIZ" ||
+    activeLesson?.type === "ASSESSMENT" ||
+    activeLesson?.quiz
+  );
+
+  // Check if current module has a quiz available
+  const currentModuleQuizLesson = useMemo(() => {
+    return allLessons.find(
+      (l) =>
+        l.moduleId === activeLesson?.moduleId &&
+        (l.type === "QUIZ" || l.type === "ASSESSMENT" || Boolean(l.quiz))
+    );
+  }, [allLessons, activeLesson?.moduleId]);
+
   // Completed lessons set
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(
     () => new Set(initialCompletedIds)
   );
 
-  // Video player controls
+  // Layout View Modes (YouTube Standard vs Theater Mode)
+  const [isTheaterMode, setIsTheaterMode] = useState(false);
+  const [isMobilePlaylistOpen, setIsMobilePlaylistOpen] = useState(false);
+  const [selectedModuleFilter, setSelectedModuleFilter] = useState<string>("all");
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview");
+
+  // Video Player Controls & State
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(activeLesson?.duration || 300);
+  const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [showSubtitles, setShowSubtitles] = useState(true);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
-  const [videoHasError, setVideoHasError] = useState(false);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [autoplayNext, setAutoplayNext] = useState(true);
+  const [isScrubbing, setIsScrubbing] = useState(false);
+  const [hoverPosition, setHoverPosition] = useState<number | null>(null);
+  const [showControls, setShowControls] = useState(true);
+  const [copiedLink, setCopiedLink] = useState(false);
+  const [copiedCertVerify, setCopiedCertVerify] = useState(false);
+  const [showExerciseModal, setShowExerciseModal] = useState(false);
 
-  // Student notebook notes
-  const [notes, setNotes] = useState<Array<{ id: string; time: number; text: string; date: string }>>([]);
-  const [newNoteText, setNewNoteText] = useState("");
-
-  // Load notes from local storage
-  useEffect(() => {
-    if (typeof window !== "undefined" && activeLesson) {
-      const saved = localStorage.getItem(`notes_${courseId}_${activeLesson.id}`);
-      if (saved) {
-        try {
-          setNotes(JSON.parse(saved));
-        } catch {
-          setNotes([]);
-        }
-      } else {
-        setNotes([]);
-      }
+  const handleCopyCertVerify = async () => {
+    const origin =
+      typeof window !== "undefined" && window.location.origin
+        ? window.location.origin
+        : "https://chhaigaonudyami.in";
+    const url = `${origin}/certificates/CHU-SAMPLE-2026`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedCertVerify(true);
+      setTimeout(() => setCopiedCertVerify(false), 2500);
+    } catch {
+      prompt("सत्यापन लिंक कॉपी करें:", url);
     }
-  }, [courseId, activeLesson?.id]);
+  };
 
-  // Update duration and reset video states when lesson changes
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const playerContainerRef = useRef<HTMLDivElement | null>(null);
+
+  // Navigation indices
+  const currentIndex = allLessons.findIndex((l) => l.id === activeLessonId);
+  const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
+  const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
+
+  // Reset video state on lesson change
   useEffect(() => {
     if (activeLesson) {
       setDuration(activeLesson.duration || 300);
       setCurrentTime(0);
       setIsPlaying(false);
-      setVideoHasError(false);
       if (videoRef.current) {
         videoRef.current.currentTime = 0;
         videoRef.current.pause();
@@ -186,10 +219,20 @@ export function DedicatedLearningPlayer({
     }
   }, [activeLesson?.id]);
 
-  // Mark lesson complete API call
-  const markLessonComplete = async (lessonId: string) => {
-    setCompletedLessons((prev) => new Set([...prev, lessonId]));
+  // Auto-hide controls when playing
+  const handleMouseMove = () => {
+    setShowControls(true);
+    if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
+    if (isPlaying) {
+      controlsTimeoutRef.current = setTimeout(() => {
+        setShowControls(false);
+      }, 2500);
+    }
+  };
 
+  // Sync completion API
+  const markLessonComplete = useCallback(async (lessonId: string) => {
+    setCompletedLessons((prev) => new Set([...prev, lessonId]));
     try {
       await fetch("/api/progress", {
         method: "POST",
@@ -205,14 +248,23 @@ export function DedicatedLearningPlayer({
     } catch (err) {
       console.error("Failed to sync progress:", err);
     }
+  }, [duration]);
+
+  const isCurrentCompleted = activeLesson ? completedLessons.has(activeLesson.id) : false;
+
+  // Handlers
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      videoRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => setIsPlaying(false));
+    }
   };
-
-  const isCompleted = activeLesson ? completedLessons.has(activeLesson.id) : false;
-
-  // Next and Previous lesson navigation
-  const currentIndex = allLessons.findIndex((l) => l.id === activeLessonId);
-  const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
-  const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
 
   const handleNext = () => {
     if (activeLesson) markLessonComplete(activeLesson.id);
@@ -223,47 +275,71 @@ export function DedicatedLearningPlayer({
     if (prevLesson) setActiveLessonId(prevLesson.id);
   };
 
-  // Safe play toggle avoiding unhandled rejections
-  const togglePlay = () => {
+  const seekRelative = (seconds: number) => {
     if (!videoRef.current) return;
-    if (isPlaying) {
-      videoRef.current.pause();
-      setIsPlaying(false);
+    const target = Math.min(Math.max(videoRef.current.currentTime + seconds, 0), duration);
+    videoRef.current.currentTime = target;
+    setCurrentTime(target);
+  };
+
+  const seekTo = (seconds: number) => {
+    if (!videoRef.current) return;
+    const target = Math.min(Math.max(seconds, 0), duration);
+    videoRef.current.currentTime = target;
+    setCurrentTime(target);
+  };
+
+  // Toggle fullscreen
+  const toggleFullscreen = () => {
+    if (!playerContainerRef.current) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
     } else {
-      videoRef.current
-        .play()
-        .then(() => setIsPlaying(true))
-        .catch(() => {
-          // Fallback if media source isn't playable
-          setIsPlaying(false);
-          setVideoHasError(true);
+      playerContainerRef.current.requestFullscreen().catch(() => {});
+    }
+  };
+
+  // Keyboard Shortcuts (Space, K, J, L, M, F, T)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is typing in textarea or input
+      const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
+      if (tag === "input" || tag === "textarea") return;
+
+      if (e.code === "Space" || e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        togglePlay();
+      } else if (e.key.toLowerCase() === "j" || e.code === "ArrowLeft") {
+        e.preventDefault();
+        seekRelative(-10);
+      } else if (e.key.toLowerCase() === "l" || e.code === "ArrowRight") {
+        e.preventDefault();
+        seekRelative(10);
+      } else if (e.key.toLowerCase() === "m") {
+        e.preventDefault();
+        setIsMuted((prev) => {
+          if (videoRef.current) videoRef.current.muted = !prev;
+          return !prev;
         });
-    }
-  };
-
-  // Add note handler
-  const handleAddNote = () => {
-    if (!newNoteText.trim() || !activeLesson) return;
-    const newNote = {
-      id: Date.now().toString(),
-      time: Math.floor(currentTime),
-      text: newNoteText.trim(),
-      date: new Date().toLocaleDateString("hi-IN"),
+      } else if (e.key.toLowerCase() === "f") {
+        e.preventDefault();
+        toggleFullscreen();
+      } else if (e.key.toLowerCase() === "t") {
+        e.preventDefault();
+        setIsTheaterMode((prev) => !prev);
+      }
     };
-    const updated = [newNote, ...notes];
-    setNotes(updated);
-    setNewNoteText("");
-    if (typeof window !== "undefined") {
-      localStorage.setItem(`notes_${courseId}_${activeLesson.id}`, JSON.stringify(updated));
-    }
-  };
 
-  const handleDeleteNote = (noteId: string) => {
-    if (!activeLesson) return;
-    const updated = notes.filter((n) => n.id !== noteId);
-    setNotes(updated);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isPlaying, duration]);
+
+  // Share URL handler
+  const handleCopyLink = () => {
     if (typeof window !== "undefined") {
-      localStorage.setItem(`notes_${courseId}_${activeLesson.id}`, JSON.stringify(updated));
+      navigator.clipboard.writeText(window.location.href);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
     }
   };
 
@@ -277,125 +353,183 @@ export function DedicatedLearningPlayer({
   const completionPercentage =
     allLessons.length > 0 ? Math.round((completedLessons.size / allLessons.length) * 100) : 0;
 
-  // Reusable Sidebar Contents Markup (rendered on desktop and mobile drawer)
-  const renderSidebarContent = () => (
-    <div className="flex flex-col h-full bg-white select-none">
-      {/* Sidebar Header */}
-      <div className="p-4 sm:p-5 border-b border-slate-200/80 bg-slate-50/60">
-        <Link
-          href={`/dashboard/courses/${courseSlug}`}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors uppercase tracking-wider mb-2.5 group"
-        >
-          <ChevronLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
-          <span>← सीखने के पथ पर वापस जाएं</span>
-        </Link>
+  // Filter lessons for sidebar if module filter is selected
+  const filteredLessons = useMemo(() => {
+    if (selectedModuleFilter === "all") return allLessons;
+    return allLessons.filter((l) => l.moduleId === selectedModuleFilter);
+  }, [allLessons, selectedModuleFilter]);
 
-        <h2 className="text-sm font-bold text-slate-900 line-clamp-2 leading-snug">
-          {courseTitle}
-        </h2>
-
-        {/* Progress Card */}
-        <div className="mt-3.5 pt-3 border-t border-slate-200/70 space-y-2">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
-            <span>पाठ्यक्रम सामग्री (Contents)</span>
-            <span className="font-mono text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200/60">
-              {completedLessons.size}/{allLessons.length} ({completionPercentage}%)
-            </span>
+  // Reusable YouTube-Style Playlist Column Component
+  const renderPlaylistSidebar = () => (
+    <div className="flex flex-col h-full bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+      {/* Playlist Header */}
+      <div className="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/70">
+        <div className="flex items-center justify-between gap-2 mb-2">
+          <div className="flex items-center gap-2">
+            <Layers className="h-4 w-4 text-blue-600" />
+            <h3 className="text-sm font-bold text-slate-900 tracking-tight">
+              पाठ्यक्रम सूची (Course Playlist)
+            </h3>
           </div>
-          <Progress value={completionPercentage} className="h-2 bg-slate-200" />
+          <span className="font-mono text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200/70">
+            {completedLessons.size}/{allLessons.length}
+          </span>
         </div>
+
+        <p className="text-xs text-slate-500 line-clamp-1 mb-3">
+          {courseTitle}
+        </p>
+
+        {/* Progress bar */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-[11px] font-medium text-slate-600">
+            <span>प्रगति: {completionPercentage}% पूर्ण</span>
+            <span className="text-slate-400">पाठ {currentIndex + 1} / {allLessons.length}</span>
+          </div>
+          <Progress value={completionPercentage} className="h-1.5 bg-slate-200" />
+        </div>
+
+        {/* Autoplay Next toggle row */}
+        <div className="mt-3.5 pt-3 border-t border-slate-200/60 flex items-center justify-between">
+          <label htmlFor="autoplay-switch" className="text-xs font-semibold text-slate-700 cursor-pointer flex items-center gap-1.5">
+            <span>स्वतः अगला पाठ (Autoplay Next)</span>
+          </label>
+          <Switch
+            id="autoplay-switch"
+            checked={autoplayNext}
+            onCheckedChange={setAutoplayNext}
+            className="data-[state=checked]:bg-blue-600"
+          />
+        </div>
+
+        {/* Module Filter Chips */}
+        {modules.length > 1 && (
+          <div className="mt-3 flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            <button
+              type="button"
+              onClick={() => setSelectedModuleFilter("all")}
+              className={`text-[11px] px-2.5 py-1 rounded-full whitespace-nowrap font-medium transition-colors ${
+                selectedModuleFilter === "all"
+                  ? "bg-slate-900 text-white"
+                  : "bg-slate-100 hover:bg-slate-200 text-slate-600"
+              }`}
+            >
+              सभी ({allLessons.length})
+            </button>
+            {modules.map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => setSelectedModuleFilter(m.id)}
+                className={`text-[11px] px-2.5 py-1 rounded-full whitespace-nowrap font-medium transition-colors ${
+                  selectedModuleFilter === m.id
+                    ? "bg-slate-900 text-white"
+                    : "bg-slate-100 hover:bg-slate-200 text-slate-600"
+                }`}
+              >
+                मॉड्यूल {m.order}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Modules & Lessons List with Scroll */}
-      <div className="flex-1 overflow-y-auto divide-y divide-slate-100">
-        {modules.map((module) => {
-          const moduleCompleted = module.lessons.every((l) => completedLessons.has(l.id));
+      {/* Playlist Scrollable Items List */}
+      <div className="flex-1 overflow-y-auto divide-y divide-slate-100 select-none">
+        {filteredLessons.map((lesson, idx) => {
+          const isActive = lesson.id === activeLessonId;
+          const isDone = completedLessons.has(lesson.id);
+          const parentMod = modules.find((m) => m.id === lesson.moduleId);
+
           return (
-            <div key={module.id} className="py-2.5">
-              {/* Module Title Header */}
-              <div className="px-4 py-1.5 flex items-center justify-between text-xs font-bold text-slate-600 uppercase tracking-wider">
-                <span className="truncate pr-2">
-                  मॉड्यूल {module.order}: {module.title}
-                </span>
-                {moduleCompleted && (
-                  <Badge variant="outline" className="text-[10px] bg-emerald-50 text-emerald-700 border-emerald-200 shrink-0 font-medium">
-                    पूर्ण
-                  </Badge>
+            <button
+              key={lesson.id}
+              type="button"
+              onClick={() => {
+                setActiveLessonId(lesson.id);
+                setIsMobilePlaylistOpen(false);
+              }}
+              className={`w-full text-left p-3 sm:p-3.5 flex items-start gap-3 transition-colors group relative ${
+                isActive
+                  ? "bg-blue-50/90 hover:bg-blue-50"
+                  : isDone
+                  ? "hover:bg-slate-50 bg-white"
+                  : "hover:bg-slate-50 bg-white"
+              }`}
+            >
+              {/* Active Indicator Bar on left edge */}
+              {isActive && (
+                <div className="absolute left-0 inset-y-0 w-1 bg-blue-600 rounded-r-full" />
+              )}
+
+              {/* Number / Status Icon */}
+              <div className="shrink-0 w-5 text-center mt-1">
+                {isActive ? (
+                  <div className="flex items-end justify-center gap-0.5 h-3.5">
+                    <span className="w-1 bg-blue-600 h-full animate-pulse rounded-full" />
+                    <span className="w-1 bg-blue-600 h-2/3 animate-pulse delay-75 rounded-full" />
+                    <span className="w-1 bg-blue-600 h-4/5 animate-pulse delay-150 rounded-full" />
+                  </div>
+                ) : isDone ? (
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                ) : (
+                  <span className="text-xs font-mono text-slate-400 group-hover:text-slate-600">
+                    {idx + 1}
+                  </span>
                 )}
               </div>
 
-              {/* Lesson Items */}
-              <div className="space-y-1 mt-1 px-2">
-                {module.lessons.map((lesson) => {
-                  const isActive = lesson.id === activeLessonId;
-                  const isLessonDone = completedLessons.has(lesson.id);
+              {/* Video Thumbnail (YouTube 16:9 Pill) */}
+              <div className="relative w-24 sm:w-28 aspect-video rounded-lg overflow-hidden bg-slate-900 shrink-0 border border-slate-200/80 shadow-2xs group-hover:opacity-95">
+                <Image
+                  src={lesson.videoThumbnail || "/images/dairy-course.jpg"}
+                  alt={lesson.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 96px, 112px"
+                />
 
-                  return (
-                    <button
-                      key={lesson.id}
-                      type="button"
-                      onClick={() => {
-                        setActiveLessonId(lesson.id);
-                        setMobileDrawerOpen(false);
-                      }}
-                      className={`w-full text-left px-3 py-2.5 rounded-xl flex items-start gap-3 transition-all ${
-                        isActive
-                          ? "bg-blue-600 text-white shadow-xs font-semibold ring-1 ring-blue-700"
-                          : isLessonDone
-                          ? "bg-slate-50/70 hover:bg-slate-100 text-slate-800"
-                          : "hover:bg-slate-100 text-slate-700"
-                      }`}
-                    >
-                      {/* Status Icon */}
-                      <div className="shrink-0 mt-0.5">
-                        {isLessonDone ? (
-                          <CheckCircle2
-                            className={`h-4 w-4 ${
-                              isActive ? "text-emerald-200" : "text-emerald-600"
-                            }`}
-                          />
-                        ) : isActive ? (
-                          <Play className="h-4 w-4 text-white fill-white" />
-                        ) : lesson.type === "QUIZ" || lesson.type === "ASSESSMENT" ? (
-                          <Award className="h-4 w-4 text-amber-500" />
-                        ) : lesson.type === "READING" ? (
-                          <FileText className="h-4 w-4 text-slate-400" />
-                        ) : (
-                          <VideoIcon className="h-4 w-4 text-slate-400" />
-                        )}
-                      </div>
+                {/* Duration Badge */}
+                <span className="absolute bottom-1 right-1 bg-black/80 text-white font-mono text-[9px] px-1 py-0.5 rounded font-semibold backdrop-blur-2xs">
+                  {lesson.type === "QUIZ" ? "क्विज" : formatTime(lesson.duration || 300)}
+                </span>
 
-                      {/* Lesson Title & Duration */}
-                      <div className="min-w-0 flex-1">
-                        <p
-                          className={`text-xs leading-snug line-clamp-2 ${
-                            isActive ? "text-white font-semibold" : "text-slate-800"
-                          }`}
-                        >
-                          {lesson.title}
-                        </p>
-                        <div
-                          className={`flex items-center gap-2 mt-1 text-[11px] ${
-                            isActive ? "text-blue-100" : "text-slate-500"
-                          }`}
-                        >
-                          {lesson.type === "QUIZ" || lesson.type === "ASSESSMENT" ? (
-                            <span className="flex items-center gap-1 text-amber-500 font-medium">
-                              <Award className="h-3 w-3" /> प्रश्नोत्तरी
-                            </span>
-                          ) : (
-                            <span className="font-mono">{formatTime(lesson.duration || 300)}</span>
-                          )}
-                          {isLessonDone && !isActive && (
-                            <span className="text-emerald-600 font-medium">• पूर्ण</span>
-                          )}
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
+                {/* Center Hover Play Icon */}
+                <div className={`absolute inset-0 bg-black/30 flex items-center justify-center transition-opacity ${
+                  isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                }`}>
+                  <Play className={`h-4 w-4 ${isActive ? "text-blue-400 fill-blue-400" : "text-white fill-white"}`} />
+                </div>
               </div>
-            </div>
+
+              {/* Lesson Details */}
+              <div className="min-w-0 flex-1">
+                <p
+                  className={`text-xs sm:text-sm leading-snug line-clamp-2 ${
+                    isActive ? "font-bold text-blue-950" : "font-medium text-slate-800"
+                  }`}
+                >
+                  {lesson.title}
+                </p>
+
+                <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                  {parentMod && (
+                    <span className="text-[10px] text-slate-500 font-medium">
+                      मॉड्यूल {parentMod.order}
+                    </span>
+                  )}
+                  {lesson.type === "QUIZ" ? (
+                    <Badge variant="outline" className="text-[9px] h-4 px-1.5 bg-amber-50 text-amber-700 border-amber-200 font-semibold">
+                      प्रश्नोत्तरी
+                    </Badge>
+                  ) : isDone ? (
+                    <span className="text-[10px] text-emerald-600 font-medium flex items-center gap-0.5">
+                      • पूर्ण
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+            </button>
           );
         })}
       </div>
@@ -403,575 +537,504 @@ export function DedicatedLearningPlayer({
   );
 
   return (
-    <div className="flex h-screen w-full bg-slate-50 text-slate-900 overflow-hidden font-sans">
-      {/* ---------------------------------------------------- */}
-      {/* 1. PERMANENT LEFT SIDEBAR (DO NOT HIDE ON DESKTOP)   */}
-      {/* ---------------------------------------------------- */}
-      <aside className="hidden md:flex w-80 lg:w-96 shrink-0 h-full border-r border-slate-200 bg-white flex-col z-20 shadow-xs">
-        {renderSidebarContent()}
-      </aside>
+    <div className="min-h-screen bg-[#f9fafb] text-slate-900 font-sans flex flex-col">
+      {/* ======================================================== */}
+      {/* 1. TOP YOUTUBE-STYLE CLEAN NAVIGATION HEADER             */}
+      {/* ======================================================== */}
+      <header className="sticky top-0 z-40 h-14 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 flex items-center justify-between gap-4">
+        {/* Left: Back & Breadcrumb */}
+        <div className="flex items-center gap-3 min-w-0">
+          <Link
+            href={`/dashboard/courses/${courseSlug}`}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-slate-700 hover:text-slate-950 hover:bg-slate-100 transition-colors shrink-0"
+            title="कोर्स अवलोकन पर वापस जाएं"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">डैशबोर्ड</span>
+          </Link>
 
-      {/* Mobile Drawer (Overlay only when open on < md screens) */}
-      {mobileDrawerOpen && (
-        <div className="fixed inset-0 z-50 md:hidden bg-black/50 backdrop-blur-xs flex">
-          <div className="w-80 max-w-[85%] h-full bg-white shadow-2xl relative flex flex-col">
-            <button
-              type="button"
-              onClick={() => setMobileDrawerOpen(false)}
-              className="absolute top-3 right-3 p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
-            >
-              <X className="h-4 w-4" />
-            </button>
-            {renderSidebarContent()}
+          <div className="h-4 w-px bg-slate-200 hidden sm:block shrink-0" />
+
+          <div className="min-w-0 flex items-center gap-2">
+            <span className="text-xs font-bold text-blue-700 shrink-0 font-headline hidden md:inline">
+              छैगांव उद्यमी
+            </span>
+            <span className="text-slate-300 hidden md:inline">•</span>
+            <h1 className="text-xs sm:text-sm font-semibold text-slate-900 truncate">
+              {courseTitle}
+            </h1>
           </div>
-          <div className="flex-1" onClick={() => setMobileDrawerOpen(false)} />
         </div>
+
+        {/* Right: Quick Actions */}
+        <div className="flex items-center gap-2 shrink-0">
+          {/* Mobile Playlist Toggle Button */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsMobilePlaylistOpen(true)}
+            className="lg:hidden h-8 px-2.5 text-xs font-semibold gap-1.5 border-slate-200 rounded-full"
+          >
+            <Layers className="h-3.5 w-3.5 text-blue-600" />
+            <span>पाठ्यक्रम ({allLessons.length})</span>
+          </Button>
+
+          {/* Mark Complete Pill Button */}
+          <Button
+            size="sm"
+            onClick={() => activeLesson && markLessonComplete(activeLesson.id)}
+            className={`h-8 px-3.5 text-xs font-semibold rounded-full gap-1.5 transition-all shadow-2xs ${
+              isCurrentCompleted
+                ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+                : "bg-slate-900 hover:bg-slate-800 text-white"
+            }`}
+          >
+            <Check className="h-3.5 w-3.5" />
+            <span>{isCurrentCompleted ? "पूर्ण है" : "पूर्ण चिह्नित करें"}</span>
+          </Button>
+
+          {/* Certificate Download Pill in Header when 100% completed */}
+          {completionPercentage === 100 && (
+            <Link href="/certificates/CHU-SAMPLE-2026" target="_blank">
+              <Button
+                size="sm"
+                className="h-8 px-3 text-xs font-bold rounded-full bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 shadow-2xs"
+                title="आधिकारिक प्रमाण पत्र डाउनलोड करें"
+              >
+                <Award className="h-3.5 w-3.5 fill-white text-emerald-600" />
+                <span>प्रमाण पत्र</span>
+              </Button>
+            </Link>
+          )}
+
+          {/* Theater Mode Button on Desktop */}
+          <button
+            type="button"
+            onClick={() => setIsTheaterMode((prev) => !prev)}
+            className="hidden lg:flex items-center justify-center h-8 w-8 rounded-full hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors"
+            title={isTheaterMode ? "डिफ़ॉल्ट दृश्य (Default View - T)" : "थिएटर मोड (Theater Mode - T)"}
+          >
+            <Tv className="h-4 w-4" />
+          </button>
+        </div>
+      </header>
+
+      {/* ======================================================== */}
+      {/* 2. THEATER MODE FULL-WIDTH VIDEO STRIP (IF ACTIVE)       */}
+      {/* ======================================================== */}
+      {isTheaterMode && !isQuizActive && (
+        <section className="w-full bg-black py-2 sm:py-4 flex justify-center border-b border-slate-900">
+          <div className="w-full max-w-7xl px-0 sm:px-4">
+            {/* Embedded Theater Player */}
+            {renderVideoPlayerStage()}
+          </div>
+        </section>
       )}
 
-      {/* ---------------------------------------------------- */}
-      {/* 2. RIGHT MAIN LECTURE & MEDIA WORKSPACE              */}
-      {/* ---------------------------------------------------- */}
-      <main className="flex-1 flex flex-col h-full bg-slate-100 overflow-hidden">
-        {/* Top Navbar */}
-        <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between shrink-0 z-10 shadow-2xs">
-          <div className="flex items-center gap-3 min-w-0">
-            {/* Mobile Hamburger Drawer Trigger */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setMobileDrawerOpen(true)}
-              className="md:hidden p-2 h-9 w-9 border-slate-200 text-slate-700"
-              title="पाठ्यक्रम सूची खोलें"
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
+      {/* ======================================================== */}
+      {/* 3. MAIN YOUTUBE 2-COLUMN WORKSPACE                       */}
+      {/* ======================================================== */}
+      <main className="flex-1 max-w-[1780px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-5">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 xl:gap-8 items-start">
+          
+          {/* ---------------------------------------------------- */}
+          {/* PRIMARY COLUMN (Video/Quiz, Info, Description, Tabs) */}
+          {/* ---------------------------------------------------- */}
+          <div className={`space-y-5 ${isTheaterMode && !isQuizActive ? "lg:col-span-12" : "lg:col-span-8 xl:col-span-8 2xl:col-span-9"}`}>
+            
+            {/* Video Player OR Quiz View (Replaces Video Completely) */}
+            {(!isTheaterMode || isQuizActive) && renderVideoPlayerStage()}
 
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-[10px] bg-blue-50 text-blue-700 border-blue-200 font-semibold uppercase tracking-wider">
+            {/* Video Title & Meta Bar */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 text-xs font-semibold text-blue-700">
+                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 uppercase tracking-wide text-[10px]">
                   {courseCategory}
                 </Badge>
-                <span className="text-xs text-slate-400 hidden sm:inline">•</span>
-                <span className="text-xs font-medium text-slate-500 hidden sm:inline truncate">
+                <span>•</span>
+                <span className="text-slate-500 font-medium">
                   {activeModule?.title}
                 </span>
+                <span>•</span>
+                <span className="text-slate-500 font-mono">
+                  पाठ {currentIndex + 1} / {allLessons.length}
+                </span>
               </div>
-              <h1 className="text-sm sm:text-base font-bold text-slate-900 truncate mt-0.5">
+
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
                 {activeLesson?.title || courseTitle}
               </h1>
             </div>
-          </div>
 
-          {/* Quick Header Action Buttons */}
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              variant={isCompleted ? "outline" : "default"}
-              onClick={() => activeLesson && markLessonComplete(activeLesson.id)}
-              className={`h-9 text-xs font-semibold gap-1.5 transition-all ${
-                isCompleted
-                  ? "border-emerald-300 text-emerald-800 bg-emerald-50 hover:bg-emerald-100"
-                  : "bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
-              }`}
-            >
-              <Check className="h-3.5 w-3.5" />
-              <span>{isCompleted ? "पूर्ण है (Completed)" : "पूर्ण चिह्नित करें"}</span>
-            </Button>
-
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setShowExerciseModal(true)}
-              className="h-9 text-xs font-semibold border-slate-200 text-slate-700 hover:bg-slate-50 gap-1.5"
-            >
-              <Download className="h-3.5 w-3.5 text-blue-600" />
-              <span className="hidden sm:inline">अभ्यास फाइलें (Files)</span>
-            </Button>
-          </div>
-        </header>
-
-        {/* Scrollable Main Player & Tabbed Content */}
-        <div className="flex-1 overflow-y-auto">
-          {/* Main Stage Display (Video Player or Quiz) */}
-          <div className="w-full bg-slate-950 p-3 sm:p-6 flex items-center justify-center">
-            {activeLesson?.type === "QUIZ" || activeLesson?.type === "ASSESSMENT" || activeLesson?.quiz ? (
-              // Quiz View (Matching Image 5)
-              <div className="w-full max-w-4xl min-h-[460px]">
-                <InteractiveQuizView
-                  quizId={activeLesson.quiz?.id || activeLesson.id}
-                  quizTitle={activeLesson.title}
-                  passingPercentage={activeLesson.quiz?.passingPercentage || 70}
-                  enrollmentId={enrollmentId}
-                  questions={
-                    activeLesson.quiz?.questions || [
-                      {
-                        id: "q-1",
-                        question:
-                          "प्रधानमंत्री रोजगार सृजन कार्यक्रम (PMEGP) के तहत ग्रामीण क्षेत्र में सामान्य वर्ग को कितनी मार्जिन मनी सब्सिडी मिलती है?",
-                        marks: 1,
-                        order: 1,
-                        options: [
-                          {
-                            id: "opt-1",
-                            optionText: "15% पूंजीगत सब्सिडी",
-                            isCorrect: false,
-                            explanation: "15% सब्सिडी केवल शहरी क्षेत्र के सामान्य वर्ग के लिए निर्धारित है।",
-                          },
-                          {
-                            id: "opt-2",
-                            optionText: "25% पूंजीगत सब्सिडी",
-                            isCorrect: true,
-                            explanation:
-                              "सही उत्तर! PMEGP दिशानिर्देशों के तहत ग्रामीण क्षेत्र में सामान्य वर्ग को 25% मार्जिन मनी सब्सिडी प्रदान की जाती है।",
-                          },
-                          {
-                            id: "opt-3",
-                            optionText: "35% पूंजीगत सब्सिडी",
-                            isCorrect: false,
-                            explanation:
-                              "35% सब्सिडी ग्रामीण क्षेत्र के विशेष वर्ग (SC/ST/OBC/महिला/दिव्यांग) हेतु देय होती है।",
-                          },
-                          {
-                            id: "opt-4",
-                            optionText: "10% पूंजीगत सब्सिडी",
-                            isCorrect: false,
-                            explanation: "10% लाभार्थी का स्वयं का अंशदान होता है, सब्सिडी नहीं।",
-                          },
-                        ],
-                      },
-                    ]
-                  }
-                  onComplete={() => activeLesson && markLessonComplete(activeLesson.id)}
-                  onNextLesson={handleNext}
-                />
-              </div>
-            ) : (
-              // HD Video Lecture Player (Matching Image 3)
-              <div className="w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl relative group flex items-center justify-center border border-slate-800">
-                <video
-                  ref={videoRef}
-                  className="w-full h-full object-contain"
-                  src={activeLesson?.videoUrl || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"}
-                  poster={activeLesson?.videoThumbnail || "/images/dairy-course.jpg"}
-                  onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
-                  onLoadedMetadata={(e) => {
-                    setDuration(e.currentTarget.duration || 300);
-                    setVideoHasError(false);
-                  }}
-                  onError={() => {
-                    // Prevent unhandled rejection and mark error state cleanly
-                    setVideoHasError(true);
-                    setIsPlaying(false);
-                  }}
-                  onEnded={() => {
-                    setIsPlaying(false);
-                    if (activeLesson) markLessonComplete(activeLesson.id);
-                  }}
-                  playsInline
-                />
-
-                {/* Subtitle Overlay Banner (Image 3 Feature) */}
-                {showSubtitles && (
-                  <div className="absolute bottom-16 inset-x-0 mx-auto max-w-2xl text-center px-4 pointer-events-none transition-opacity duration-300">
-                    <span className="inline-block px-4 py-1.5 rounded-lg bg-black/85 text-white font-medium text-xs sm:text-sm backdrop-blur-xs border border-white/10 shadow-lg">
-                      {currentTime < 10
-                        ? `नमस्कार, छैगांव माखन उद्यमी मिशन में आपका स्वागत है।`
-                        : currentTime < 25
-                        ? `आज हम ${activeLesson?.title || "इस सत्र"} के व्यावहारिक पहलुओं को समझेंगे।`
-                        : `परियोजना रिपोर्ट एवं बैंक ऋण के मानकों का समुचित पालन आवश्यक है।`}
-                    </span>
+            {/* YouTube-Style Channel / Instructor & Actions Row */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1 pb-3 border-b border-slate-200/80">
+              {/* Instructor / Channel Info */}
+              <div className="flex items-center gap-3">
+                <Avatar className="h-11 w-11 border border-slate-200 bg-blue-100 text-blue-900 font-bold shrink-0">
+                  <AvatarFallback>RP</AvatarFallback>
+                </Avatar>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-tight">
+                      {instructor.name}
+                    </h3>
+                    <CheckCircle2 className="h-4 w-4 text-blue-600 fill-blue-50" />
                   </div>
-                )}
-
-                {/* Center Play Overlay Button when paused or on fallback */}
-                {!isPlaying && (
-                  <button
-                    type="button"
-                    onClick={togglePlay}
-                    className="absolute inset-0 m-auto h-20 w-20 rounded-full bg-blue-600/90 text-white flex items-center justify-center shadow-2xl hover:scale-110 hover:bg-blue-600 transition-all backdrop-blur-xs cursor-pointer"
-                  >
-                    <Play className="h-8 w-8 fill-white ml-1" />
-                  </button>
-                )}
-
-                {/* Custom Video Controls Bar */}
-                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2">
-                  {/* Progress Bar Scrubber */}
-                  <div
-                    className="w-full bg-white/20 hover:bg-white/30 h-1.5 rounded-full cursor-pointer relative"
-                    onClick={(e) => {
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      const pos = (e.clientX - rect.left) / rect.width;
-                      if (videoRef.current && duration > 0) {
-                        videoRef.current.currentTime = pos * duration;
-                        setCurrentTime(pos * duration);
-                      }
-                    }}
-                  >
-                    <div
-                      className="bg-blue-500 h-full rounded-full relative"
-                      style={{ width: `${(currentTime / (duration || 1)) * 100}%` }}
-                    />
-                  </div>
-
-                  {/* Buttons Row */}
-                  <div className="flex items-center justify-between text-xs text-white">
-                    <div className="flex items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={togglePlay}
-                        className="hover:text-blue-400 cursor-pointer p-1"
-                      >
-                        {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (videoRef.current) {
-                            videoRef.current.muted = !isMuted;
-                            setIsMuted(!isMuted);
-                          }
-                        }}
-                        className="hover:text-blue-400 cursor-pointer p-1"
-                      >
-                        {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
-                      </button>
-
-                      <span className="font-mono text-[11px] text-slate-300">
-                        {formatTime(currentTime)} / {formatTime(duration)}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      {/* Playback speed switcher */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const speeds = [1, 1.25, 1.5, 2];
-                          const nextIdx = (speeds.indexOf(playbackSpeed) + 1) % speeds.length;
-                          const nextSpeed = speeds[nextIdx];
-                          setPlaybackSpeed(nextSpeed);
-                          if (videoRef.current) videoRef.current.playbackRate = nextSpeed;
-                        }}
-                        className="hover:text-blue-400 font-mono text-[11px] font-semibold px-2 py-0.5 rounded bg-white/10"
-                      >
-                        {playbackSpeed}x
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => setShowSubtitles((prev) => !prev)}
-                        className={`hover:text-white flex items-center gap-1 cursor-pointer ${
-                          showSubtitles ? "text-blue-400" : "text-slate-400"
-                        }`}
-                        title="सबटाइटल्स चालू/बंद करें"
-                      >
-                        <Subtitles className="h-4 w-4" />
-                        <span className="text-[10px] font-semibold">CC</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (videoRef.current) {
-                            if (document.fullscreenElement) {
-                              document.exitFullscreen().catch(() => {});
-                            } else {
-                              videoRef.current.requestFullscreen().catch(() => {});
-                            }
-                          }
-                        }}
-                        className="hover:text-blue-400 cursor-pointer p-1"
-                      >
-                        <Maximize2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
+                  <p className="text-xs text-slate-500 font-medium line-clamp-1">
+                    {instructor.title}
+                  </p>
                 </div>
               </div>
-            )}
-          </div>
 
-          {/* Under-Player Navigation Strip */}
-          <div className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between gap-4">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={!prevLesson}
-              onClick={handlePrev}
-              className="text-xs font-semibold text-slate-700 border-slate-300 hover:bg-slate-50 gap-1.5"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              <span>पिछला पाठ (Previous)</span>
-            </Button>
-
-            <span className="text-xs font-semibold text-slate-500 font-mono">
-              पाठ {currentIndex + 1} / {allLessons.length}
-            </span>
-
-            <Button
-              size="sm"
-              disabled={!nextLesson}
-              onClick={handleNext}
-              className="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white gap-1.5 shadow-xs"
-            >
-              <span>अगला पाठ (Next)</span>
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-
-          {/* 3-Tab Interface (Built with shadcn Tabs) */}
-          <div className="p-6 sm:p-8 max-w-5xl mx-auto">
-            <Tabs defaultValue="overview" className="w-full space-y-6">
-              {/* Tabs List */}
-              <TabsList className="bg-slate-200/70 p-1 rounded-xl h-11 w-full sm:w-auto grid grid-cols-3 sm:inline-flex">
-                <TabsTrigger
-                  value="overview"
-                  className="rounded-lg text-xs sm:text-sm font-bold data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-xs"
+              {/* YouTube Action Pill Buttons */}
+              <div className="flex items-center gap-2 flex-wrap">
+                {/* Previous Lesson */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!prevLesson}
+                  onClick={handlePrev}
+                  className="h-9 px-3.5 text-xs font-semibold rounded-full border-slate-200 text-slate-700 hover:bg-slate-100 gap-1"
+                  title="पिछला पाठ (Previous)"
                 >
-                  अवलोकन (Overview)
-                </TabsTrigger>
-                <TabsTrigger
-                  value="notebook"
-                  className="rounded-lg text-xs sm:text-sm font-bold data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-xs flex items-center gap-1.5"
+                  <ChevronLeft className="h-4 w-4" />
+                  <span className="hidden sm:inline">पिछला</span>
+                </Button>
+
+                {/* Next Lesson */}
+                <Button
+                  size="sm"
+                  disabled={!nextLesson}
+                  onClick={handleNext}
+                  className="h-9 px-3.5 text-xs font-semibold rounded-full bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-200 gap-1"
+                  title="अगला पाठ (Next)"
                 >
-                  <span>नोटबुक (Notebook)</span>
-                  {notes.length > 0 && (
-                    <Badge variant="secondary" className="text-[10px] bg-blue-100 text-blue-800 h-4 px-1.5">
-                      {notes.length}
-                    </Badge>
+                  <span>अगला</span>
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+
+                {/* Module Quiz Toggle Button: Click to hide video and show Quiz */}
+                {!isQuizActive && currentModuleQuizLesson && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setActiveLessonId(currentModuleQuizLesson.id)}
+                    className="h-9 px-3.5 text-xs font-semibold rounded-full border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100 gap-1.5 shadow-2xs"
+                    title="वीडियो छुपाएं और इस मॉड्यूल का क्विज हल करें"
+                  >
+                    <Award className="h-4 w-4 text-amber-600" />
+                    <span>क्विज हल करें</span>
+                  </Button>
+                )}
+
+                {/* Return to Video Lecture Button when Quiz is active */}
+                {isQuizActive && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const videoLesson = allLessons.find(
+                        (l) => l.moduleId === activeLesson?.moduleId && l.type !== "QUIZ" && l.type !== "ASSESSMENT"
+                      ) || allLessons[0];
+                      if (videoLesson) setActiveLessonId(videoLesson.id);
+                    }}
+                    className="h-9 px-3.5 text-xs font-semibold rounded-full border-blue-200 bg-blue-50 text-blue-900 hover:bg-blue-100 gap-1.5 shadow-2xs"
+                    title="क्विज से वापस वीडियो व्याख्यान देखें"
+                  >
+                    <VideoIcon className="h-4 w-4 text-blue-600" />
+                    <span>वीडियो देखें</span>
+                  </Button>
+                )}
+
+                {/* Download Exercise Files Pill */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowExerciseModal(true)}
+                  className="h-9 px-3.5 text-xs font-semibold rounded-full border-slate-200 text-slate-700 hover:bg-slate-100 gap-1.5"
+                >
+                  <Download className="h-4 w-4 text-blue-600" />
+                  <span className="hidden sm:inline">फाइलें</span>
+                </Button>
+
+                {/* Share Pill Button */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyLink}
+                  className="h-9 px-3 text-xs font-semibold rounded-full border-slate-200 text-slate-700 hover:bg-slate-100 gap-1.5"
+                  title="पाठ लिंक कॉपी करें"
+                >
+                  {copiedLink ? (
+                    <>
+                      <CheckCheck className="h-4 w-4 text-emerald-600" />
+                      <span className="text-emerald-700">कॉपी हुआ</span>
+                    </>
+                  ) : (
+                    <>
+                      <Share2 className="h-4 w-4" />
+                      <span>शेयर</span>
+                    </>
                   )}
-                </TabsTrigger>
-                <TabsTrigger
-                  value="transcript"
-                  className="rounded-lg text-xs sm:text-sm font-bold data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-xs"
-                >
-                  ट्रांसक्रिप्ट (Transcript)
-                </TabsTrigger>
-              </TabsList>
+                </Button>
+              </div>
+            </div>
 
-              {/* TAB 1: OVERVIEW */}
-              <TabsContent value="overview" className="space-y-6">
-                <Card className="border-slate-200/90 shadow-xs">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-xl font-bold text-slate-900 leading-snug">
-                      {activeLesson?.title}
-                    </CardTitle>
-                    <p className="text-sm text-slate-600 pt-1 leading-relaxed">
-                      {activeLesson?.description ||
-                        "इस व्याख्यान में ग्रामीण उद्यम संचालन, लागत नियंत्रण, सरकारी योजनाओं की पात्रता तथा बैंक ऋण स्वीकृति के व्यावहारिक गुर सिखाए गए हैं।"}
-                    </p>
-                  </CardHeader>
+            {/* YouTube-Style Clean Description Box */}
+            <div
+              onClick={() => setIsDescriptionExpanded((prev) => !prev)}
+              className="p-4 sm:p-5 rounded-2xl bg-slate-100/90 hover:bg-slate-100 transition-colors text-slate-800 text-sm cursor-pointer space-y-3"
+            >
+              {/* Meta stats line */}
+              <div className="flex items-center gap-3 text-xs font-bold text-slate-700 flex-wrap">
+                <span className="font-mono">
+                  अवधि: {formatTime(activeLesson?.duration || 300)}
+                </span>
+                <span>•</span>
+                <span>अध्याय {activeLesson?.order || 1}</span>
+                <span>•</span>
+                <span className="text-blue-700">#ग्रामीण_उद्यमिता #छैगांव_माखन</span>
+              </div>
 
-                  <CardContent className="space-y-6 pt-2">
-                    {/* Key Takeaways */}
-                    <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/70 space-y-2">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                        <Sparkles className="size-3.5 text-blue-600" />
-                        <span>इस पाठ के मुख्य बिंदु (Key Takeaways)</span>
-                      </h4>
-                      <ul className="text-xs sm:text-sm text-slate-600 space-y-1.5 pt-1">
-                        <li className="flex items-start gap-2">
-                          <Check className="size-4 text-emerald-600 shrink-0 mt-0.5" />
-                          <span>विस्तृत परियोजना रिपोर्ट (DPR) तैयार करने के मानक और आवश्यक दस्तावेज।</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <Check className="size-4 text-emerald-600 shrink-0 mt-0.5" />
-                          <span>DIC खंडवा एवं PMEGP के अंतर्गत 25% से 35% पूंजीगत सब्सिडी के आवेदन नियम।</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <Check className="size-4 text-emerald-600 shrink-0 mt-0.5" />
-                          <span>स्थानीय बाजार व आपूर्ति श्रृंखला में मूल्य संवर्धन (Value Addition) के तरीके।</span>
-                        </li>
-                      </ul>
+              {/* Description Body */}
+              <div className={`space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed ${!isDescriptionExpanded ? "line-clamp-2" : ""}`}>
+                <p>
+                  {activeLesson?.description ||
+                    "इस व्यावहारिक सत्र में ग्रामीण उद्यम स्थापना, मशीनरी चयन, लागत आकलन, डीआईसी खंडवा व नाबार्ड की अनुदान योजनाओं की विस्तृत जानकारी दी गई है।"}
+                </p>
+
+                {isDescriptionExpanded && (
+                  <div className="pt-2 border-t border-slate-200/70 space-y-3">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                      <Sparkles className="h-3.5 w-3.5 text-blue-600" />
+                      <span>इस सत्र के मुख्य बिंदु (Key Takeaways):</span>
+                    </h4>
+                    <ul className="space-y-1.5 text-xs sm:text-sm text-slate-600 list-disc list-inside">
+                      <li>कस्टम हायरिंग सेंटर एवं कृषि यंत्र बैंक की विस्तृत परियोजना रिपोर्ट (DPR)।</li>
+                      <li>रोटावेटर, थ्रेशर, कल्टीवेटर व सोलर ड्रायर के भाड़ा दर निर्धारण सूत्र।</li>
+                      <li>PMEGP एवं राज्य कृषि अभियांत्रिकी योजनाओं के तहत 40% तक पूंजीगत अनुदान नियम।</li>
+                    </ul>
+
+                    <div className="pt-2 text-xs text-slate-500">
+                      प्रशिक्षक: <strong className="text-slate-800">{instructor.name}</strong> • {instructor.bio}
                     </div>
+                  </div>
+                )}
+              </div>
 
-                    {/* Instructor Profile Card */}
-                    <div className="p-5 rounded-xl border border-slate-200 bg-white flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                      <Avatar className="h-14 w-14 border-2 border-blue-200 bg-blue-100 text-blue-800 font-bold shrink-0">
-                        <AvatarFallback>RP</AvatarFallback>
-                      </Avatar>
-                      <div className="space-y-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h4 className="font-bold text-slate-900 text-sm sm:text-base">
-                            {instructor.name}
-                          </h4>
-                          <Badge variant="outline" className="text-[10px] text-blue-700 bg-blue-50 border-blue-200">
-                            प्रमाणित मार्गदर्शक
-                          </Badge>
+              {/* Show more / Show less toggle */}
+              <button
+                type="button"
+                className="text-xs font-bold text-slate-900 hover:underline flex items-center gap-1 pt-0.5"
+              >
+                <span>{isDescriptionExpanded ? "कम दिखाएं (Show less)" : "और दिखाएं (Show more)..."}</span>
+                {isDescriptionExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+              </button>
+            </div>
+
+            {/* Clean 4-Tab Navigation Below Description */}
+            <div className="pt-2">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full space-y-5">
+                <TabsList className="bg-slate-100 p-1 rounded-full h-10 w-full sm:w-auto inline-flex overflow-x-auto no-scrollbar">
+                  <TabsTrigger
+                    value="overview"
+                    className="rounded-full px-4 text-xs font-semibold data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-xs"
+                  >
+                    अवलोकन (Overview)
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="transcript"
+                    className="rounded-full px-4 text-xs font-semibold data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-xs"
+                  >
+                    ट्रांसक्रिप्ट (Transcript)
+                  </TabsTrigger>
+                </TabsList>
+
+                {/* TAB 1: OVERVIEW */}
+                <TabsContent value="overview" className="space-y-4">
+                  {/* Certificate Celebration Card (when course is completed) */}
+                  {completionPercentage === 100 && (
+                    <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border border-emerald-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-in fade-in-50">
+                      <div className="flex items-center gap-3.5">
+                        <div className="size-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                          <Award className="size-6 fill-white" />
                         </div>
-                        <p className="text-xs font-semibold text-slate-500">{instructor.title}</p>
-                        <p className="text-xs text-slate-600 leading-relaxed pt-0.5">{instructor.bio}</p>
-                      </div>
-                    </div>
-
-                    {/* Related to this Course Cards (Image 3 Feature) */}
-                    <div className="space-y-3 pt-2">
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                        संबंधित संसाधन व सहायता (Related to this Course)
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div
-                          onClick={() => setShowExerciseModal(true)}
-                          className="p-4 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50/40 transition-all cursor-pointer flex items-center justify-between group bg-white shadow-2xs"
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className="p-2.5 rounded-lg bg-emerald-50 text-emerald-700 group-hover:scale-105 transition-transform">
-                              <Download className="h-5 w-5" />
-                            </div>
-                            <div>
-                              <h4 className="text-sm font-bold text-slate-900">अभ्यास फाइलें (Exercise Files)</h4>
-                              <p className="text-xs text-slate-500">DPR एक्सेल मॉडल, चेकलिस्ट व प्रपत्र</p>
-                            </div>
+                        <div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h4 className="text-sm sm:text-base font-bold text-emerald-950">
+                              बधाई हो! आपने यह पाठ्यक्रम पूर्ण कर लिया है
+                            </h4>
+                            <Badge className="bg-emerald-600 text-white text-[10px] font-bold">100% Certified</Badge>
                           </div>
-                          <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-blue-600" />
-                        </div>
-
-                        <div className="p-4 rounded-xl border border-slate-200 bg-white shadow-2xs flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="p-2.5 rounded-lg bg-blue-50 text-blue-700">
-                              <Award className="h-5 w-5" />
-                            </div>
-                            <div>
-                              <h4 className="text-sm font-bold text-slate-900">डीआईसी व नाबार्ड प्रमाणन</h4>
-                              <p className="text-xs text-slate-500">सभी अध्याय पूर्ण करने पर डिजिटल प्रमाण पत्र</p>
-                            </div>
-                          </div>
-                          <Badge variant="secondary" className="text-[10px] text-slate-700 bg-slate-100">
-                            70% न्यूनतम
-                          </Badge>
+                          <p className="text-xs text-emerald-800 pt-0.5">
+                            आपका आधिकारिक डिजिटल उद्यमिता प्रमाण पत्र तैयार है। इसे तुरंत डाउनलोड करें अथवा सत्यापन लिंक साझा करें।
+                          </p>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
 
-              {/* TAB 2: NOTEBOOK */}
-              <TabsContent value="notebook" className="space-y-4">
-                <Card className="border-slate-200 shadow-xs">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-lg font-bold text-slate-900">
-                      विद्यार्थी नोटबुक (Personal Notes)
-                    </CardTitle>
-                    <p className="text-xs text-slate-500">
-                      वीडियो देखते समय मुख्य बिंदु नोट करें। आपके नोट्स सुरक्षित रखे जाएंगे।
-                    </p>
-                  </CardHeader>
-
-                  <CardContent className="space-y-4">
-                    {/* Add Note Input */}
-                    <div className="space-y-2">
-                      <Textarea
-                        value={newNoteText}
-                        onChange={(e) => setNewNoteText(e.target.value)}
-                        placeholder={`समय ${formatTime(currentTime)} पर अपने विचार या प्रश्न लिखें...`}
-                        className="p-3 text-sm resize-none h-24 border-slate-200 bg-slate-50/50"
-                      />
-                      <div className="flex items-center justify-between pt-1">
-                        <span className="text-xs text-slate-500 font-mono">
-                          वर्तमान समय: {formatTime(currentTime)}
-                        </span>
+                      <div className="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
                         <Button
+                          type="button"
+                          onClick={handleCopyCertVerify}
+                          variant="outline"
                           size="sm"
-                          disabled={!newNoteText.trim()}
-                          onClick={handleAddNote}
-                          className="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white gap-1.5"
+                          className="h-9 px-3.5 text-xs font-semibold rounded-full border-emerald-300 bg-white text-emerald-800 hover:bg-emerald-100 gap-1.5 shadow-2xs cursor-pointer"
+                          title="सत्यापन लिंक कॉपी करें"
                         >
-                          <Plus className="h-4 w-4" />
-                          <span>नोट सहेजें</span>
+                          {copiedCertVerify ? (
+                            <>
+                              <Check className="size-3.5 text-emerald-600" />
+                              <span className="font-bold">सत्यापन लिंक कॉपी हुआ!</span>
+                            </>
+                          ) : (
+                            <>
+                              <ShieldCheck className="size-3.5 text-blue-600" />
+                              <span>सत्यापन लिंक कॉपी</span>
+                            </>
+                          )}
                         </Button>
+
+                        <Link href="/certificates/CHU-SAMPLE-2026" target="_blank">
+                          <Button
+                            size="sm"
+                            className="h-9 px-4 text-xs font-bold rounded-full bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 shadow-xs cursor-pointer"
+                          >
+                            <Download className="size-3.5" />
+                            <span>प्रमाण पत्र डाउनलोड</span>
+                          </Button>
+                        </Link>
                       </div>
                     </div>
+                  )}
 
-                    {/* Notes List */}
-                    <div className="space-y-3 pt-3">
-                      {notes.length === 0 ? (
-                        <div className="p-8 text-center border border-dashed border-slate-200 rounded-xl bg-slate-50">
-                          <BookOpen className="h-8 w-8 text-slate-300 mx-auto mb-2" />
-                          <p className="text-sm text-slate-500">इस पाठ के लिए अभी कोई नोट नहीं जोड़ा गया है।</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div
+                      onClick={() => setShowExerciseModal(true)}
+                      className="p-4 rounded-2xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-xs transition-all cursor-pointer flex items-center justify-between group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-700 group-hover:scale-105 transition-transform">
+                          <Download className="h-5 w-5" />
                         </div>
-                      ) : (
-                        notes.map((note) => (
-                          <div
-                            key={note.id}
-                            className="p-4 rounded-xl border border-slate-200 bg-white shadow-2xs flex items-start justify-between gap-4"
-                          >
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-2">
-                                <Badge variant="outline" className="text-[10px] font-mono text-blue-700 bg-blue-50 border-blue-200">
-                                  {formatTime(note.time)}
-                                </Badge>
-                                <span className="text-[11px] text-slate-400">{note.date}</span>
-                              </div>
-                              <p className="text-sm text-slate-800 whitespace-pre-wrap">{note.text}</p>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => handleDeleteNote(note.id)}
-                              className="text-slate-400 hover:text-red-500 p-1 cursor-pointer"
-                              title="नोट हटाएं"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </div>
-                        ))
-                      )}
+                        <div>
+                          <h4 className="text-sm font-bold text-slate-900">अभ्यास फाइलें (Exercise Files)</h4>
+                          <p className="text-xs text-slate-500">DPR एक्सेल मॉडल, चेकलिस्ट व प्रपत्र</p>
+                        </div>
+                      </div>
+                      <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-blue-600" />
                     </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
 
-              {/* TAB 3: TRANSCRIPT */}
-              <TabsContent value="transcript">
-                <Card className="border-slate-200 shadow-xs">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-lg font-bold text-slate-900">
-                      पाठ ट्रांसक्रिप्ट (Lesson Transcript)
-                    </CardTitle>
-                    <p className="text-xs text-slate-500">
-                      व्याख्यान की पूरी लिखित सामग्री द्विभाषी (हिंदी/अंग्रेजी) रूप में पढ़ें।
-                    </p>
-                  </CardHeader>
-
-                  <CardContent className="space-y-4 text-sm text-slate-700 leading-relaxed">
-                    <div className="p-3 rounded-lg bg-slate-50 border border-slate-200/80 font-mono text-xs text-blue-700 inline-block">
-                      [00:00 - 01:15] परिचय एवं उद्यमिता की अवधारणा
+                    <div className="p-4 rounded-2xl border border-slate-200 bg-white flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2.5 rounded-xl bg-blue-50 text-blue-700">
+                          <Award className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-bold text-slate-900">डीआईसी व नाबार्ड प्रमाणन</h4>
+                          <p className="text-xs text-slate-500">सभी अध्याय पूर्ण करने पर डिजिटल प्रमाण पत्र</p>
+                        </div>
+                      </div>
+                      <Badge variant="secondary" className="text-[10px] text-slate-700 bg-slate-100">
+                        70% न्यूनतम
+                      </Badge>
                     </div>
-                    <p>
-                      नमस्कार उद्यमी साथियों! छैगांव माखन ब्लॉक और निमाड़ क्षेत्र के सभी महत्वाकांक्षी भाइयों और बहनों का इस विशेष प्रशिक्षण सत्र में हार्दिक अभिनंदन।
-                    </p>
+                  </div>
+                </TabsContent>
 
-                    <div className="p-3 rounded-lg bg-slate-50 border border-slate-200/80 font-mono text-xs text-blue-700 inline-block">
-                      [01:15 - 02:45] विस्तृत परियोजना रिपोर्ट (DPR) तैयार करना
+                {/* TAB 2: TRANSCRIPT WITH CLICKABLE TIME JUMPS */}
+                <TabsContent value="transcript" className="space-y-4">
+                  <div className="p-5 rounded-2xl border border-slate-200 bg-white space-y-4 shadow-2xs text-xs sm:text-sm text-slate-700 leading-relaxed">
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-900">पाठ ट्रांसक्रिप्ट (Lesson Transcript)</h4>
+                      <p className="text-xs text-slate-500">किसी भी समय पर क्लिक करके उस भाग पर जाएं।</p>
                     </div>
-                    <p>
-                      जब हम किसी नए सूक्ष्म उद्यम या कृषि-आधारित प्रसंस्करण इकाई की नींव रखते हैं, तो सबसे महत्वपूर्ण पहलू होता है विस्तृत परियोजना रिपोर्ट (DPR) तैयार करना। बैंक ऋण के मूल्यांकन में 70% ध्यान आपके कैश-फ्लो और ब्रेक-ईवन विश्लेषण पर होता है।
-                    </p>
 
-                    <div className="p-3 rounded-lg bg-slate-50 border border-slate-200/80 font-mono text-xs text-blue-700 inline-block">
-                      [02:45 - 04:10] सरकारी योजनाएं व सब्सिडी मानदंड
-                    </div>
-                    <p>
-                      प्रधानमंत्री रोजगार सृजन कार्यक्रम (PMEGP) तथा मुख्यमंत्री उद्यम क्रांति योजना में ऋण आवेदन प्रस्तुत करने से पूर्व यह सुनिश्चित करें कि आपके पास जीएसटी पंजीयन, उद्यम आधार तथा भूमि/परिसर का वैध अनुबंध उपलब्ध हो।
-                    </p>
+                    <div className="space-y-3.5 divide-y divide-slate-100">
+                      <div className="pt-2">
+                        <button
+                          type="button"
+                          onClick={() => seekTo(0)}
+                          className="font-mono text-xs font-bold text-blue-600 hover:underline mb-1 inline-block"
+                        >
+                          [00:00] परिचय एवं कस्टम हायरिंग सेंटर का उद्देश्य
+                        </button>
+                        <p className="text-slate-600">
+                          नमस्कार किसान व उद्यमी भाइयों! आज हम कस्टम हायरिंग सेंटर (Custom Hiring Center) की स्थापना, उपयुक्त मशीनरी चयन व ग्रामीण मांग का विश्लेषण करेंगे।
+                        </p>
+                      </div>
 
-                    <div className="p-3 rounded-lg bg-slate-50 border border-slate-200/80 font-mono text-xs text-blue-700 inline-block">
-                      [04:10 - समाप्ति] वित्तीय अनुमान एक्सेल मॉडल
+                      <div className="pt-3">
+                        <button
+                          type="button"
+                          onClick={() => seekTo(85)}
+                          className="font-mono text-xs font-bold text-blue-600 hover:underline mb-1 inline-block"
+                        >
+                          [01:25] उपकरण चयन: रोटावेटर, थ्रेशर एवं सोलर ड्रायर
+                        </button>
+                        <p className="text-slate-600">
+                          निमाड़ क्षेत्र में कपास, सोयाबीन, गेहूं और मिर्च की खेती मुख्य है। अतः 50HP ट्रैक्टर, मल्टीक्रॉप थ्रेशर, लेजर लैंड लेवलर व 500kg सोलर ड्रायर का संयोजन सर्वाधिक लाभदायक सिद्ध होता है।
+                        </p>
+                      </div>
+
+                      <div className="pt-3">
+                        <button
+                          type="button"
+                          onClick={() => seekTo(180)}
+                          className="font-mono text-xs font-bold text-blue-600 hover:underline mb-1 inline-block"
+                        >
+                          [03:00] बैंक ऋण व 40% सब्सिडी आवेदन नियम
+                        </button>
+                        <p className="text-slate-600">
+                          कृषि यंत्रीकरण उप-मिशन (SMAM) व PMEGP के तहत ₹10 लाख से ₹25 लाख तक की परियोजनाओं पर 40% तक पूंजीगत सब्सिडी का प्रावधान है। आवश्यक दस्तावेजों में आधार, जमीन की खतौनी और बैंक कोटेशन शामिल हैं।
+                        </p>
+                      </div>
                     </div>
-                    <p>
-                      इस पाठ के साथ संलग्न अभ्यास फाइल (Exercise File) में दिए गए एक्सेल टेम्पलेट की सहायता से आप अपने व्यवसाय का 3 वर्षीय लाभ-हानि अनुमान सरलता से बना सकते हैं।
-                    </p>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+          </div>
+
+          {/* ---------------------------------------------------- */}
+          {/* SIDEBAR COLUMN (YouTube-Style Playlist Column)       */}
+          {/* ---------------------------------------------------- */}
+          <div className={`hidden lg:block shrink-0 sticky top-20 ${
+            isTheaterMode
+              ? "lg:col-span-12 max-w-4xl mx-auto w-full"
+              : "lg:col-span-4 xl:col-span-4 2xl:col-span-3 h-[calc(100vh-6.5rem)]"
+          }`}>
+            {renderPlaylistSidebar()}
           </div>
         </div>
       </main>
 
-      {/* Exercise Files Download Modal */}
+      {/* ======================================================== */}
+      {/* 4. MOBILE PLAYLIST DRAWER (FOR SMALL SCREENS)            */}
+      {/* ======================================================== */}
+      {isMobilePlaylistOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden bg-black/60 backdrop-blur-xs flex">
+          <div className="w-full max-w-sm h-full bg-white shadow-2xl relative flex flex-col">
+            <div className="p-3 border-b border-slate-100 flex items-center justify-between">
+              <span className="text-sm font-bold text-slate-900">पाठ्यक्रम सामग्री</span>
+              <button
+                type="button"
+                onClick={() => setIsMobilePlaylistOpen(false)}
+                className="p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden">
+              {renderPlaylistSidebar()}
+            </div>
+          </div>
+          <div className="flex-1" onClick={() => setIsMobilePlaylistOpen(false)} />
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* 5. EXERCISE FILES MODAL                                  */}
+      {/* ======================================================== */}
       <ExerciseFilesModal
         isOpen={showExerciseModal}
         onClose={() => setShowExerciseModal(false)}
@@ -979,4 +1042,168 @@ export function DedicatedLearningPlayer({
       />
     </div>
   );
+
+  // Helper renderer: Video Player / Quiz Stage (Hides video completely if quiz is active)
+  function renderVideoPlayerStage() {
+    if (isQuizActive) {
+      // In place of video player: Render clean, dedicated Quiz View taking over the left player section
+      return (
+        <div className="w-full bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 sm:p-8 animate-in fade-in-50">
+          <div className="flex items-center justify-between pb-4 mb-6 border-b border-slate-100 flex-wrap gap-2">
+            <div className="flex items-center gap-3">
+              <div className="size-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center border border-amber-200/80 shadow-2xs">
+                <Award className="size-5" />
+              </div>
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 block">
+                  मॉड्यूल स्व-मूल्यांकन एवं प्रश्नोत्तरी
+                </span>
+                <h2 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                  {activeLesson?.title}
+                </h2>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="text-xs bg-amber-50/70 border-amber-200 text-amber-800 font-semibold">
+                उत्तीर्ण अंक: {activeLesson?.quiz?.passingPercentage || 70}%
+              </Badge>
+              {currentModuleQuizLesson && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    const videoLesson = allLessons.find(
+                      (l) => l.moduleId === activeLesson?.moduleId && l.type !== "QUIZ" && l.type !== "ASSESSMENT"
+                    ) || allLessons[0];
+                    if (videoLesson) setActiveLessonId(videoLesson.id);
+                  }}
+                  className="h-7 text-xs px-2.5 rounded-full border-slate-200 text-slate-600 hover:text-slate-900"
+                  title="वीडियो व्याख्यान देखें"
+                >
+                  <VideoIcon className="h-3.5 w-3.5 text-blue-600 mr-1" />
+                  <span>वीडियो देखें</span>
+                </Button>
+              )}
+            </div>
+          </div>
+
+          <InteractiveQuizView
+            quizId={activeLesson?.quiz?.id || activeLesson?.id || "quiz-default"}
+            quizTitle={activeLesson?.title || "प्रश्नोत्तरी"}
+            passingPercentage={activeLesson?.quiz?.passingPercentage || 70}
+            enrollmentId={enrollmentId}
+            questions={
+              activeLesson?.quiz?.questions && activeLesson.quiz.questions.length > 0
+                ? activeLesson.quiz.questions
+                : [
+                    {
+                      id: "q-1",
+                      question:
+                        "कस्टम हायरिंग सेंटर (CHC) योजना के अंतर्गत सामान्य वर्ग के लाभार्थियों को कितने प्रतिशत तक पूंजीगत अनुदान (Capital Subsidy) अनुमन्य है?",
+                      marks: 1,
+                      order: 1,
+                      options: [
+                        {
+                          id: "opt-1",
+                          optionText: "25% पूंजीगत अनुदान",
+                          isCorrect: false,
+                        },
+                        {
+                          id: "opt-2",
+                          optionText: "40% पूंजीगत अनुदान (अधिकतम ₹10 लाख)",
+                          isCorrect: true,
+                          explanation: "सही उत्तर! कृषि यंत्रीकरण उप-मिशन (SMAM) के तहत CHC स्थापना हेतु 40% तक पूंजीगत अनुदान देय है।",
+                        },
+                        {
+                          id: "opt-3",
+                          optionText: "10% केवल ब्याज अनुदान",
+                          isCorrect: false,
+                        },
+                        {
+                          id: "opt-4",
+                          optionText: "50% पूर्ण अनुदान",
+                          isCorrect: false,
+                        },
+                      ],
+                    },
+                  ]
+            }
+            onComplete={() => activeLesson && markLessonComplete(activeLesson.id)}
+            onNextLesson={handleNext}
+          />
+        </div>
+      );
+    }
+
+    // Video Player Stage (Video is ONLY shown when lesson is not a quiz)
+    return (
+      <div
+        ref={playerContainerRef}
+        className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-xl border border-slate-800/90 group select-none flex items-center justify-center"
+      >
+        <iframe
+          key={activeLesson?.id}
+          src={getEmbedUrl(activeLesson?.videoUrl, activeLesson?.id)}
+          title={activeLesson?.title || "पाठ्यक्रम व्याख्यान"}
+          className="w-full h-full border-0 aspect-video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+}
+
+/**
+ * Helper to construct an iframe embed URL.
+ * Handles:
+ * - YouTube watch URLs (https://www.youtube.com/watch?v=...)
+ * - YouTube short URLs (https://youtu.be/...)
+ * - Direct YouTube 11-char IDs
+ * - VdoCipher embed URLs (https://player.vdocipher.com/...)
+ * - Vimeo / external iframe embed URLs
+ * - Curated fallback Hindi agricultural machinery & entrepreneurship video tutorials
+ */
+function getEmbedUrl(videoUrlOrId?: string | null, lessonId?: string): string {
+  if (!videoUrlOrId) {
+    // High quality Hindi training videos for Custom Hiring Center & agricultural equipment
+    const sampleVideos = [
+      "https://www.youtube-nocookie.com/embed/fW-8O4pT5kI?rel=0&autoplay=1",
+      "https://www.youtube-nocookie.com/embed/9p_b0v0F7rU?rel=0&autoplay=1",
+      "https://www.youtube-nocookie.com/embed/XqZsoesa55w?rel=0&autoplay=1",
+    ];
+    const hash = (lessonId || "1").split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return sampleVideos[hash % sampleVideos.length];
+  }
+
+  const str = videoUrlOrId.trim();
+
+  // If already an embed URL
+  if (
+    str.includes("youtube.com/embed/") ||
+    str.includes("youtube-nocookie.com/embed/") ||
+    str.includes("player.vdocipher.com") ||
+    str.includes("player.vimeo.com")
+  ) {
+    return str.includes("?") ? `${str}&autoplay=1` : `${str}?autoplay=1`;
+  }
+
+  // YouTube watch or youtu.be URL
+  const ytMatch = str.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if (ytMatch && ytMatch[1]) {
+    return `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=1&rel=0&modestbranding=1`;
+  }
+
+  // 11-char YouTube ID
+  if (/^[a-zA-Z0-9_-]{11}$/.test(str)) {
+    return `https://www.youtube-nocookie.com/embed/${str}?autoplay=1&rel=0&modestbranding=1`;
+  }
+
+  // Full external URL (HTTP/HTTPS)
+  if (str.startsWith("http://") || str.startsWith("https://")) {
+    return str;
+  }
+
+  // Fallback
+  return `https://www.youtube-nocookie.com/embed/fW-8O4pT5kI?autoplay=1&rel=0`;
 }

@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 import {
   CreateCourseDTO,
   UpdateCourseDTO,
@@ -11,35 +12,40 @@ import { CourseStatus } from "@prisma/client";
 
 /**
  * Get list of published courses (unpaginated array for server components)
+ * Cached with Next.js unstable_cache to avoid multi-second DB roundtrips on every request.
  */
-export async function getPublishedCourses() {
-  return prisma.course.findMany({
-    where: { status: "PUBLISHED" },
-    include: {
-      createdBy: {
-        select: { id: true, name: true, email: true },
-      },
-      modules: {
-        orderBy: { order: "asc" },
-        include: {
-          lessons: {
-            select: {
-              id: true,
-              title: true,
-              duration: true,
-              isPreview: true,
-              order: true,
-              type: true,
-              isPublished: true,
+export const getPublishedCourses = unstable_cache(
+  async () => {
+    return prisma.course.findMany({
+      where: { status: "PUBLISHED" },
+      include: {
+        createdBy: {
+          select: { id: true, name: true, email: true },
+        },
+        modules: {
+          orderBy: { order: "asc" },
+          include: {
+            lessons: {
+              select: {
+                id: true,
+                title: true,
+                duration: true,
+                isPreview: true,
+                order: true,
+                type: true,
+                isPublished: true,
+              },
+              orderBy: { order: "asc" },
             },
-            orderBy: { order: "asc" },
           },
         },
       },
-    },
-    orderBy: { createdAt: "desc" },
-  });
-}
+      orderBy: { createdAt: "desc" },
+    });
+  },
+  ["published-courses-catalog"],
+  { revalidate: 60, tags: ["courses"] }
+);
 
 /**
  * Get list of published/filtered courses with pagination (for API routes)
@@ -370,50 +376,55 @@ export interface HomeCourseItem {
 
 /**
  * Get featured courses for homepage (Server Function)
+ * Cached with Next.js unstable_cache to avoid DB roundtrips on every page visit.
  */
-export async function getHomeFeaturedCourses(limit: number = 8): Promise<HomeCourseItem[]> {
-  try {
-    const dbCourses = await prisma.course.findMany({
-      where: {
-        status: "PUBLISHED",
-      },
-      orderBy: { createdAt: "desc" },
-      include: {
-        modules: {
-          include: {
-            lessons: {
-              select: { id: true },
+export const getHomeFeaturedCourses = unstable_cache(
+  async (limit: number = 8): Promise<HomeCourseItem[]> => {
+    try {
+      const dbCourses = await prisma.course.findMany({
+        where: {
+          status: "PUBLISHED",
+        },
+        orderBy: { createdAt: "desc" },
+        include: {
+          modules: {
+            include: {
+              lessons: {
+                select: { id: true },
+              },
             },
           },
         },
-      },
-      take: limit,
-    });
-
-    if (dbCourses && dbCourses.length > 0) {
-      return dbCourses.map((c) => {
-        const totalLessons = (c.modules || []).reduce(
-          (acc, m) => acc + (m.lessons?.length || 0),
-          0
-        );
-        return {
-          id: c.id,
-          title: c.title,
-          slug: c.slug,
-          shortDesc: c.description,
-          thumbnail: c.thumbnail || "/images/dairy-course.jpg",
-          price: Number(c.price),
-          discountedPrice: c.isPaid ? Number(c.price) : 0,
-          isPaid: c.isPaid,
-          level: c.level || "Beginner",
-          lessonsCount: totalLessons || 12,
-          category: "उद्यम कौशल",
-        };
+        take: limit,
       });
-    }
-  } catch (error) {
-    console.error("Error in getHomeFeaturedCourses:", error);
-  }
 
-  return [];
-}
+      if (dbCourses && dbCourses.length > 0) {
+        return dbCourses.map((c) => {
+          const totalLessons = (c.modules || []).reduce(
+            (acc, m) => acc + (m.lessons?.length || 0),
+            0
+          );
+          return {
+            id: c.id,
+            title: c.title,
+            slug: c.slug,
+            shortDesc: c.description,
+            thumbnail: c.thumbnail || "/images/dairy-course.jpg",
+            price: Number(c.price),
+            discountedPrice: c.isPaid ? Number(c.price) : 0,
+            isPaid: c.isPaid,
+            level: c.level || "Beginner",
+            lessonsCount: totalLessons || 12,
+            category: "उद्यम कौशल",
+          };
+        });
+      }
+    } catch (error) {
+      console.error("Error in getHomeFeaturedCourses:", error);
+    }
+
+    return [];
+  },
+  ["home-featured-courses"],
+  { revalidate: 60, tags: ["courses"] }
+);

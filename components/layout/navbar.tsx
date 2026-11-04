@@ -140,10 +140,9 @@ export function Navbar() {
                   <Image
                     src="/assets/logo.png"
                     alt="छैगांव उद्यमी Logo"
-                    width={36}
+                    width={40}
                     height={36}
-                    className="object-contain"
-                    style={{ width: "auto", height: "auto" }}
+                    className="h-9 w-auto object-contain"
                     priority
                   />
                 </div>

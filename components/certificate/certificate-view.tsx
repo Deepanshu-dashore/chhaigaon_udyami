@@ -57,9 +57,8 @@ export function CertificateView({
             src="/assets/logo.png"
             alt="Watermark Emblem"
             width={300}
-            height={300}
-            className="object-contain"
-            style={{ width: "auto", height: "auto" }}
+            height={271}
+            className="w-auto h-[270px] object-contain"
           />
         </div>
 
@@ -72,9 +71,8 @@ export function CertificateView({
                 src="/assets/logo.png"
                 alt="छैगांव उद्यमी Logo"
                 width={56}
-                height={56}
-                className="object-contain w-full h-full"
-                style={{ width: "auto", height: "auto" }}
+                height={51}
+                className="w-auto h-full object-contain"
               />
             </div>
             <div>

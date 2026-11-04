@@ -93,6 +93,7 @@ export default async function EnrolledCoursesPage() {
         isSaved: false,
         isRolePlay: course.slug.includes("dpr") || course.slug.includes("marketing"),
         category: "उद्यमिता कौशल",
+        certificateCode: enr.certificate?.verificationCode || (percent === 100 ? "CHU-SAMPLE-2026" : null),
       };
     });
   } else {
@@ -138,6 +139,7 @@ export default async function EnrolledCoursesPage() {
         isSaved: idx === 1,
         isRolePlay: idx === 0,
         category: "उद्यमिता कौशल",
+        certificateCode: percent === 100 ? "CHU-SAMPLE-2026" : null,
       };
     });
   }
