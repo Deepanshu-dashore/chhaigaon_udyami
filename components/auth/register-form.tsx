@@ -475,8 +475,8 @@ export function RegisterForm() {
       <DialogContent className="sm:max-w-md bg-white p-6 rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
         <div className="relative w-full h-48 rounded-xl overflow-hidden bg-amber-50/50 mb-3 border border-amber-100 flex items-center justify-center">
           <Image
-            src="/images/illustrations/rural-entrepreneur-cycle.jpg"
-            alt="छैगांव ग्रामीण उद्यमी"
+            src="/images/illustrations/email-sent-pending.png"
+            alt="छैगांव ग्रामीण उद्यमी - ईमेल सत्यापन"
             fill
             className="object-contain p-2"
             priority

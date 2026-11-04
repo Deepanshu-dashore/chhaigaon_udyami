@@ -280,6 +280,7 @@ export function LoginForm() {
               </div>
               <div className="relative">
                 <Input
+                  ref={passwordInputRef}
                   id="login-password"
                   type={showPassword ? "text" : "password"}
                   value={password}
@@ -386,6 +387,120 @@ export function LoginForm() {
             >
               <Sparkles className="h-4 w-4 text-amber-300" />
               <span>डैशबोर्ड पर आगे बढ़ें ({countdown}s)</span>
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* 1. Unverified Email Warning Modal (Clean Popup with Illustration) */}
+      <Dialog open={showUnverifiedModal} onOpenChange={setShowUnverifiedModal}>
+        <DialogContent className="sm:max-w-md bg-white p-6 rounded-2xl shadow-2xl border border-amber-200 overflow-hidden">
+          <div className="relative w-full h-44 rounded-xl overflow-hidden bg-amber-50/60 mb-2 border border-amber-100 flex items-center justify-center">
+            <Image
+              src="/images/illustrations/email-unverified-warning.png"
+              alt="ईमेल सत्यापन आवश्यक"
+              fill
+              className="object-contain p-2"
+              priority
+            />
+          </div>
+
+          <DialogHeader className="text-center space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-800 text-xs font-bold border border-amber-200 mx-auto">
+              <AlertCircle className="h-3.5 w-3.5 text-amber-600" />
+              <span>सत्यापन प्रतीक्षारत</span>
+            </div>
+            <DialogTitle className="text-xl sm:text-2xl font-bold text-slate-950 font-headline">
+              कृपया पहले अपना ईमेल सत्यापित करें ✉️
+            </DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              आपका खाता तैयार है, लेकिन ईमेल <strong className="text-slate-900 font-semibold">{unverifiedEmail}</strong> अभी तक सत्यापित नहीं हुआ है।
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="my-2 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1.5">
+            <p className="font-semibold text-slate-800 flex items-center gap-1.5">
+              <Mail className="h-4 w-4 text-[#0056d2]" />
+              <span>सत्यापन कैसे करें:</span>
+            </p>
+            <p>
+              कृपया अपने इनबॉक्स या स्पैम फ़ोल्डर में जाकर Supabase द्वारा भेजे गए <strong>&quot;Confirm your email&quot;</strong> लिंक पर क्लिक करें। उसके बाद ही आपका खाता सक्रिय होगा।
+            </p>
+            {resendStatus && (
+              <p className="mt-2 p-2 rounded-lg bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200 text-center animate-in fade-in">
+                {resendStatus}
+              </p>
+            )}
+          </div>
+
+          <DialogFooter className="flex flex-col sm:flex-row gap-2 mt-2">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={resendingEmail}
+              onClick={handleResendVerification}
+              className="w-full sm:w-1/2 h-11 text-xs sm:text-sm font-semibold rounded-xl border-slate-300 hover:bg-slate-50 text-slate-700 cursor-pointer flex items-center justify-center gap-1.5"
+            >
+              {resendingEmail ? (
+                <>
+                  <Spinner size="sm" variant="default" />
+                  <span>भेजा जा रहा है...</span>
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="h-3.5 w-3.5 text-slate-500" />
+                  <span>पुनः लिंक भेजें</span>
+                </>
+              )}
+            </Button>
+            <Button
+              type="button"
+              onClick={() => setShowUnverifiedModal(false)}
+              className="w-full sm:w-1/2 h-11 text-xs sm:text-sm font-bold rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white shadow-md cursor-pointer flex items-center justify-center gap-1.5"
+            >
+              <span>समझ गया</span>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* 2. Email Verified Successfully Modal (Celebration Popup with Illustration) */}
+      <Dialog open={showVerifiedSuccessModal} onOpenChange={setShowVerifiedSuccessModal}>
+        <DialogContent className="sm:max-w-md bg-white p-6 rounded-2xl shadow-2xl border border-emerald-200 overflow-hidden">
+          <div className="relative w-full h-44 rounded-xl overflow-hidden bg-emerald-50/50 mb-2 border border-emerald-100 flex items-center justify-center">
+            <Image
+              src="/images/illustrations/email-verified-success.png"
+              alt="ईमेल सत्यापित हुआ"
+              fill
+              className="object-contain p-2"
+              priority
+            />
+          </div>
+
+          <DialogHeader className="text-center space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200 mx-auto">
+              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+              <span>सत्यापन पूर्ण</span>
+            </div>
+            <DialogTitle className="text-xl sm:text-2xl font-bold text-slate-950 font-headline">
+              ईमेल सफलतापूर्वक सत्यापित हुआ! 🎉
+            </DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              बधाई हो! आपका ईमेल <strong className="text-slate-900 font-semibold">{email}</strong> सक्रिय हो चुका है। अब आप पासवर्ड डालकर अपने खाते में प्रवेश कर सकते हैं।
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter className="flex flex-col sm:flex-row gap-2 mt-2">
+            <Button
+              type="button"
+              onClick={() => {
+                setShowVerifiedSuccessModal(false);
+                passwordInputRef.current?.focus();
+              }}
+              className="w-full h-11 text-xs sm:text-sm font-bold rounded-xl bg-[#0056d2] hover:bg-blue-700 text-white shadow-md cursor-pointer flex items-center justify-center gap-2"
+            >
+              <span>पासवर्ड दर्ज करके लॉगिन करें</span>
               <ArrowRight className="h-4 w-4" />
             </Button>
           </DialogFooter>
